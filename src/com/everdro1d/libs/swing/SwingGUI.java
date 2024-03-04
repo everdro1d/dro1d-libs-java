@@ -1,0 +1,398 @@
+package com.everdro1d.libs.swing;
+
+import com.everdro1d.libs.swing.components.DoNotAskAgainConfirmDialog;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.everdro1d.libs.core.ApplicationCore;
+import com.everdro1d.libs.core.Utils;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.InputStream;
+import java.util.prefs.Preferences;
+
+public class SwingGUI {
+
+    private SwingGUI() {}
+
+
+    // ----------------------------------------- TODO -----------------------------------------
+    // Modular functions for Swing GUI
+
+
+    /**
+     * Set the look and feel of the application.
+     * @param flatLaf whether to use FlatLaf (defaults to system look and feel)
+     * @param hasDarkMode whether to enable dark mode (FlatLaf only)
+     * @param debug whether to print debug information
+     */
+    public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode, boolean debug) {
+        if (flatLaf) {
+            FlatLightLaf.setup();
+
+            if (hasDarkMode) {
+                FlatDarkLaf.setup();
+            }
+        } else {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                if (debug) e.printStackTrace(System.err);
+                System.err.println("Could not set look and feel of application.");
+            }
+        }
+    }
+
+    /**
+     * Used to enable dark mode for the application.
+     * <p>
+     * FlatLaf is used to set the look and feel of the application
+     * @param isDarkModeEnabled whether to enable dark mode
+     * @param frames array of JFrames to update
+     */
+    public static void lightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
+        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeEnabled ? 0x303234 :0xe0e0e0);
+
+        try {
+            LookAndFeel laf = isDarkModeEnabled ? new FlatDarkLaf() : new FlatLightLaf();
+            UIManager.setLookAndFeel( laf );
+            UIManager.put("RootPane.background", mainColor);
+            UIManager.put("RootPane.foreground", secondaryColor);
+
+            for (JFrame frame : frames) {
+                if (frame != null) { // because for some reason the title bar color doesn't change with the L&F
+                    frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", mainColor);
+                    frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", secondaryColor);
+                }
+            }
+        } catch (Exception ex) {
+            System.err.println("Could not set look and feel of application.");
+        } finally {
+            for (JFrame frame : frames) if (frame != null) SwingUtilities.updateComponentTreeUI(frame);
+        }
+    }
+
+    /**
+     * Gets the window's position on the current monitor.
+     * @param frame the frame to get the position of
+     * @return int[] = {x, y, activeMonitor}
+     */
+    public static int[] getFramePositionOnScreen(JFrame frame) {
+        int[] framePosition = new int[]{0, 0, 0};
+        Point frameLocation = frame.getLocationOnScreen();
+
+        // get the monitor that frame is on
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+
+        for (int i = 0; i < gs.length; i++) {
+            GraphicsDevice gd = gs[i];
+            GraphicsConfiguration[] gc = gd.getConfigurations();
+            Rectangle screenBounds = gc[0].getBounds();
+            int screenWidth = screenBounds.width;
+            int screenHeight = screenBounds.height;
+
+            framePosition[0] = frameLocation.x;
+            framePosition[1] = frameLocation.y;
+
+            if (frameLocation.x >= screenBounds.x && frameLocation.x <= screenBounds.x + screenWidth) {
+                if (frameLocation.y >= screenBounds.y && frameLocation.y <= screenBounds.y + screenHeight) {
+                    framePosition[2] = i;
+                    break;
+                }
+            }
+        }
+
+        return framePosition;
+    }
+
+    /**
+     * Set the position of the frame on the screen.
+     * @param frame the frame to set the position of
+     * @param framePosX the x position of the frame
+     * @param framePosY the y position of the frame
+     * @param activeMonitor the active monitor
+     */
+    public static void setFramePosition(JFrame frame, int framePosX, int framePosY, int activeMonitor) {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+
+        if (activeMonitor > -1 && activeMonitor < gs.length) {
+            GraphicsDevice gd = gs[activeMonitor];
+            GraphicsConfiguration[] gc = gd.getConfigurations();
+            Rectangle screenBounds = gc[0].getBounds();
+            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc[0]);
+            int screenWidth = screenBounds.width;
+            int screenHeight = screenBounds.height;
+
+            // check if the window is on the screen and account for taskbar
+            if (framePosY > screenBounds.height - frame.getHeight() - screenInsets.bottom) {
+                framePosY = Math.min( Math.max(0, framePosY),
+                        screenBounds.height - frame.getHeight() - screenInsets.bottom
+                );
+            }
+
+            if (framePosX == 0 && framePosY == 0) {
+                //center on screen 0
+                framePosX = screenBounds.x + (screenWidth - frame.getWidth()) / 2;
+                framePosY = screenBounds.y + (screenHeight - frame.getHeight()) / 2;
+            }
+
+            if (framePosX >= screenBounds.x && framePosX <= screenBounds.x + screenWidth) {
+                if (framePosY >= screenBounds.y && framePosY <= screenBounds.y + screenHeight) {
+
+                    frame.setLocation(framePosX, framePosY);
+                }
+            }
+        }
+    }
+
+    /**
+     * Set the location of the frame on the screen when it is resized.
+     * @param frame the frame to set the location of
+     */
+    public static void setLocationOnResize(JFrame frame) {
+        int[] framePosition = getFramePositionOnScreen(frame);
+        setFramePosition(frame, framePosition[0], framePosition[1], framePosition[2]);
+    }
+
+    /**
+     * Get the size of the window. Used for debugging.
+     * @param frame the frame to get the size of
+     */
+    public static void getWindowSize(JFrame frame) {
+        System.out.println("Width: " + frame.getWidth() + "px Height: " + frame.getHeight() + "px");
+    }
+
+    /**
+     * Set the icon of the frame.
+     * @param frame the frame to set the icon of
+     * @param internalPath path to the image file within resources
+     * @param clazz the class to trace from
+     * @param debug whether to print debug information
+     */
+    public static void setFrameIcon(JFrame frame, String internalPath, Class<?> clazz, boolean debug) {
+        Icon icon = getApplicationIcon(internalPath, clazz, debug);
+        if (icon != null) {
+            frame.setIconImage(((ImageIcon) icon).getImage());
+        }
+    }
+
+    /**
+     * Retrieve an image as an Icon from the application's resources.
+     * @param internalPath path to the image file within resources
+     * @param clazz the class to trace from
+     * @param debug whether to print debug information
+     * @return the Icon
+     */
+    public static Icon getApplicationIcon(String internalPath, Class<?> clazz, boolean debug) {
+        Icon icon = null;
+        try (InputStream iconStream = clazz.getClassLoader().getResourceAsStream(internalPath)) {
+            if (iconStream != null) {
+                icon = new ImageIcon(ImageIO.read(iconStream));
+            }
+        } catch (Exception e) {
+            if (debug) e.printStackTrace(System.err);
+        }
+        if (icon == null) {
+            System.err.println("[ERROR] Could not find icon file at: " + internalPath);
+        }
+        return icon;
+    }
+
+    /**
+     * Simulate a key event after requesting focus on a component.
+     * @param component the component to request focus on
+     * @see #simulateKeyEvent(JComponent, int, char, int, int)
+     */
+    public static void requestFocusAndSimulateKeyEvent(JComponent component) {
+        component.requestFocusInWindow();
+        simulateKeyEvent(component);
+    }
+
+    /**
+     * Simulates an ENTER keyReleased event on a component.
+     * @param component the component to simulate the event on
+     * @see #simulateKeyEvent(JComponent, int, char, int, int)
+     */
+    public static void simulateKeyEvent(JComponent component) {
+        simulateKeyEvent(component, KeyEvent.VK_ENTER, '\n', 0, KeyEvent.KEY_RELEASED);
+    }
+
+    /**
+     * Simulates a keyEvent event on a component.
+     * @param component the component to simulate the event on
+     * @param keyCode ex: KeyEvent.VK_ENTER for ENTER
+     * @param keyChar ex: '\n' for ENTER
+     * @param modifiers KeyEvent.CTRL_MASK, KeyEvent.SHIFT_MASK, KeyEvent.ALT_MASK, KeyEvent.META_MASK
+     * @param event KeyEvent.KEY_PRESSED, KeyEvent.KEY_RELEASED, or KeyEvent.KEY_TYPED
+     * @see #simulateKeyEvent(JComponent)
+     */
+    public static void simulateKeyEvent(JComponent component, int keyCode, char keyChar, int modifiers, int event) {
+        KeyEvent keyEvent = new KeyEvent(component, event, System.currentTimeMillis(), modifiers, keyCode, keyChar);
+        component.dispatchEvent(keyEvent);
+    }
+
+    /**
+     * Creates a string combo box with the specified parameters.
+     * @param strArr the array of items for the combo box
+     * @param selectedIndex default selected index
+     * @param fontName the name of the font to use
+     * @param fontSize the size of the font to use
+     * @return the combo box
+     */
+    public JComboBox<String> stringComboBoxConstructor(String[] strArr, int selectedIndex, String fontName, int fontSize) {
+        JComboBox<String> comboBox = new JComboBox<>(strArr);
+        comboBox.setFont(new Font(fontName, Font.PLAIN, fontSize));
+        comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        comboBox.setSelectedIndex(selectedIndex);
+
+        return comboBox;
+    }
+
+    /** OVERLOAD <p>
+     * Update the width of the combobox depending on the width of the longest string within its array.
+     * Padding defaults to 40.
+     * @param strArr the array of items for the combo box
+     * @param comboBox the combo box to update
+     * @see #updateComboBox(String[], JComboBox, int)
+     */
+    public static void updateComboBox(String[] strArr, JComboBox<String> comboBox) {
+        updateComboBox(strArr, comboBox, 40);
+    }
+
+    /**
+     * Update the width of the combobox depending on the width of the longest string within its array.
+     * @param strArr the array of items for the combo box
+     * @param comboBox the combo box to update
+     * @param padding the padding to add to the width
+     */
+    public static void updateComboBox(String[] strArr, JComboBox<String> comboBox, int padding) {
+        comboBox.setModel(new DefaultComboBoxModel<>(strArr));
+
+        // Determine the highest width of all items
+        int maxWidth = 0;
+        FontMetrics fontMetrics = comboBox.getFontMetrics(comboBox.getFont());
+
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            int textWidth = fontMetrics.stringWidth(comboBox.getItemAt(i));
+            maxWidth = Math.max(maxWidth, textWidth);
+        }
+
+        // Add some padding to the maxWidth to accommodate borders
+        int adjustedMaxWidth = maxWidth + padding;
+
+        // Set the width of the JComboBox to the maximum width
+        Dimension dimension = new Dimension(adjustedMaxWidth, comboBox.getPreferredSize().height);
+        comboBox.setMinimumSize(dimension);
+        comboBox.setPreferredSize(dimension);
+        comboBox.setMaximumSize(dimension);
+    }
+
+    /**
+     * Set the cursor to the hand cursor for clickable components.
+     * @param container the container of the components (top level JFrame etc.)
+     */
+    public static void setHandCursorToClickableComponents(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof AbstractButton || component instanceof JComboBox) {
+                component.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            } else if (component instanceof JTextField) {
+                component.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+            } else if (component instanceof Container) {
+                setHandCursorToClickableComponents((Container) component);
+            }
+        }
+    }
+
+    /**
+     * Check for updates and display a dialog if an update is available.
+     * @param currentVersion the current version of the application - "1.2.1"
+     * @param parentFrame the parent frame of the dialog
+     * @param debug whether to print debug information
+     * @param githubURL the URL of the GitHub repository - "https://github.com/user/repo/releases/latest/"
+     * @param downloadURL the URL of the download link - "https://someurl.com/download"
+     * @param prefs the preferences object for saving do not ask again
+     * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String, boolean)
+     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String)
+     */
+    public static void updateCheckerDialog(
+            String currentVersion, JFrame parentFrame, boolean debug,
+            String githubURL, String downloadURL, Preferences prefs
+    ) {
+        String latestVersion = ApplicationCore.getLatestVersion(githubURL, debug);
+        if (latestVersion != null) {
+            if (latestVersion.equals(currentVersion)) {
+                if (debug) System.out.println("Application up to date.");
+
+            } else {
+                if (debug) System.out.println("Application update available.");
+
+                int dialogResult = DoNotAskAgainConfirmDialog.showConfirmDialog(parentFrame,
+                        "An update is available.<br>Would you like to update now?<br><br>Current Version: v" +
+                        currentVersion + "<br>Latest Version: v" + latestVersion, "Update Available",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog"
+                );
+
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    Utils.openLink(downloadURL, debug);
+                    System.exit(0);
+                }
+            }
+        } else {
+            if (debug) System.err.println("Failed to check for update. Latest Version returned null.");
+        }
+    }
+
+    /**
+     * Sets the progress bar in percentage format "1-100%", while ensuring non-jumpy values (only increases not decreases).
+     * @param i current progress percentage
+     * @param progressBar progressBar to change
+     * Use case example: download ~X mb out of 100 mb where the estimated progress varies.
+     */
+    public void setProgressPercent(int i, JProgressBar progressBar) {
+        if (i < 0 || i > 100) {
+            if (progressBar.isIndeterminate()) return;
+            progressBar.setIndeterminate(true);
+            progressBar.setStringPainted(false);
+            return;
+        }
+        int ip = progressBar.getValue();
+        if (i > ip || ip == 100) {
+            progressBar.setIndeterminate(false);
+            progressBar.setValue(i);
+            progressBar.setStringPainted(true);
+            progressBar.setString(i + "%");
+        }
+    }
+
+
+    // ----------------------------------------- TODO -----------------------------------------
+    // Non-modular functions for Swing GUI
+    // Expected to be copied and pasted into the main application
+
+
+    /**
+     * Set the default UI settings for the application.
+     * @param darkMode whether to enable dark mode
+     * @param fontName the name of the font to use
+     */
+    public static void uiSetup(boolean darkMode, String fontName, int fontSize) {
+        Color mainColor = new Color(darkMode ? 0x2B2B2B : 0xe1e1e1);
+        Color txtColor = new Color(darkMode ? 0xbbbbbb : 0x000000);
+        UIManager.put("Component.arc", 10);
+        UIManager.put("TextComponent.arc", 10);
+        UIManager.put("Separator.stripeWidth", 10);
+        UIManager.put("RootPane.background", mainColor);
+        UIManager.put("RootPane.foreground", txtColor);
+
+        UIManager.put("OptionPane.minimumSize",new Dimension(300, 100));
+        UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, fontSize));
+        UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.PLAIN, fontSize));
+
+        UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
+    }
+}
