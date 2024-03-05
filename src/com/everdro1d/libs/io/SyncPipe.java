@@ -3,7 +3,7 @@ package com.everdro1d.libs.io;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-class SyncPipe implements Runnable
+public class SyncPipe implements Runnable
 {
     public SyncPipe(InputStream iStream, OutputStream oStream) {
         iStream_ = iStream;

@@ -3,4 +3,3 @@ Implementation-Vendor: dro1dDev
 Implementation-Copyright: Copyright (C) 2024 dro1dDev. All rights reserved.
 Multi-Release: true
 Class-Path: flatlaf-3.4.jar
-
