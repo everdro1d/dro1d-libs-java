@@ -1,6 +1,6 @@
 package com.everdro1d.libs.core;
 
-import com.everdro1d.libs.interfaces.CLICommands;
+import com.everdro1d.libs.commands.*;
 
 import javax.swing.*;
 import java.net.*;
@@ -9,26 +9,13 @@ import java.util.prefs.Preferences;
 public final class ApplicationCore {
     private ApplicationCore() {}
 
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Modular functions for the application core
-
-
     /**
-     * Implement CLI arguments through CLICommands interface
+     * Implement CLI arguments through CommandInterface
      * @param args passed from main
      */
-    public static void checkCLIArgs(String[] args) {
+    public static void checkCLIArgs(String[] args, CommandManager commandManager) {
         for (String arg : args) {
-            CLICommands command = CLICommands.CLI_COMMANDS_MAP.get(arg);
-            if (command != null) {
-                command.execute();
-            } else {
-                System.err.println(
-                        "Unknown argument: [" + arg + "] Skipping." +
-                                "\n    Use -help to list valid arguments."
-                );
-            }
+            commandManager.executeCommand(arg);
         }
     }
 
@@ -40,8 +27,6 @@ public final class ApplicationCore {
      *      - "macOS"
      *      - "Unix"
      *      - "Unknown"
-     *
-     * @see #checkOSCompatibility(boolean)
      */
     public static String detectOS(boolean debug) {
         String os = System.getProperty("os.name").toLowerCase();
@@ -78,47 +63,4 @@ public final class ApplicationCore {
         }
         return null;
     }
-
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Non-modular functions for the application core
-    // Expected to be copied and pasted into the main application
-
-
-    /**
-     * Detects the OS to determine compat with application and dependencies.
-     * @param debug whether to print debug information
-     * @see #detectOS(boolean)
-     * @see #executeOSSpecificCode(String, boolean)
-     */
-    public static void checkOSCompatibility(boolean debug) {
-        String detectedOS = detectOS(debug);
-        executeOSSpecificCode(detectedOS, debug);
-    }
-
-    /**
-     * Execute OS specific code.
-     * @param detectedOS the detected OS
-     * @param debug whether to print debug information
-     * @see #checkOSCompatibility(boolean)
-     * @see #detectOS(boolean)
-     */
-    public static void executeOSSpecificCode(String detectedOS, boolean debug) {
-        switch (detectedOS) {
-            case "Windows" -> {
-                // beep boop
-            }
-            case "macOS" -> {
-                // beep boop the second coming
-            }
-            case "Unix" -> {
-                // beep boop pengwin
-            }
-            default -> {
-                System.out.println("Unknown OS detected. Exiting.");
-                System.exit(1);
-            }
-        }
-    }
-
 }

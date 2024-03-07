@@ -17,11 +17,6 @@ public class SwingGUI {
 
     private SwingGUI() {}
 
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Modular functions for Swing GUI
-
-
     /**
      * Set the look and feel of the application.
      * @param flatLaf whether to use FlatLaf (defaults to system look and feel)
@@ -153,9 +148,30 @@ public class SwingGUI {
     /**
      * Set the location of the frame on the screen when it is resized.
      * @param frame the frame to set the location of
+     * @param keepOnActiveMonitor whether to adjust the frame to fit fully on the active monitor
      */
-    public static void setLocationOnResize(JFrame frame) {
+    public static void setLocationOnResize(JFrame frame, boolean keepOnActiveMonitor) {
         int[] framePosition = getFramePositionOnScreen(frame);
+        if (keepOnActiveMonitor) {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice[] gs = ge.getScreenDevices();
+            if (framePosition[2] > -1 && framePosition[2] < gs.length) {
+                GraphicsDevice gd = gs[framePosition[2]];
+                GraphicsConfiguration[] gc = gd.getConfigurations();
+                Rectangle screenBounds = gc[0].getBounds();
+                Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc[0]);
+                int screenWidth = screenBounds.width;
+                int screenHeight = screenBounds.height;
+
+                // Adjust the frame's position to fit within the monitor's dimensions
+                if (framePosition[0] + frame.getWidth() > screenBounds.x + screenWidth) {
+                    framePosition[0] = screenBounds.x + screenWidth - frame.getWidth();
+                }
+                if (framePosition[1] + frame.getHeight() > screenBounds.y + screenHeight - screenInsets.bottom) {
+                    framePosition[1] = screenBounds.y + screenHeight - frame.getHeight() - screenInsets.bottom;
+                }
+            }
+        }
         setFramePosition(frame, framePosition[0], framePosition[1], framePosition[2]);
     }
 
@@ -368,12 +384,6 @@ public class SwingGUI {
             progressBar.setString(i + "%");
         }
     }
-
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Non-modular functions for Swing GUI
-    // Expected to be copied and pasted into the main application
-
 
     /**
      * Set the default UI settings for the application.

@@ -7,14 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.prefs.Preferences;
 
 public class Utils {
     private Utils() {}
-
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Modular utility functions
-
 
     /**
      * Open a link in the default browser.
@@ -32,15 +28,23 @@ public class Utils {
 
     /**
      * Get the current time as a string.
+     * @param includeDate whether to include the date - yyyy-MM-dd
+     * @param includeTime whether to include the time - HH:mm:ss
+     * @param includeMillis whether to include milliseconds - .SSS
      * @return the current time as a string
-     *     - "yyyy-MM-dd HH:mm:ss"
      */
-    public static String getCurrentTime() {
-        return LocalDateTime.now()
-                .toString()
-                .replace("T", " ")
-                .replace("Z", "")
-                .split("\\.")[0];
+    public static String getCurrentTime(boolean includeDate, boolean includeTime, boolean includeMillis) {
+        String now = LocalDateTime.now().toString();
+        String date = now.split("T")[0];
+        String time = now.split("T")[1].split("\\.")[0];
+        String millis = now.split("\\.")[1];
+
+        String currentTime = "";
+        if (includeDate) currentTime += date + (includeTime ? " " : "");
+        if (includeTime) currentTime += time;
+        if (includeMillis) currentTime += "." + millis;
+
+        return currentTime;
     }
 
     /**
@@ -89,7 +93,6 @@ public class Utils {
         }
     }
 
-
     /**
      * Prints a formatted nested map. See example below.
      *
@@ -130,8 +133,4 @@ public class Utils {
         }
         System.out.println("}");
     }
-
-
-    // ----------------------------------------- TODO -----------------------------------------
-    // Non-modular utility functions
 }

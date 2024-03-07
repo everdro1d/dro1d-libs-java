@@ -20,7 +20,7 @@ public class FileChooser extends JFileChooser {
      * Create a generic file chooser dialog allowing selection of both files and directories.
      */
     public FileChooser(String path, String dialogTitle) {
-        this(path, dialogTitle, true, true, false, null);
+        this(path, dialogTitle, true, true, false, null, false, null);
     }
 
     /**
@@ -30,7 +30,7 @@ public class FileChooser extends JFileChooser {
      * @param showFiles Whether to show files in the dialog. If false, only directories will be shown.
      */
     public FileChooser(String path, String dialogTitle, boolean showFiles) {
-        this(path, dialogTitle, showFiles, !showFiles, false, null);
+        this(path, dialogTitle, showFiles, !showFiles, false, null, false, null);
     }
 
     /**
@@ -40,7 +40,18 @@ public class FileChooser extends JFileChooser {
      * @param extension The extension to filter files by. ex. "txt"
      */
     public FileChooser(String path, String dialogTitle, String extension) {
-        this(path, dialogTitle, true, false, true, extension);
+        this(path, dialogTitle, true, false, true, extension, false, null);
+    }
+
+    /**
+     * Create a file chooser dialog for selecting files or directories that uses a custom description message.
+     * @param path The directory to open the dialog in.
+     * @param dialogTitle The title of the dialog.
+     * @param showFiles Whether to show files in the dialog. If false, only directories will be shown.
+     * @param customMessage Custom message to show in the description area.
+     */
+    public FileChooser(String path, String dialogTitle, boolean showFiles, String customMessage) {
+        this(path, dialogTitle, showFiles, !showFiles, false, null, true, customMessage);
     }
 
     /**
@@ -51,9 +62,12 @@ public class FileChooser extends JFileChooser {
      * @param filterByExtension Whether to filter files by extension.
      * @param extension The extension to filter files by. Dependent on filterByExtension. ex. "txt"
      * @param dialogTitle The title of the dialog.
+     * @param useCustomMessage whether to use a custom message for the description
+     * @param customMessage the message to use for custom message
      */
-    public FileChooser(String path ,String dialogTitle, boolean showFiles,
-                       boolean showDirectories, boolean filterByExtension, String extension) {
+    public FileChooser(String path ,String dialogTitle, boolean showFiles, boolean showDirectories,
+                       boolean filterByExtension, String extension, boolean useCustomMessage, String customMessage
+    ) {
         super();
         // Set file chooser gui properties
         setDialogTitle(dialogTitle);
@@ -84,6 +98,7 @@ public class FileChooser extends JFileChooser {
 
             @Override
             public String getDescription() {
+                if (useCustomMessage) return customMessage;
                 if (filterByExtension) return extension.toUpperCase() + " Files (*." + extension + ")";
 
                 if (selectionMode == JFileChooser.DIRECTORIES_ONLY) return "Directory (Folder)";
