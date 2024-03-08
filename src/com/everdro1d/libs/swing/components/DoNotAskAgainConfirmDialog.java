@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.prefs.Preferences;
 
 public class DoNotAskAgainConfirmDialog extends JPanel {
-    private JCheckBox doNotAskAgainCheckBox;
+    private final JCheckBox doNotAskAgainCheckBox;
 
     private DoNotAskAgainConfirmDialog(Object message) {
         setLayout(new BorderLayout());
