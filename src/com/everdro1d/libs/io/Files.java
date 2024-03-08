@@ -114,7 +114,7 @@ public class Files {
      * Open a directory in the file manager, and select the file.
      * @param path the path to the file
      */
-    public static void openInFileManager(String path) {
+    public static void openInFileManager(String path, boolean debug) {
         if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
             System.err.println("Desktop not supported. Cannot open in file manager.");
             return;
@@ -126,6 +126,7 @@ public class Files {
         String directory;
         if (!new java.io.File(path).isDirectory()) {
             String fileDiv = FileSystems.getDefault().getSeparator();
+            if (fileDiv.equals("\\")) fileDiv = "\\\\";
             String fileName = path.split(fileDiv)[path.split(fileDiv).length - 1];
             directory = path.replace(fileName, "");
         } else {
@@ -134,15 +135,16 @@ public class Files {
 
 
         try {
-            Desktop.getDesktop().open(new java.io.File(directory));
-
             if (!new File(path).exists()) {
                 System.err.println("File or Directory does not exist. Cannot select in file manager.");
                 return;
             } else if (directory.equals(path)) {
+                Desktop.getDesktop().open(new java.io.File(directory)); // Open the directory
                 System.err.println("Path is not a file. Cannot select in file manager.");
                 return;
             }
+
+            // Open the directory and select the file
             String os = ApplicationCore.detectOS(false);
             if (os.equals("Windows")) {
                 new ProcessBuilder("explorer.exe", "/select,", path).start();

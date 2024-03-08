@@ -1,13 +1,13 @@
 package com.everdro1d.libs.core;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.prefs.Preferences;
 
 public class Utils {
     private Utils() {}
@@ -21,6 +21,15 @@ public class Utils {
         try {
             if (debug) System.out.println("Opening link: " + url);
             Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception e) {
+            if (debug) e.printStackTrace(System.err);
+        }
+    }
+
+    public static void copyToClipboard(String copyString, boolean debug) {
+        try {
+            if (debug) System.out.println("Copying to clipboard: " + copyString);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(copyString), null);
         } catch (Exception e) {
             if (debug) e.printStackTrace(System.err);
         }
@@ -62,6 +71,10 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static String replaceCharAt(String string, int i, String s) {
+        return string.substring(0, i) + s + string.substring(i + s.length());
     }
 
     /**

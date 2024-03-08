@@ -1,5 +1,6 @@
 package com.everdro1d.libs.swing.components;
 
+import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.io.TiedOutputStream;
@@ -118,8 +119,9 @@ public class DebugConsoleWindow extends JFrame {
                     leftNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel("Debug Console");
+                    int mac = ApplicationCore.detectOS(debug).equals("macOS") ? 30 : 0;
                     titleLabel.setPreferredSize(
-                            new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - 30, BORDER_PADDING_HEIGHT - 10)
+                            new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
                     );
                     titleLabel.setFont(new Font(fontName, Font.BOLD, fontSize + 4));
                     titleLabel.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -146,9 +148,9 @@ public class DebugConsoleWindow extends JFrame {
                     expandWindowButton.setFocusPainted(false);
                     expandWindowButton.setMargin(new Insets(0,0,15,0));
 
-                    ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("images/debugConsoleWindow/expand.png",
+                    ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/debugconsolewindow/expand.png",
                             this.getClass(), debug);
-                    ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("images/debugConsoleWindow/shrink.png",
+                    ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/debugconsolewindow/shrink.png",
                             this.getClass(), debug);
                     iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
                     iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
@@ -166,7 +168,7 @@ public class DebugConsoleWindow extends JFrame {
             {
                 // Add components here
                 debugTextArea = new JTextArea();
-                debugTextArea.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                debugTextArea.setFont(new Font("Courier New", Font.PLAIN, fontSize));
                 debugTextArea.setEditable(false);
                 debugTextArea.setLineWrap(true);
                 debugTextArea.setCaretColor(debugTextArea.getBackground());
@@ -251,7 +253,7 @@ public class DebugConsoleWindow extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
-                            Files.openInFileManager(debugSaveAsFilePath);
+                            Files.openInFileManager(debugSaveAsFilePath, debug);
                         }
 
                     });
@@ -320,7 +322,10 @@ public class DebugConsoleWindow extends JFrame {
     }
 
     private String getLogFileName() {
-        return FileSystems.getDefault().getSeparator() + "DEBUG_LOG_[" + Utils.getCurrentTime(true, true, false).replace(" ", "_") + "].txt";
+        String dateTime = Utils.getCurrentTime(true, true, false)
+                .replace(" ", "_")
+                .replaceAll(":","!");
+        return FileSystems.getDefault().getSeparator() + "DEBUG_LOG_[" + dateTime + "].txt";
     }
 
     private void updateNumberOfLines(int numberOfLines) {
@@ -361,7 +366,6 @@ public class DebugConsoleWindow extends JFrame {
 
         FileChooser fileChooser = new FileChooser(
                 output, "Save To", false, "Text File - *.txt");
-        fileChooser.setVisible(true);
 
         int returnValue = fileChooser.showOpenDialog(debugFrame);
         if (returnValue == JFileChooser.APPROVE_OPTION) {

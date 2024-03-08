@@ -44,15 +44,15 @@ public class SwingGUI {
      * Used to enable dark mode for the application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
-     * @param isDarkModeEnabled whether to enable dark mode
+     * @param isDarkModeActive whether to enable dark mode
      * @param frames array of JFrames to update
      */
-    public static void lightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
-        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeEnabled ? 0x303234 :0xe0e0e0);
+    public static void lightOrDarkMode(boolean isDarkModeActive, JFrame[] frames) {
+        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeActive ? 0xe0e0e0 : 0x303234);
 
         try {
-            LookAndFeel laf = isDarkModeEnabled ? new FlatDarkLaf() : new FlatLightLaf();
+            LookAndFeel laf = isDarkModeActive ? new FlatDarkLaf() : new FlatLightLaf();
             UIManager.setLookAndFeel( laf );
             UIManager.put("RootPane.background", mainColor);
             UIManager.put("RootPane.foreground", secondaryColor);
@@ -68,6 +68,27 @@ public class SwingGUI {
         } finally {
             for (JFrame frame : frames) if (frame != null) SwingUtilities.updateComponentTreeUI(frame);
         }
+    }
+
+    /**
+     * Set the default UI settings for the application.
+     * @param isDarkModeActive whether to enable dark mode
+     * @param fontName the name of the font to use
+     */
+    public static void uiSetup(boolean isDarkModeActive, String fontName, int fontSize) {
+        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
+        Color txtColor = new Color(isDarkModeActive ? 0xbbbbbb : 0x000000);
+        UIManager.put("Component.arc", 10);
+        UIManager.put("TextComponent.arc", 10);
+        UIManager.put("Separator.stripeWidth", 10);
+        UIManager.put("RootPane.background", mainColor);
+        UIManager.put("RootPane.foreground", txtColor);
+
+        UIManager.put("OptionPane.minimumSize",new Dimension(300, 100));
+        UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, fontSize));
+        UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.PLAIN, fontSize));
+
+        UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
     }
 
     /**
@@ -260,13 +281,16 @@ public class SwingGUI {
      * @param fontSize the size of the font to use
      * @return the combo box
      */
-    public JComboBox<String> stringComboBoxConstructor(String[] strArr, int selectedIndex, String fontName, int fontSize) {
+    public static JComboBox<String> stringComboBoxConstructor(String[] strArr, int selectedIndex, String fontName, int fontSize) {
         JComboBox<String> comboBox = new JComboBox<>(strArr);
+        setupComboBox(new JComboBox<>(strArr), selectedIndex, fontName, fontSize);
+        return comboBox;
+    }
+
+    public static void setupComboBox(JComboBox<String> comboBox, int selectedIndex, String fontName, int fontSize) {
         comboBox.setFont(new Font(fontName, Font.PLAIN, fontSize));
         comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
         comboBox.setSelectedIndex(selectedIndex);
-
-        return comboBox;
     }
 
     /** OVERLOAD <p>
@@ -348,8 +372,9 @@ public class SwingGUI {
                 if (debug) System.out.println("Application update available.");
 
                 int dialogResult = DoNotAskAgainConfirmDialog.showConfirmDialog(parentFrame,
-                        "An update is available.<br>Would you like to update now?<br><br>Current Version: v" +
-                        currentVersion + "<br>Latest Version: v" + latestVersion, "Update Available",
+                        "An update is available.<br>Would you like to update now?<br><br>Latest Version: v" + latestVersion +
+                                "<br>Installed Version: v" +
+                                currentVersion, "Update Available",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog"
                 );
 
@@ -369,7 +394,7 @@ public class SwingGUI {
      * @param progressBar progressBar to change
      * Use case example: download ~X mb out of 100 mb where the estimated progress varies.
      */
-    public void setProgressPercent(int i, JProgressBar progressBar) {
+    public static void setProgressPercent(int i, JProgressBar progressBar) {
         if (i < 0 || i > 100) {
             if (progressBar.isIndeterminate()) return;
             progressBar.setIndeterminate(true);
@@ -383,26 +408,5 @@ public class SwingGUI {
             progressBar.setStringPainted(true);
             progressBar.setString(i + "%");
         }
-    }
-
-    /**
-     * Set the default UI settings for the application.
-     * @param darkMode whether to enable dark mode
-     * @param fontName the name of the font to use
-     */
-    public static void uiSetup(boolean darkMode, String fontName, int fontSize) {
-        Color mainColor = new Color(darkMode ? 0x2B2B2B : 0xe1e1e1);
-        Color txtColor = new Color(darkMode ? 0xbbbbbb : 0x000000);
-        UIManager.put("Component.arc", 10);
-        UIManager.put("TextComponent.arc", 10);
-        UIManager.put("Separator.stripeWidth", 10);
-        UIManager.put("RootPane.background", mainColor);
-        UIManager.put("RootPane.foreground", txtColor);
-
-        UIManager.put("OptionPane.minimumSize",new Dimension(300, 100));
-        UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, fontSize));
-        UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.PLAIN, fontSize));
-
-        UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
     }
 }

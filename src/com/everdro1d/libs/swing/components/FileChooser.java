@@ -27,10 +27,10 @@ public class FileChooser extends JFileChooser {
      * Create a file chooser dialog for selecting files or directories.
      * @param path The directory to open the dialog in.
      * @param dialogTitle The title of the dialog.
-     * @param showFiles Whether to show files in the dialog. If false, only directories will be shown.
+     * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
      */
-    public FileChooser(String path, String dialogTitle, boolean showFiles) {
-        this(path, dialogTitle, showFiles, !showFiles, false, null, false, null);
+    public FileChooser(String path, String dialogTitle, boolean selectFiles) {
+        this(path, dialogTitle, selectFiles, !selectFiles, false, null, false, null);
     }
 
     /**
@@ -47,25 +47,25 @@ public class FileChooser extends JFileChooser {
      * Create a file chooser dialog for selecting files or directories that uses a custom description message.
      * @param path The directory to open the dialog in.
      * @param dialogTitle The title of the dialog.
-     * @param showFiles Whether to show files in the dialog. If false, only directories will be shown.
+     * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
      * @param customMessage Custom message to show in the description area.
      */
-    public FileChooser(String path, String dialogTitle, boolean showFiles, String customMessage) {
-        this(path, dialogTitle, showFiles, !showFiles, false, null, true, customMessage);
+    public FileChooser(String path, String dialogTitle, boolean selectFiles, String customMessage) {
+        this(path, dialogTitle, selectFiles, !selectFiles, false, null, true, customMessage);
     }
 
     /**
      * Create a file chooser dialog.
      * @param path The directory to open the dialog in.
-     * @param showFiles Whether to show files in the dialog.
-     * @param showDirectories Whether to show directories in the dialog.
+     * @param selectFiles Whether to show files in the dialog.
+     * @param selectDirectories Whether to show directories in the dialog.
      * @param filterByExtension Whether to filter files by extension.
      * @param extension The extension to filter files by. Dependent on filterByExtension. ex. "txt"
      * @param dialogTitle The title of the dialog.
      * @param useCustomMessage whether to use a custom message for the description
      * @param customMessage the message to use for custom message
      */
-    public FileChooser(String path ,String dialogTitle, boolean showFiles, boolean showDirectories,
+    public FileChooser(String path ,String dialogTitle, boolean selectFiles, boolean selectDirectories,
                        boolean filterByExtension, String extension, boolean useCustomMessage, String customMessage
     ) {
         super();
@@ -78,7 +78,7 @@ public class FileChooser extends JFileChooser {
 
         // Set the file chooser properties
         int selectionMode
-                = showFiles ? (showDirectories ? JFileChooser.FILES_AND_DIRECTORIES : JFileChooser.FILES_ONLY)
+                = selectFiles ? (selectDirectories ? JFileChooser.FILES_AND_DIRECTORIES : JFileChooser.FILES_ONLY)
                 : JFileChooser.DIRECTORIES_ONLY;
 
         setFileSelectionMode(selectionMode);
