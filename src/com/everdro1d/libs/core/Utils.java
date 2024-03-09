@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * Copyright (c) dro1dDev 2024.                                                                   *
+ **************************************************************************************************/
+
 package com.everdro1d.libs.core;
 
 import java.awt.*;
@@ -15,23 +19,20 @@ public class Utils {
     /**
      * Open a link in the default browser.
      * @param url the link to open
-     * @param debug whether to print debug information
      */
-    public static void openLink(String url, boolean debug) {
+    public static void openLink(String url) {
         try {
-            if (debug) System.out.println("Opening link: " + url);
             Desktop.getDesktop().browse(new URI(url));
         } catch (Exception e) {
-            if (debug) e.printStackTrace(System.err);
+            e.printStackTrace(System.err);
         }
     }
 
-    public static void copyToClipboard(String copyString, boolean debug) {
+    public static void copyToClipboard(String copyString) {
         try {
-            if (debug) System.out.println("Copying to clipboard: " + copyString);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(copyString), null);
         } catch (Exception e) {
-            if (debug) e.printStackTrace(System.err);
+            e.printStackTrace(System.err);
         }
     }
 

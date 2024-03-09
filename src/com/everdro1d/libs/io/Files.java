@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * Copyright (c) dro1dDev 2024.                                                                   *
+ **************************************************************************************************/
+
 package com.everdro1d.libs.io;
 
 import com.everdro1d.libs.core.ApplicationCore;
@@ -24,17 +28,14 @@ public class Files {
     /**
      * Get the abs. path of the jar file.
      * @param clazz the class to trace the jar path from
-     * @param debug whether to print debug information
      * @return the path of the jar file as a string
      */
-    public static String getJarPath(Class<?> clazz, boolean debug) {
+    public static String getJarPath(Class<?> clazz) {
         String jarPath = null;
         try {
             jarPath = Paths.get(clazz.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString();
-            if (debug) System.out.println("Jar Path: " + jarPath);
         } catch (URISyntaxException e) {
-            if (debug) e.printStackTrace(System.err);
-            System.err.println("[ERROR] Failed to get jar path.");
+            e.printStackTrace(System.err);
         }
         return jarPath;
     }
@@ -76,12 +77,10 @@ public class Files {
      * Get a set of files in a directory.
      * @param inputDirectory the directory to get the files from
      * @param contains the string to match in the file names
-     * @param debug whether to print debug information
      * @return set of matching file names, null if no matches are found
      */
-    public static Set<String> getMatchingFiles(String inputDirectory, String contains, boolean debug) {
+    public static Set<String> getMatchingFiles(String inputDirectory, String contains) {
         Set<String> allFiles = getAllFilesInDirectory(inputDirectory);
-        if (debug) System.out.println("All Files: \n" + allFiles);
 
         Set<String> wantedFiles = new HashSet<>();
         for (String file : allFiles) {
@@ -94,7 +93,6 @@ public class Files {
             return null;
         }
 
-        if (debug) System.out.println("Found " + wantedFiles.size() + " files: \n" + wantedFiles);
         return wantedFiles;
     }
 
@@ -114,7 +112,7 @@ public class Files {
      * Open a directory in the file manager, and select the file.
      * @param path the path to the file
      */
-    public static void openInFileManager(String path, boolean debug) {
+    public static void openInFileManager(String path) {
         if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
             System.err.println("Desktop not supported. Cannot open in file manager.");
             return;
@@ -145,13 +143,13 @@ public class Files {
             }
 
             // Open the directory and select the file
-            String os = ApplicationCore.detectOS(false);
+            String os = ApplicationCore.detectOS();
             if (os.equals("Windows")) {
                 new ProcessBuilder("explorer.exe", "/select,", path).start();
             } else if (os.equals("macOS")) {
                 new ProcessBuilder("open", "-R", path).start();
             } else {
-                System.err.println("Unsupported OS: " + ApplicationCore.detectOS(false) + ". Cannot select in file manager.");
+                System.err.println("Unsupported OS: " + ApplicationCore.detectOS() + ". Cannot select in file manager.");
             }
         } catch (IOException e) {
             e.printStackTrace(System.err);
@@ -166,7 +164,7 @@ public class Files {
     private static boolean validateFilePath(String path) {
         if (path == null || path.isEmpty()) return false;
 
-        String os = ApplicationCore.detectOS(false);
+        String os = ApplicationCore.detectOS();
         if (os.equals("Windows")) {
             if (!(path.contains(":") && path.contains("\\"))) return false;
         } else if (os.equals("macOS") || os.equals("Unix")) {

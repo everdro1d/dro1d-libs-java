@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.*;
 import java.io.InputStream;
 import java.util.prefs.Preferences;
 
@@ -21,9 +22,8 @@ public class SwingGUI {
      * Set the look and feel of the application.
      * @param flatLaf whether to use FlatLaf (defaults to system look and feel)
      * @param hasDarkMode whether to enable dark mode (FlatLaf only)
-     * @param debug whether to print debug information
      */
-    public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode, boolean debug) {
+    public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode) {
         if (flatLaf) {
             FlatLightLaf.setup();
 
@@ -34,7 +34,7 @@ public class SwingGUI {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
-                if (debug) e.printStackTrace(System.err);
+                e.printStackTrace(System.err);
                 System.err.println("Could not set look and feel of application.");
             }
         }
@@ -209,10 +209,9 @@ public class SwingGUI {
      * @param frame the frame to set the icon of
      * @param internalPath path to the image file within resources
      * @param clazz the class to trace from
-     * @param debug whether to print debug information
      */
-    public static void setFrameIcon(JFrame frame, String internalPath, Class<?> clazz, boolean debug) {
-        Icon icon = getApplicationIcon(internalPath, clazz, debug);
+    public static void setFrameIcon(JFrame frame, String internalPath, Class<?> clazz) {
+        Icon icon = getApplicationIcon(internalPath, clazz);
         if (icon != null) {
             frame.setIconImage(((ImageIcon) icon).getImage());
         }
@@ -222,17 +221,16 @@ public class SwingGUI {
      * Retrieve an image as an Icon from the application's resources.
      * @param internalPath path to the image file within resources
      * @param clazz the class to trace from
-     * @param debug whether to print debug information
      * @return the Icon
      */
-    public static Icon getApplicationIcon(String internalPath, Class<?> clazz, boolean debug) {
+    public static Icon getApplicationIcon(String internalPath, Class<?> clazz) {
         Icon icon = null;
         try (InputStream iconStream = clazz.getClassLoader().getResourceAsStream(internalPath)) {
             if (iconStream != null) {
                 icon = new ImageIcon(ImageIO.read(iconStream));
             }
         } catch (Exception e) {
-            if (debug) e.printStackTrace(System.err);
+            e.printStackTrace(System.err);
         }
         if (icon == null) {
             System.err.println("[ERROR] Could not find icon file at: " + internalPath);
@@ -352,24 +350,24 @@ public class SwingGUI {
      * Check for updates and display a dialog if an update is available.
      * @param currentVersion the current version of the application - "1.2.1"
      * @param parentFrame the parent frame of the dialog
-     * @param debug whether to print debug information
+     * @param printDebug whether to print debug information
      * @param githubURL the URL of the GitHub repository - "https://github.com/user/repo/releases/latest/"
      * @param downloadURL the URL of the download link - "https://someurl.com/download"
      * @param prefs the preferences object for saving do not ask again
-     * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String, boolean)
+     * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String)
      * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String)
      */
     public static void updateCheckerDialog(
-            String currentVersion, JFrame parentFrame, boolean debug,
+            String currentVersion, JFrame parentFrame, boolean printDebug,
             String githubURL, String downloadURL, Preferences prefs
     ) {
-        String latestVersion = ApplicationCore.getLatestVersion(githubURL, debug);
+        String latestVersion = ApplicationCore.getLatestVersion(githubURL);
         if (latestVersion != null) {
             if (latestVersion.equals(currentVersion)) {
-                if (debug) System.out.println("Application up to date.");
+                if (printDebug) System.out.println("Application up to date.");
 
             } else {
-                if (debug) System.out.println("Application update available.");
+                if (printDebug) System.out.println("Application update available.");
 
                 int dialogResult = DoNotAskAgainConfirmDialog.showConfirmDialog(parentFrame,
                         "An update is available.<br>Would you like to update now?<br><br>Latest Version: v" + latestVersion +
@@ -379,12 +377,12 @@ public class SwingGUI {
                 );
 
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    Utils.openLink(downloadURL, debug);
+                    Utils.openLink(downloadURL);
                     System.exit(0);
                 }
             }
         } else {
-            if (debug) System.err.println("Failed to check for update. Latest Version returned null.");
+            System.err.println("Failed to check for update. Latest Version returned null.");
         }
     }
 
@@ -408,5 +406,45 @@ public class SwingGUI {
             progressBar.setStringPainted(true);
             progressBar.setString(i + "%");
         }
+    }
+
+    public static ImageIcon changeIconColor(Icon icon, Color color) {
+        // Create a new image that can be edited
+        BufferedImage bufferedImage = new BufferedImage(
+                icon.getIconWidth(),
+                icon.getIconHeight(),
+                BufferedImage.TYPE_INT_ARGB
+        );
+        Graphics2D g2d = bufferedImage.createGraphics();
+        // Draw the icon on the new image
+        icon.paintIcon(null, g2d, 0, 0);
+        g2d.dispose();
+
+        // Create a filter that changes the color of the image
+        ImageFilter filter = new RGBImageFilter() {
+            public int filterRGB(int x, int y, int rgb) {
+                // If the pixel is transparent, preserve its original RGB values
+                if ((rgb & 0xFF000000) == 0) {
+                    return rgb;
+                }
+                // If the pixel is not transparent, replace its RGB values with the desired color
+                else {
+                    // Preserve the alpha value
+                    int alpha = rgb & 0xFF000000;
+                    // Replace the RGB values with the desired color
+                    return alpha | (color.getRGB() & 0x00FFFFFF);
+                }
+            }
+        };
+
+        // Apply the filter
+        ImageProducer producer = new FilteredImageSource(bufferedImage.getSource(), filter);
+        Image newImage = Toolkit.getDefaultToolkit().createImage(producer);
+
+        return new ImageIcon(newImage);
+    }
+
+    public static boolean isDarkModeActive() {
+        return UIManager.getLookAndFeel().getName().contains("FlatLaf Dark");
     }
 }

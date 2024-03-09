@@ -1,3 +1,7 @@
+/**************************************************************************************************
+ * Copyright (c) dro1dDev 2024.                                                                   *
+ **************************************************************************************************/
+
 package com.everdro1d.libs.swing.components;
 
 import com.everdro1d.libs.core.ApplicationCore;
@@ -27,7 +31,7 @@ public class DebugConsoleWindow extends JFrame {
                     private JLabel titleLabel;
                 private JPanel rightNorthPanel;
                     private JLabel numberOfLinesLabel;
-                    private JButton expandWindowButton;
+                    public static JButton expandWindowButton;
                         private Icon iconExpand;
                         private Icon iconShrink;
             private JPanel centerPanel;
@@ -85,8 +89,6 @@ public class DebugConsoleWindow extends JFrame {
         debugFrame.setVisible(true);
 
         SwingGUI.setHandCursorToClickableComponents(debugFrame);
-
-        System.out.println("Debug Console initialized.");
     }
     private void initializeWindowProperties(JFrame parent) {
         debugFrame = this;
@@ -119,7 +121,7 @@ public class DebugConsoleWindow extends JFrame {
                     leftNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel("Debug Console");
-                    int mac = ApplicationCore.detectOS(debug).equals("macOS") ? 30 : 0;
+                    int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
                     titleLabel.setPreferredSize(
                             new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
                     );
@@ -149,9 +151,9 @@ public class DebugConsoleWindow extends JFrame {
                     expandWindowButton.setMargin(new Insets(0,0,15,0));
 
                     ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/debugconsolewindow/expand.png",
-                            this.getClass(), debug);
+                            this.getClass());
                     ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/debugconsolewindow/shrink.png",
-                            this.getClass(), debug);
+                            this.getClass());
                     iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
                     iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
@@ -172,12 +174,13 @@ public class DebugConsoleWindow extends JFrame {
                 debugTextArea.setEditable(false);
                 debugTextArea.setLineWrap(true);
                 debugTextArea.setCaretColor(debugTextArea.getBackground());
+
                 TiedOutputStream tiedOutputStream = getTiedOutputStream();
                 TiedOutputStream.tieOutputStreams(tiedOutputStream);
 
-                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    TiedOutputStream.resetOutputStreams(tiedOutputStream);
-                }));
+                Runtime.getRuntime().addShutdownHook(
+                        new Thread(() -> TiedOutputStream.resetOutputStreams(tiedOutputStream))
+                );
 
                 debugScrollPane = new JScrollPane(debugTextArea);
                 centerPanel.add(debugScrollPane, BorderLayout.CENTER);
@@ -253,7 +256,7 @@ public class DebugConsoleWindow extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
-                            Files.openInFileManager(debugSaveAsFilePath, debug);
+                            Files.openInFileManager(debugSaveAsFilePath);
                         }
 
                     });
@@ -318,7 +321,21 @@ public class DebugConsoleWindow extends JFrame {
 
         SwingGUI.setLocationOnResize(debugFrame, true);
 
+        debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
+
+        boolean darkMode = SwingGUI.isDarkModeActive();
+        expandWindowButtonColorChange(new Color(darkMode ? 0xbbbbbb : 0x000000));
+
         this.maximized = !maximized;
+    }
+
+    public static void expandWindowButtonColorChange(Color color) {
+        if (DebugConsoleWindow.debugFrame != null) {
+            Icon tmp = expandWindowButton.getIcon();
+            // set the icon to the colour
+            Icon icon = SwingGUI.changeIconColor(tmp, color);
+            expandWindowButton.setIcon(icon);
+        }
     }
 
     private String getLogFileName() {
@@ -339,7 +356,7 @@ public class DebugConsoleWindow extends JFrame {
         ));
     }
 
-    private TiedOutputStream getTiedOutputStream() {
+    private TiedOutputStream getTiedOutputStream() { //TODO
         PrintStream debugPrintStream = new PrintStream(new OutputStream() {
             boolean newLine = true;
             @Override
@@ -348,10 +365,13 @@ public class DebugConsoleWindow extends JFrame {
                     debugTextArea.append("[" + Utils.getCurrentTime(false, true, false) + "]: ");
                     newLine = false;
                 }
+
                 debugTextArea.append(String.valueOf((char)b));
+
                 if ((char)b == '\n') {
                     newLine = true;
                 }
+
                 debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
                 updateNumberOfLines(debugTextArea.getLineCount());
             }
