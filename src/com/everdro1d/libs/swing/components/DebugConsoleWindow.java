@@ -356,7 +356,7 @@ public class DebugConsoleWindow extends JFrame {
         ));
     }
 
-    private TiedOutputStream getTiedOutputStream() {
+    private TiedOutputStream getTiedOutputStream() { //TODO
         PrintStream debugPrintStream = new PrintStream(new OutputStream() {
             boolean newLine = true;
             @Override
