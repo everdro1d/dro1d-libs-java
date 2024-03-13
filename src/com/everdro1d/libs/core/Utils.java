@@ -101,33 +101,28 @@ public class Utils {
         return uniqueValues;
     }
 
-    public static void printNestedMap(Map<String, Map<String, String>> map) {
-        for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
-        }
-    }
-
     /**
-     * Prints a formatted nested map. See example below.
+     * Prints a json formatted nested map (allows for infinite nesting). See example below.
      *
      * <p>Example:</p>
      * <p></p>
-     * <p>Outer Map:</p>
      * <pre>
      * {
-     *   "Key1": Inner Map
-     *   {
-     *     "SubKey1": "SubValue1",
-     *     "SubKey2": "SubValue2",
-     *     "SubKey3": "SubValue3"
+     *   "Key1": {
+     *     "SubKey1-1": {
+     *       "SubKey1-2": "SubValue1-2",
+     *       "SubKey2-2": "SubValue2-2",
+     *       "SubKey3-2": "SubValue3-2"
+     *      }
      *   },
-     *   "Key2": Inner Map
-     *   {
-     *     "SubKey1": "SubValue1",
-     *     "SubKey2": "SubValue2"
+     *   "Key2": {
+     *     "SubKey1-1": {
+     *       "SubKey1-2": "SubValue1-2",
+     *       "SubKey2-2": "SubValue2-2",
+     *       "SubKey3-2": "SubValue3-2"
+     *     }
      *   },
-     *   "Key3": Inner Map
-     *   {
+     *   "Key3": {
      *     "SubKey1": "SubValue1",
      *     "SubKey2": "SubValue2",
      *     "SubKey3": "SubValue3",
@@ -136,15 +131,31 @@ public class Utils {
      * }
      * </pre>
      */
-    public static void printNestedMapFormatted(Map<String, Map<String, String>> map) {
-        System.out.println("Outer Map \n{");
-        for (Map.Entry<String, Map<String, String>> outerEntry : map.entrySet()) {
-            System.out.println("  \"" + outerEntry.getKey() + "\" : Inner Map\n        {");
-            for (Map.Entry<String, String> innerEntry : outerEntry.getValue().entrySet()) {
-                System.out.println("            \"" + innerEntry.getKey() + "\" : \"" + innerEntry.getValue() + "\",");
+    public static void printNestedMapFormatted(Object map, int indentLeaveAsZero) {
+        String indentString = new String(new char[indentLeaveAsZero]).replace("\0", "  ");
+
+        // Use a separate indentation for nested content
+        String nestedIndent = indentString + "  ";
+
+        if (map instanceof Map) {
+            Map<String, ?> mapObj = (Map<String, ?>) map;
+            boolean isFirstEntry = true;
+            System.out.print("{");
+            for (Map.Entry<String, ?> entry : mapObj.entrySet()) {
+                if (!isFirstEntry) {
+                    System.out.print(",");
+                }
+                isFirstEntry = false;
+                System.out.print("\n" + nestedIndent + "\"" + entry.getKey() + "\" : ");
+                printNestedMapFormatted(entry.getValue(), indentLeaveAsZero + 1);
             }
-            System.out.println("        },");
+            // Check if it's the last entry and only print newline then
+            if (!isFirstEntry) {
+                System.out.println();
+            }
+            System.out.print(indentString + "}");
+        } else {
+            System.out.print("\"" + map + "\"");
         }
-        System.out.println("}");
     }
 }
