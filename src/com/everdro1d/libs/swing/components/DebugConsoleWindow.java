@@ -112,9 +112,9 @@ public class DebugConsoleWindow extends JFrame {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.debug = debug;
+
         if (localeManager != null) {
             DebugConsoleWindow.localeManager = localeManager;
-
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("DebugConsoleWindow")) {
                 addClassToLocale();
