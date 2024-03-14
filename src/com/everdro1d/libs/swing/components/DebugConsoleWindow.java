@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.nio.file.FileSystems;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -73,14 +74,28 @@ public class DebugConsoleWindow extends JFrame {
     // End of variables -----------------------------------------------------------------------------------------------|
 
     /**
-     * Overload Constructor with default font.
+     * Overload Constructor with default font and null locale.
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
+     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean, LocaleManager)
      * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
      */
     public DebugConsoleWindow(JFrame parent, Preferences prefs, boolean debug) {
         this(parent, "Tahoma", 16, prefs, debug, null);
+    }
+
+    /**
+     * Overload Constructor with default font.
+     * @param parent frame to latch onto if called from another window
+     * @param prefs Preferences object for saving and loading user settings
+     * @param debug whether to print debug information
+     * @param localeManager LocaleManager object for handling locale changes
+     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean)
+     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
+     */
+    public DebugConsoleWindow(JFrame parent, Preferences prefs, boolean debug, LocaleManager localeManager) {
+        this(parent, "Tahoma", 16, prefs, debug, localeManager);
     }
 
     /**
