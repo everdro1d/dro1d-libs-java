@@ -60,6 +60,7 @@ public class LocaleManager {
     Path localeDirPath;
 
     private String currentLocale = "eng";
+    private boolean localeMapUpdated = false;
 
     public LocaleManager(String localeFileName, Class<?> mainClazz) {
         localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
@@ -254,8 +255,11 @@ public class LocaleManager {
     }
 
     private void localeMapUpdated() {
-        Runtime.getRuntime().addShutdownHook(
-                new Thread(() -> saveLocaleToFile("locale_" + getCurrentLocale(), LocaleMap, true)));
+        if (!localeMapUpdated) {
+            Runtime.getRuntime().addShutdownHook(
+                    new Thread(() -> saveLocaleToFile("locale_" + getCurrentLocale(), LocaleMap, true)));
+            localeMapUpdated = true;
+        }
     }
 
     // Getters and Setters --------------------------------------------------------------------------------------------|
