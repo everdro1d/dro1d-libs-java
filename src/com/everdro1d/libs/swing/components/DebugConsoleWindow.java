@@ -5,6 +5,7 @@
 package com.everdro1d.libs.swing.components;
 
 import com.everdro1d.libs.core.ApplicationCore;
+import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.io.TiedOutputStream;
@@ -13,24 +14,26 @@ import com.everdro1d.libs.swing.SwingGUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.FileSystems;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
 public class DebugConsoleWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
-    // Swing components - Follow tab hierarchy for organization -----------|
+    // Swing components - Follow indent hierarchy for organization -----------|
     public static JFrame debugFrame;
         private JPanel mainPanel;
             private JPanel northPanel;
                 private JPanel leftNorthPanel;
                     private JLabel titleLabel;
+                        private String titleText = "Debug Console";
+
                 private JPanel rightNorthPanel;
                     private JLabel numberOfLinesLabel;
+                        private String numberOfLinesText = "Number of Lines: ";
                     public static JButton expandWindowButton;
                         private Icon iconExpand;
                         private Icon iconShrink;
@@ -39,15 +42,24 @@ public class DebugConsoleWindow extends JFrame {
                     private JTextArea debugTextArea;
             private JPanel southPanel;
                 private JPanel leftSouthPanel;
-                    private JButton copyButton;
                     private JButton clearButton;
+                        private String clearButtonText = "Clear";
+                    private JButton copyButton;
+                        private String copyButtonText = "Copy";
                     private JButton saveButton;
+                        private String saveButtonText = "Save as ";
+                        private String savedSuccessDialogMessage = "Saved debug console to file at: ";
+                        private String savedSuccessDialogTitle = "Success!";
+                        private static String fileChooserTitle = "Save To";
+                        private static String fileChooserCustomMessage = "Text File";
                 private JPanel rightSouthPanel;
                     private JButton closeButton;
+                        private String closeButtonText = "Close";
             private JPanel eastPanel;
             private JPanel westPanel;
 
     // End of Swing components --------------------------------------------|
+    private LocaleManager localeManager;
     private boolean debug = false;
     private boolean maximized;
     private int numberOfLines = 0;
@@ -63,11 +75,12 @@ public class DebugConsoleWindow extends JFrame {
     /**
      * Overload Constructor with default font.
      * @param parent frame to latch onto if called from another window
+     * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean)
+     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
      */
     public DebugConsoleWindow(JFrame parent, Preferences prefs, boolean debug) {
-        this(parent, "Tahoma", 16, prefs, debug);
+        this(parent, "Tahoma", 16, prefs, debug, null);
     }
 
     /**
@@ -75,13 +88,24 @@ public class DebugConsoleWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param fontName the name of the font to use
      * @param fontSize the size of the font to use
+     * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
+     * @param localeManager LocaleManager object for handling locale changes
      * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean)
      */
-    public DebugConsoleWindow(JFrame parent, String fontName, int fontSize, Preferences prefs, boolean debug) {
+    public DebugConsoleWindow(JFrame parent, String fontName, int fontSize, Preferences prefs, boolean debug, LocaleManager localeManager) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.debug = debug;
+        if (localeManager != null) {
+            this.localeManager = localeManager;
+
+            // if the locale does not contain the class, add it and it's components
+            if (!localeManager.getClassesInLocaleMap().contains("DebugConsoleWindow")) {
+                addClassToLocale();
+            }
+            useLocale();
+        } else System.out.println("LocaleManager is null. DebugConsoleWindow will launch without localization.");
 
         initializeWindowProperties(parent);
         initializeGUIComponents(prefs);
@@ -90,9 +114,45 @@ public class DebugConsoleWindow extends JFrame {
 
         SwingGUI.setHandCursorToClickableComponents(debugFrame);
     }
+
+    private void addClassToLocale() {
+        Map<String, Map<String, String>> map = new TreeMap<>();
+        map.put("Main", new TreeMap<>());
+        map.put("FileChooser", new TreeMap<>());
+        Map<String, String> mainMap = map.get("Main");
+        Map<String, String> fileChooserMap = map.get("FileChooser");
+        mainMap.put("titleText", titleText);
+        mainMap.put("numberOfLinesText", numberOfLinesText);
+        mainMap.put("clearButtonText", clearButtonText);
+        mainMap.put("copyButtonText", copyButtonText);
+        mainMap.put("saveButtonText", saveButtonText);
+        fileChooserMap.put("savedSuccessDialogMessage", savedSuccessDialogMessage);
+        fileChooserMap.put("savedSuccessDialogTitle", savedSuccessDialogTitle);
+        fileChooserMap.put("fileChooserTitle", fileChooserTitle);
+        fileChooserMap.put("fileChooserCustomMessage", fileChooserCustomMessage);
+        mainMap.put("closeButtonText", closeButtonText);
+
+        localeManager.addClassSpecificMap("DebugConsoleWindow", map);
+    }
+
+    private void useLocale() {
+        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("DebugConsoleWindow");
+
+        titleText = varMap.getOrDefault("titleText", titleText);
+        numberOfLinesText = varMap.getOrDefault("numberOfLinesText", numberOfLinesText);
+        clearButtonText = varMap.getOrDefault("clearButtonText", clearButtonText);
+        copyButtonText = varMap.getOrDefault("copyButtonText", copyButtonText);
+        saveButtonText = varMap.getOrDefault("saveButtonText", saveButtonText);
+        savedSuccessDialogMessage = varMap.getOrDefault("savedSuccessDialogMessage", savedSuccessDialogMessage);
+        savedSuccessDialogTitle = varMap.getOrDefault("savedSuccessDialogTitle", savedSuccessDialogTitle);
+        fileChooserTitle = varMap.getOrDefault("fileChooserTitle", fileChooserTitle);
+        fileChooserCustomMessage = varMap.getOrDefault("fileChooserCustomMessage", fileChooserCustomMessage);
+        closeButtonText = varMap.getOrDefault("closeButtonText", closeButtonText);
+    }
+
     private void initializeWindowProperties(JFrame parent) {
         debugFrame = this;
-        debugFrame.setTitle("Debug Console");
+        debugFrame.setTitle(titleText);
         debugFrame.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         debugFrame.setResizable(false);
@@ -120,7 +180,7 @@ public class DebugConsoleWindow extends JFrame {
                 {
                     leftNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
-                    titleLabel = new JLabel("Debug Console");
+                    titleLabel = new JLabel(titleText);
                     int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
                     titleLabel.setPreferredSize(
                             new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
@@ -195,7 +255,7 @@ public class DebugConsoleWindow extends JFrame {
                 leftSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth + 50, BORDER_PADDING_HEIGHT));
                 southPanel.add(leftSouthPanel);
                 {
-                    clearButton = new JButton("Clear");
+                    clearButton = new JButton(clearButtonText);
                     clearButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                     clearButton.addActionListener(e -> {
                         debugTextArea.setText("");
@@ -204,7 +264,7 @@ public class DebugConsoleWindow extends JFrame {
                     });
                     leftSouthPanel.add(clearButton);
 
-                    copyButton = new JButton("Copy");
+                    copyButton = new JButton(copyButtonText);
                     copyButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                     copyButton.addActionListener(e -> {
                         try {
@@ -220,7 +280,7 @@ public class DebugConsoleWindow extends JFrame {
                     });
                     leftSouthPanel.add(copyButton);
 
-                    saveButton = new JButton("Save as \".txt\"");
+                    saveButton = new JButton(saveButtonText + "\".txt\"");
                     saveButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                     saveButton.addActionListener(e -> {
                         String debugSaveAsFilePath = openFileChooser(
@@ -252,7 +312,7 @@ public class DebugConsoleWindow extends JFrame {
                             if (debug)
                                 System.out.println("Successfully saved debug console as .txt file. Showing message.");
                             JOptionPane.showMessageDialog(debugFrame,
-                                    "Saved log to: \"" + debugSaveAsFilePath + "\"", "Success!",
+                                    savedSuccessDialogMessage+ "\"" + debugSaveAsFilePath + "\"", savedSuccessDialogTitle,
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
@@ -268,7 +328,7 @@ public class DebugConsoleWindow extends JFrame {
                 rightSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth - 50, BORDER_PADDING_HEIGHT));
                 southPanel.add(rightSouthPanel);
                 {
-                    closeButton = new JButton("Close");
+                    closeButton = new JButton(closeButtonText);
                     closeButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                     closeButton.addActionListener(e -> {
                         if (debug) System.out.println("Closed debug console.");
@@ -347,7 +407,7 @@ public class DebugConsoleWindow extends JFrame {
 
     private void updateNumberOfLines(int numberOfLines) {
         this.numberOfLines = numberOfLines;
-        numberOfLinesLabel.setText("Number of Lines: " + numberOfLines);
+        numberOfLinesLabel.setText(numberOfLinesText + numberOfLines);
 
         FontMetrics metrics = numberOfLinesLabel.getFontMetrics(numberOfLinesLabel.getFont());
         int textWidth = metrics.stringWidth(numberOfLinesLabel.getText());
@@ -356,7 +416,7 @@ public class DebugConsoleWindow extends JFrame {
         ));
     }
 
-    private TiedOutputStream getTiedOutputStream() { //TODO
+    private TiedOutputStream getTiedOutputStream() {
         PrintStream debugPrintStream = new PrintStream(new OutputStream() {
             boolean newLine = true;
             @Override
@@ -385,7 +445,8 @@ public class DebugConsoleWindow extends JFrame {
         String output = System.getProperty("user.home");
 
         FileChooser fileChooser = new FileChooser(
-                output, "Save To", false, "Text File - *.txt");
+                output, fileChooserTitle, false, fileChooserCustomMessage+ "- *.txt");
+
 
         int returnValue = fileChooser.showOpenDialog(debugFrame);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
