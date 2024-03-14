@@ -356,7 +356,7 @@ public class SwingGUI {
      * @param downloadURL the URL of the download link - "https://someurl.com/download"
      * @param prefs the preferences object for saving do not ask again
      * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String)
-     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String)
+     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String, LocaleManager)
      */
     public static void updateCheckerDialog(
             String currentVersion, JFrame parentFrame, boolean printDebug,
