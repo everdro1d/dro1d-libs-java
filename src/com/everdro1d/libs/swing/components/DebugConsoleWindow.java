@@ -49,7 +49,7 @@ public class DebugConsoleWindow extends JFrame {
                         private String copyButtonText = "Copy";
                     private JButton saveButton;
                         private String saveButtonText = "Save as ";
-                        private String savedSuccessDialogMessage = "Saved debug console to file at: ";
+                        private String savedSuccessDialogMessage = "Saved debug console to file at:";
                         private String savedSuccessDialogTitle = "Success!";
                         private static String fileChooserTitle = "Save To";
                         private static String fileChooserCustomMessage = "Text File";
@@ -327,7 +327,7 @@ public class DebugConsoleWindow extends JFrame {
                             if (debug)
                                 System.out.println("Successfully saved debug console as .txt file. Showing message.");
                             JOptionPane.showMessageDialog(debugFrame,
-                                    savedSuccessDialogMessage+ "\"" + debugSaveAsFilePath + "\"", savedSuccessDialogTitle,
+                                    savedSuccessDialogMessage + " \"" + debugSaveAsFilePath + "\"", savedSuccessDialogTitle,
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
