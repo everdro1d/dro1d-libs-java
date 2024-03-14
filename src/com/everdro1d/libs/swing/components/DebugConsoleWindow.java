@@ -59,7 +59,7 @@ public class DebugConsoleWindow extends JFrame {
             private JPanel westPanel;
 
     // End of Swing components --------------------------------------------|
-    private LocaleManager localeManager;
+    private static LocaleManager localeManager;
     private boolean debug = false;
     private boolean maximized;
     private int numberOfLines = 0;
@@ -445,7 +445,7 @@ public class DebugConsoleWindow extends JFrame {
         String output = System.getProperty("user.home");
 
         FileChooser fileChooser = new FileChooser(
-                output, fileChooserTitle, false, fileChooserCustomMessage+ "- *.txt");
+                output, fileChooserTitle, false, fileChooserCustomMessage+ "- *.txt", localeManager);
 
 
         int returnValue = fileChooser.showOpenDialog(debugFrame);

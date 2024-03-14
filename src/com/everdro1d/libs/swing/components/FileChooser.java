@@ -4,6 +4,7 @@
 
 package com.everdro1d.libs.swing.components;
 
+import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 
 import javax.swing.*;
@@ -12,6 +13,9 @@ import java.awt.*;
 import java.io.File;
 
 public class FileChooser extends JFileChooser {
+    // UI text
+    private String selectButtonText = "Select";
+    private String cancelButtonText = "Cancel";
     private final Font font = this.getParent() != null
             ? this.getParent().getFont()
             : new Font("Tahoma", Font.PLAIN,16);
@@ -19,8 +23,8 @@ public class FileChooser extends JFileChooser {
     /**
      * Create a generic file chooser dialog allowing selection of both files and directories.
      */
-    public FileChooser(String path, String dialogTitle) {
-        this(path, dialogTitle, true, true, false, null, false, null);
+    public FileChooser(String path, String dialogTitle, LocaleManager localeManager) {
+        this(path, dialogTitle, true, true, false, null, false, null, localeManager);
     }
 
     /**
@@ -29,8 +33,8 @@ public class FileChooser extends JFileChooser {
      * @param dialogTitle The title of the dialog.
      * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
      */
-    public FileChooser(String path, String dialogTitle, boolean selectFiles) {
-        this(path, dialogTitle, selectFiles, !selectFiles, false, null, false, null);
+    public FileChooser(String path, String dialogTitle, boolean selectFiles, LocaleManager localeManager) {
+        this(path, dialogTitle, selectFiles, !selectFiles, false, null, false, null, localeManager);
     }
 
     /**
@@ -39,8 +43,8 @@ public class FileChooser extends JFileChooser {
      * @param dialogTitle The title of the dialog.
      * @param extension The extension to filter files by. ex. "txt"
      */
-    public FileChooser(String path, String dialogTitle, String extension) {
-        this(path, dialogTitle, true, false, true, extension, false, null);
+    public FileChooser(String path, String dialogTitle, String extension, LocaleManager localeManager) {
+        this(path, dialogTitle, true, false, true, extension, false, null, localeManager);
     }
 
     /**
@@ -50,8 +54,8 @@ public class FileChooser extends JFileChooser {
      * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
      * @param customMessage Custom message to show in the description area.
      */
-    public FileChooser(String path, String dialogTitle, boolean selectFiles, String customMessage) {
-        this(path, dialogTitle, selectFiles, !selectFiles, false, null, true, customMessage);
+    public FileChooser(String path, String dialogTitle, boolean selectFiles, String customMessage, LocaleManager localeManager) {
+        this(path, dialogTitle, selectFiles, !selectFiles, false, null, true, customMessage, localeManager);
     }
 
     /**
@@ -64,14 +68,17 @@ public class FileChooser extends JFileChooser {
      * @param dialogTitle The title of the dialog.
      * @param useCustomMessage whether to use a custom message for the description
      * @param customMessage the message to use for custom message
+     * @param localeManager the locale manager to use for the file chooser
      */
     public FileChooser(String path ,String dialogTitle, boolean selectFiles, boolean selectDirectories,
-                       boolean filterByExtension, String extension, boolean useCustomMessage, String customMessage
+                       boolean filterByExtension, String extension, boolean useCustomMessage, String customMessage, LocaleManager localeManager
     ) {
         super();
         // Set file chooser gui properties
         setDialogTitle(dialogTitle);
-        setApproveButtonText("Select");
+        setOpenDialogTitleText(dialogTitle);
+        setApproveButtonText(selectButtonText);
+        setCancelButtonText(cancelButtonText);
         setPreferredSize(new Dimension(600, 450));
         setFileChooserFont(this.getComponents());
         SwingGUI.setHandCursorToClickableComponents(this);
@@ -106,6 +113,16 @@ public class FileChooser extends JFileChooser {
                 return "Any File or Directory (Folder)";
             }
         });
+    }
+
+    private void setOpenDialogTitleText(String openDialogTitleText) {
+        UIManager.put("FileChooser.openDialogTitleText", openDialogTitleText);
+    }
+
+    //TODO https://beradrian.wordpress.com/2007/07/30/internationalization-for-swing-standard-components/
+
+    private void setCancelButtonText(String cancelButtonText) {
+        UIManager.put("FileChooser.cancelButtonText", cancelButtonText);
     }
 
     private void setFileChooserFont(Component[] comp) {
