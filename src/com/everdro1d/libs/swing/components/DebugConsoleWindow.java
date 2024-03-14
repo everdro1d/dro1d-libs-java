@@ -60,7 +60,7 @@ public class DebugConsoleWindow extends JFrame {
 
     // End of Swing components --------------------------------------------|
     private static LocaleManager localeManager;
-    private boolean debug = false;
+    private boolean debug;
     private boolean maximized;
     private int numberOfLines = 0;
     private final int WINDOW_WIDTH = 600;
@@ -98,7 +98,7 @@ public class DebugConsoleWindow extends JFrame {
         this.fontSize = fontSize;
         this.debug = debug;
         if (localeManager != null) {
-            this.localeManager = localeManager;
+            DebugConsoleWindow.localeManager = localeManager;
 
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("DebugConsoleWindow")) {

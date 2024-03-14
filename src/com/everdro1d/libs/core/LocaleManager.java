@@ -56,13 +56,13 @@ public class LocaleManager {
      */
     Map<String, Map<String, Map<String, String>>> LocaleMap = new TreeMap<>();
 
-    // The path to the locales directory
-    Path localeDirPath = Path.of(
-            Path.of(Files.getJarPath(this.getClass())).getParent().toString() + "/locales");
+    // The default path to the locales directory
+    Path localeDirPath;
 
     private String currentLocale = "eng";
 
-    public LocaleManager(String localeFileName) {
+    public LocaleManager(String localeFileName, Class<?> mainClazz) {
+        localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
         initValidLocalesMap();
         loadLocaleFromFile(localeFileName);
     }
