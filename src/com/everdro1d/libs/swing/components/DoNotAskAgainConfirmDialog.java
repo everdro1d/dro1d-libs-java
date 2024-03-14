@@ -4,15 +4,31 @@
 
 package com.everdro1d.libs.swing.components;
 
+import com.everdro1d.libs.core.LocaleManager;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
 public class DoNotAskAgainConfirmDialog extends JPanel {
+    private LocaleManager localeManager;
     private final JCheckBox doNotAskAgainCheckBox;
+        private String doNotAskAgainCheckBoxText = "Don't ask me again";
 
-    private DoNotAskAgainConfirmDialog(Object message) {
+    private DoNotAskAgainConfirmDialog(Object message, LocaleManager localeManager) {
         setLayout(new BorderLayout());
+
+        if (localeManager != null) {
+            this.localeManager = localeManager;
+            // if the locale does not contain the class, add it and it's components
+            if (!localeManager.getClassesInLocaleMap().contains("DoNotAskAgainConfirmDialog")) {
+                addClassToLocale();
+            }
+            useLocale();
+        } else System.out.println("LocaleManager is null. DoNotAskAgainConfirmDialog will launch without localization.");
+
 
         if (message instanceof Component) {
             add((Component) message);
@@ -22,7 +38,7 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
             add(messageLabel);
         }
 
-        doNotAskAgainCheckBox = new JCheckBox("Don't ask me again");
+        doNotAskAgainCheckBox = new JCheckBox(doNotAskAgainCheckBoxText);
         JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         checkBoxPanel.add(doNotAskAgainCheckBox);
         add(checkBoxPanel, BorderLayout.SOUTH);
@@ -41,18 +57,40 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
      * @param prefsKey key for do not ask again
      * @return int selected option
      */
-    public static int showConfirmDialog(Component parentComponent, Object message, String title, int optionType, int messageType, Preferences prefs, String prefsKey) {
+    public static int showConfirmDialog(
+            Component parentComponent, Object message, String title,
+            int optionType, int messageType, Preferences prefs, String prefsKey,
+            LocaleManager localeManager
+    ) {
         int result;
 
         if (prefs.getBoolean(prefsKey, false)) {
             return JOptionPane.YES_OPTION;
         } else {
-            DoNotAskAgainConfirmDialog confirmDialog = new DoNotAskAgainConfirmDialog(message);
-            result = JOptionPane.showOptionDialog(parentComponent, confirmDialog, title, optionType, messageType, null, null, null);
+            DoNotAskAgainConfirmDialog confirmDialog = new DoNotAskAgainConfirmDialog(message, localeManager);
+            result = JOptionPane.showOptionDialog(
+                    parentComponent, confirmDialog, title, optionType,
+                    messageType, null, null, null
+            );
             if (confirmDialog.isDoNotAskAgainSelected()) {
                 prefs.putBoolean(prefsKey, true);
             }
         }
         return result;
+    }
+
+    private void addClassToLocale() {
+        Map<String, Map<String, String>> map = new TreeMap<>();
+        map.put("Main", new TreeMap<>());
+        Map<String, String> mainMap = map.get("Main");
+        mainMap.put("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
+
+        localeManager.addClassSpecificMap("DoNotAskAgainConfirmDialog", map);
+    }
+
+    private void useLocale() {
+        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("DoNotAskAgainConfirmDialog");
+        doNotAskAgainCheckBoxText = varMap.getOrDefault("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
+        doNotAskAgainCheckBox.setText(doNotAskAgainCheckBoxText);
     }
 }

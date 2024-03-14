@@ -1,5 +1,6 @@
 package com.everdro1d.libs.swing;
 
+import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.components.DoNotAskAgainConfirmDialog;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -359,7 +360,8 @@ public class SwingGUI {
      */
     public static void updateCheckerDialog(
             String currentVersion, JFrame parentFrame, boolean printDebug,
-            String githubURL, String downloadURL, Preferences prefs
+            String githubURL, String downloadURL, Preferences prefs,
+            LocaleManager localeManager
     ) {
         String latestVersion = ApplicationCore.getLatestVersion(githubURL);
         if (latestVersion != null) {
@@ -373,7 +375,8 @@ public class SwingGUI {
                         "An update is available.<br>Would you like to update now?<br><br>Latest Version: v" + latestVersion +
                                 "<br>Installed Version: v" +
                                 currentVersion, "Update Available",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog"
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog",
+                        localeManager
                 );
 
                 if (dialogResult == JOptionPane.YES_OPTION) {
