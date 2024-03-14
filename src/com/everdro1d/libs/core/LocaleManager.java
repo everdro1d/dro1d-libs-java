@@ -82,7 +82,7 @@ public class LocaleManager {
      * @param fileName The name of the file to load the locale from **without the file extension** ex: locale_eng
      */
     public void loadLocaleFromFile(String fileName) {
-        if (!validateLocaleCode(fileName.split("_")[1].toLowerCase()) ) {
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
             System.err.println("Invalid locale");
             return;
         }
@@ -126,7 +126,7 @@ public class LocaleManager {
     }
 
     public void saveLocaleToFile(String fileName, Map<String, Map<String, Map<String, String>>> localeMap, boolean overwrite) {
-        if (!validateLocaleCode(fileName.split("_")[1].toLowerCase()) ) {
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
             System.err.println("Invalid locale");
             return;
         }
@@ -187,7 +187,7 @@ public class LocaleManager {
      * @param locale The locale code to validate
      * @return True if the locale code is valid, false otherwise
      */
-    public boolean validateLocaleCode(String locale) {
+    public boolean isLocaleCodeValid(String locale) {
         boolean valid = false;
         String[] codes = validLocaleMap.keySet().toArray(new String[0]);
         for (String code : codes) {
