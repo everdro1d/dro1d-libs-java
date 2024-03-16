@@ -62,10 +62,9 @@ public class LocaleManager {
     private String currentLocale = "eng";
     private boolean localeMapUpdated = false;
 
-    public LocaleManager(String localeFileName, Class<?> mainClazz) {
+    public LocaleManager(Class<?> mainClazz) {
         localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
         initValidLocalesMap();
-        loadLocaleFromFile(localeFileName);
     }
 
     private void initValidLocalesMap() {
