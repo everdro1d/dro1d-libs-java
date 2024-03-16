@@ -91,6 +91,5 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
     private void useLocale() {
         Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("DoNotAskAgainConfirmDialog");
         doNotAskAgainCheckBoxText = varMap.getOrDefault("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
-        doNotAskAgainCheckBox.setText(doNotAskAgainCheckBoxText);
     }
 }
