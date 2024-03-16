@@ -92,7 +92,7 @@ public class LocaleManager {
             fileName = "locale_eng";
             boolean exists1 = checkForLocaleFile(fileName);
             if (!exists1) {
-                System.err.println("Default locale file does not exist, stopping...");
+                System.err.println("Default locale file does not exist, stopping load...");
                 return;
             }
         }
