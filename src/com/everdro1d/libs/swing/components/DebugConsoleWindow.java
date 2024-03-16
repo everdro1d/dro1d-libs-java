@@ -18,6 +18,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
@@ -34,7 +35,7 @@ public class DebugConsoleWindow extends JFrame {
 
                 private JPanel rightNorthPanel;
                     private JLabel numberOfLinesLabel;
-                        private String numberOfLinesText = "Number of Lines: ";
+                        private String numberOfLinesText = "Number of Lines:";
                     public static JButton expandWindowButton;
                         private Icon iconExpand;
                         private Icon iconShrink;
@@ -48,7 +49,7 @@ public class DebugConsoleWindow extends JFrame {
                     private JButton copyButton;
                         private String copyButtonText = "Copy";
                     private JButton saveButton;
-                        private String saveButtonText = "Save as ";
+                        private String saveButtonText = "Save as";
                         private String savedSuccessDialogMessage = "Saved debug console to file at:";
                         private String savedSuccessDialogTitle = "Success!";
                         private static String fileChooserTitle = "Save To";
@@ -295,7 +296,7 @@ public class DebugConsoleWindow extends JFrame {
                     });
                     leftSouthPanel.add(copyButton);
 
-                    saveButton = new JButton(saveButtonText + "\".txt\"");
+                    saveButton = new JButton(saveButtonText + " \".txt\"");
                     saveButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                     saveButton.addActionListener(e -> {
                         String debugSaveAsFilePath = openFileChooser(
@@ -422,7 +423,7 @@ public class DebugConsoleWindow extends JFrame {
 
     private void updateNumberOfLines(int numberOfLines) {
         this.numberOfLines = numberOfLines;
-        numberOfLinesLabel.setText(numberOfLinesText + numberOfLines);
+        numberOfLinesLabel.setText(numberOfLinesText + " " + numberOfLines);
 
         FontMetrics metrics = numberOfLinesLabel.getFontMetrics(numberOfLinesLabel.getFont());
         int textWidth = metrics.stringWidth(numberOfLinesLabel.getText());
@@ -461,7 +462,6 @@ public class DebugConsoleWindow extends JFrame {
 
         FileChooser fileChooser = new FileChooser(
                 output, fileChooserTitle, false, fileChooserCustomMessage+ "- *.txt", localeManager);
-
 
         int returnValue = fileChooser.showOpenDialog(debugFrame);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
