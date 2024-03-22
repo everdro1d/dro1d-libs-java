@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
 import java.util.prefs.Preferences;
@@ -270,6 +272,18 @@ public class SwingGUI {
     public static void simulateKeyEvent(JComponent component, int keyCode, char keyChar, int modifiers, int event) {
         KeyEvent keyEvent = new KeyEvent(component, event, System.currentTimeMillis(), modifiers, keyCode, keyChar);
         component.dispatchEvent(keyEvent);
+    }
+
+    /**
+     * Simulates a mouse event on a component.
+     * @param component the component to simulate the event on
+     * @param x the x position of the mouse
+     * @param y the y position of the mouse
+     * @param event MouseEvent.MOUSE_[PRESSED, RELEASED, CLICKED, ENTERED, EXITED]
+     */
+    public static void simulateMouseEvent(JComponent component, int x, int y, int event) {
+        MouseEvent mouseEvent = new MouseEvent(component, event, System.currentTimeMillis(), 0, x, y, 1, false);
+        component.dispatchEvent(mouseEvent);
     }
 
     /**
