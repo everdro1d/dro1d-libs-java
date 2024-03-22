@@ -1,17 +1,16 @@
 package com.everdro1d.libs.swing;
 
+import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.swing.components.DoNotAskAgainConfirmDialog;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.everdro1d.libs.core.ApplicationCore;
-import com.everdro1d.libs.core.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
@@ -369,7 +368,7 @@ public class SwingGUI {
      * @param githubURL the URL of the GitHub repository - "https://github.com/user/repo/releases/latest/"
      * @param downloadURL the URL of the download link - "https://someurl.com/download"
      * @param prefs the preferences object for saving do not ask again
-     * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String)
+     * @see ApplicationCore#getLatestVersion(String)
      * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String, LocaleManager)
      */
     public static void updateCheckerDialog(
