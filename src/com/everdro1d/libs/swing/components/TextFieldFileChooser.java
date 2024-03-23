@@ -23,10 +23,18 @@ public class TextFieldFileChooser extends JComponent {
 
     // Constructors ---------------------------------------------------------------------------------------------------|
     public TextFieldFileChooser(LocaleManager localeManager) {
+        this(localeManager, true, true);
+    }
+
+    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles) {
+        this(localeManager, selectFiles, false);
+    }
+
+    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories) {
         this.textField = new JTextField();
         this.button = new JButton("...");
         this.fileChooser = new FileChooser(getText(), "Select path:",
-                true, true, false, null,
+                selectFiles, selectDirectories, false, null,
                 false, null, localeManager);
 
         // Create a JPanel with a FlowLayout and add the button to it
