@@ -13,9 +13,24 @@ public class CollapsableTitledBorder extends TitledBorder {
 
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
+            boolean exclusive, int panelExpandedHeight
+    ) {
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50);
+    }
+
+    public CollapsableTitledBorder(
+            JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight
     ) {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null);
+    }
+
+    public CollapsableTitledBorder(
+            JComponent panel, String titleText, boolean expandedDefault,
+            boolean exclusive, int panelExpandedHeight,
+            Consumer<JTabbedPane> tabbedPaneExpandFunc
+    ) {
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc);
     }
 
     public CollapsableTitledBorder(
