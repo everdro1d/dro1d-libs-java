@@ -34,6 +34,7 @@ public class CollapsableTitledBorder extends TitledBorder {
                 this, tabbedPaneExpandFunc, exclusive
         );
         panel.addMouseListener(adapter);
+        panel.addMouseMotionListener(adapter);
 
         if (expandedDefault) {
             adapter.expandPanel();
@@ -67,6 +68,11 @@ public class CollapsableTitledBorder extends TitledBorder {
             this.exclusive = exclusive;
         }
 
+        @Override
+        public void mouseMoved(MouseEvent e) { // change cursor to hand when hovering over title
+            updateMouseCursor(e);
+        }
+
         private static CollapsableTitledBorderMouseAdapter currentlyExpanded = null;
 
         @Override
@@ -75,31 +81,22 @@ public class CollapsableTitledBorder extends TitledBorder {
                 return;
             }
             togglePanelExpanded();
+            updateMouseCursor(e);
         }
 
         private void togglePanelExpanded() {
-            if (panelExpanded) {
-                if (exclusive && this == currentlyExpanded) {
-                    // If the panel is exclusive, and it's the currently expanded panel, stop
-                    return;
-                }
-                collapsePanel();
-            } else {
-                expandPanel();
+            if (exclusive && panelExpanded && this == currentlyExpanded) {
+                return; // do not collapse the panel if it is exclusive and currently expanded
             }
+            if (panelExpanded) collapsePanel(); else expandPanel();
         }
 
         private void expandPanel() {
-            if (exclusive && this != currentlyExpanded) {
-                if (currentlyExpanded != null) {
-                    currentlyExpanded.collapsePanel();
-                }
-
-                panelExpanded = true;
-                currentlyExpanded = this;
-            } else if (!exclusive) {
-                panelExpanded = true;
+            if (exclusive && this != currentlyExpanded && currentlyExpanded != null) {
+                currentlyExpanded.collapsePanel();
             }
+            panelExpanded = true;
+            currentlyExpanded = exclusive ? this : null;
             updatePanel();
         }
 
@@ -131,6 +128,22 @@ public class CollapsableTitledBorder extends TitledBorder {
             panel.revalidate();
             panel.repaint();
             SwingGUI.setHandCursorToClickableComponents(panel);
+        }
+
+        private void updateMouseCursor(MouseEvent e) {
+            int cursorType = panel.getCursor().getType();
+            if (exclusive && this == currentlyExpanded) {
+                if (cursorType == Cursor.HAND_CURSOR) {
+                    panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+                return;
+            }
+            int newCursorType = e.getY() <= panel.getBorder().getBorderInsets(panel).top ?
+                    Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR;
+
+            if (cursorType != newCursorType) {
+                panel.setCursor(Cursor.getPredefinedCursor(newCursorType));
+            }
         }
     }
 }
