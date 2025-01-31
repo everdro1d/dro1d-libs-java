@@ -218,6 +218,7 @@ public class DebugConsoleWindow extends JFrame {
                     iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
                     expandWindowButton.setIcon(iconExpand);
+                    expandWindowButtonColorChange();
 
                     expandWindowButton.addActionListener(e -> resizeWindow(maximized));
                     rightNorthPanel.add(expandWindowButton);
@@ -383,13 +384,15 @@ public class DebugConsoleWindow extends JFrame {
 
         debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
 
-        boolean darkMode = SwingGUI.isDarkModeActive();
-        expandWindowButtonColorChange(new Color(darkMode ? 0xbbbbbb : 0x000000));
+
+        expandWindowButtonColorChange();
 
         this.maximized = !maximized;
     }
 
-    public static void expandWindowButtonColorChange(Color color) {
+    public static void expandWindowButtonColorChange() {
+        boolean darkMode = SwingGUI.isDarkModeActive();
+        Color color = new Color(darkMode ? 0xbbbbbb : 0x000000);
         if (DebugConsoleWindow.debugFrame != null) {
             Icon tmp = expandWindowButton.getIcon();
             // set the icon to the colour
