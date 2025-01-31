@@ -1,5 +1,5 @@
 /**************************************************************************************************
- * Copyright (c) dro1dDev 2024.                                                                   *
+ * Copyright (c) dro1dDev 2025.                                                                   *
  **************************************************************************************************/
 
 package com.everdro1d.libs.swing.components;
@@ -60,7 +60,7 @@ public class DebugConsoleWindow extends JFrame {
             private JPanel eastPanel;
             private JPanel westPanel;
 
-    // End of Swing components --------------------------------------------|
+    // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
     private boolean debug;
     private boolean maximized;
