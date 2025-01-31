@@ -1,5 +1,5 @@
 /**************************************************************************************************
- * Copyright (c) dro1dDev 2024.                                                                   *
+ * Copyright (c) dro1dDev 2025.                                                                   *
  **************************************************************************************************/
 
 package com.everdro1d.libs.core;
@@ -61,10 +61,9 @@ public class LocaleManager {
 
     private String currentLocale = "eng";
 
-    public LocaleManager(String localeFileName, Class<?> mainClazz) {
+    public LocaleManager(Class<?> mainClazz) {
         localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
         initValidLocalesMap();
-        loadLocaleFromFile(localeFileName);
     }
 
     private void initValidLocalesMap() {
@@ -78,6 +77,7 @@ public class LocaleManager {
 
     /**
      * Loads a locale from a file. Defaults to English if the file does not exist.
+     * Expects "locale_[id]"
      *
      * @param fileName The name of the file to load the locale from **without the file extension** ex: locale_eng
      */

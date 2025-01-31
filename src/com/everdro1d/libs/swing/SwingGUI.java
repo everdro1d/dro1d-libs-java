@@ -346,7 +346,7 @@ public class SwingGUI {
         }
     }
 
-    /**
+    /** TODO - update for localeManager
      * Check for updates and display a dialog if an update is available.
      * @param currentVersion the current version of the application - "1.2.1"
      * @param parentFrame the parent frame of the dialog
