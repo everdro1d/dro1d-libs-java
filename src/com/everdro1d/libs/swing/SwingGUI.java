@@ -1,15 +1,17 @@
 package com.everdro1d.libs.swing;
 
+import com.everdro1d.libs.core.ApplicationCore;
+import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.swing.components.DoNotAskAgainConfirmDialog;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.everdro1d.libs.core.ApplicationCore;
-import com.everdro1d.libs.core.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
 import java.util.prefs.Preferences;
@@ -272,6 +274,18 @@ public class SwingGUI {
     }
 
     /**
+     * Simulates a mouse event on a component.
+     * @param component the component to simulate the event on
+     * @param x the x position of the mouse
+     * @param y the y position of the mouse
+     * @param event MouseEvent.MOUSE_[PRESSED, RELEASED, CLICKED, ENTERED, EXITED]
+     */
+    public static void simulateMouseEvent(JComponent component, int x, int y, int event) {
+        MouseEvent mouseEvent = new MouseEvent(component, event, System.currentTimeMillis(), 0, x, y, 1, false);
+        component.dispatchEvent(mouseEvent);
+    }
+
+    /**
      * Creates a string combo box with the specified parameters.
      * @param strArr the array of items for the combo box
      * @param selectedIndex default selected index
@@ -354,12 +368,13 @@ public class SwingGUI {
      * @param githubURL the URL of the GitHub repository - "https://github.com/user/repo/releases/latest/"
      * @param downloadURL the URL of the download link - "https://someurl.com/download"
      * @param prefs the preferences object for saving do not ask again
-     * @see com.everdro1d.libs.core.ApplicationCore#getLatestVersion(String)
-     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String)
+     * @see ApplicationCore#getLatestVersion(String)
+     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String, LocaleManager)
      */
     public static void updateCheckerDialog(
             String currentVersion, JFrame parentFrame, boolean printDebug,
-            String githubURL, String downloadURL, Preferences prefs
+            String githubURL, String downloadURL, Preferences prefs,
+            LocaleManager localeManager
     ) {
         String latestVersion = ApplicationCore.getLatestVersion(githubURL);
         if (latestVersion != null) {
@@ -373,7 +388,8 @@ public class SwingGUI {
                         "An update is available.<br>Would you like to update now?<br><br>Latest Version: v" + latestVersion +
                                 "<br>Installed Version: v" +
                                 currentVersion, "Update Available",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog"
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog",
+                        localeManager
                 );
 
                 if (dialogResult == JOptionPane.YES_OPTION) {

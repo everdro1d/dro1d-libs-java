@@ -60,6 +60,7 @@ public class LocaleManager {
     Path localeDirPath;
 
     private String currentLocale = "eng";
+    private boolean localeMapUpdated = false;
 
     public LocaleManager(Class<?> mainClazz) {
         localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
@@ -82,7 +83,7 @@ public class LocaleManager {
      * @param fileName The name of the file to load the locale from **without the file extension** ex: locale_eng
      */
     public void loadLocaleFromFile(String fileName) {
-        if (!validateLocaleCode(fileName.split("_")[1].toLowerCase()) ) {
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
             System.err.println("Invalid locale");
             return;
         }
@@ -92,7 +93,7 @@ public class LocaleManager {
             fileName = "locale_eng";
             boolean exists1 = checkForLocaleFile(fileName);
             if (!exists1) {
-                System.err.println("Default locale file does not exist, stopping...");
+                System.err.println("Default locale file does not exist, stopping load...");
                 return;
             }
         }
@@ -126,7 +127,7 @@ public class LocaleManager {
     }
 
     public void saveLocaleToFile(String fileName, Map<String, Map<String, Map<String, String>>> localeMap, boolean overwrite) {
-        if (!validateLocaleCode(fileName.split("_")[1].toLowerCase()) ) {
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
             System.err.println("Invalid locale");
             return;
         }
@@ -187,7 +188,7 @@ public class LocaleManager {
      * @param locale The locale code to validate
      * @return True if the locale code is valid, false otherwise
      */
-    public boolean validateLocaleCode(String locale) {
+    public boolean isLocaleCodeValid(String locale) {
         boolean valid = false;
         String[] codes = validLocaleMap.keySet().toArray(new String[0]);
         for (String code : codes) {
@@ -254,8 +255,11 @@ public class LocaleManager {
     }
 
     private void localeMapUpdated() {
-        Runtime.getRuntime().addShutdownHook(
-                new Thread(() -> saveLocaleToFile("locale_" + getCurrentLocale(), LocaleMap, true)));
+        if (!localeMapUpdated) {
+            Runtime.getRuntime().addShutdownHook(
+                    new Thread(() -> saveLocaleToFile("locale_" + getCurrentLocale(), LocaleMap, true)));
+            localeMapUpdated = true;
+        }
     }
 
     // Getters and Setters --------------------------------------------------------------------------------------------|
