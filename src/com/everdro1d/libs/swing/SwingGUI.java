@@ -360,48 +360,6 @@ public class SwingGUI {
         }
     }
 
-    /** TODO - update for localeManager
-     * Check for updates and display a dialog if an update is available.
-     * @param currentVersion the current version of the application - "1.2.1"
-     * @param parentFrame the parent frame of the dialog
-     * @param printDebug whether to print debug information
-     * @param githubURL the URL of the GitHub repository - "https://github.com/user/repo/releases/latest/"
-     * @param downloadURL the URL of the download link - "https://someurl.com/download"
-     * @param prefs the preferences object for saving do not ask again
-     * @see ApplicationCore#getLatestVersion(String)
-     * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String, LocaleManager)
-     */
-    public static void updateCheckerDialog(
-            String currentVersion, JFrame parentFrame, boolean printDebug,
-            String githubURL, String downloadURL, Preferences prefs,
-            LocaleManager localeManager
-    ) {
-        String latestVersion = ApplicationCore.getLatestVersion(githubURL);
-        if (latestVersion != null) {
-            if (latestVersion.equals(currentVersion)) {
-                if (printDebug) System.out.println("Application up to date.");
-
-            } else {
-                if (printDebug) System.out.println("Application update available.");
-
-                int dialogResult = DoNotAskAgainConfirmDialog.showConfirmDialog(parentFrame,
-                        "An update is available.<br>Would you like to update now?<br><br>Latest Version: v" + latestVersion +
-                                "<br>Installed Version: v" +
-                                currentVersion, "Update Available",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, prefs, "doNotAskAgainUpdateDialog",
-                        localeManager
-                );
-
-                if (dialogResult == JOptionPane.YES_OPTION) {
-                    Utils.openLink(downloadURL);
-                    System.exit(0);
-                }
-            }
-        } else {
-            System.err.println("Failed to check for update. Latest Version returned null.");
-        }
-    }
-
     /**
      * Sets the progress bar in percentage format "1-100%", while ensuring non-jumpy values (only increases not decreases).
      * @param i current progress percentage
