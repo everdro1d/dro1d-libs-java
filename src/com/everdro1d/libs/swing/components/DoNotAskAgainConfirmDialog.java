@@ -66,16 +66,19 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
 
         if (prefs.getBoolean(prefsKey, false)) {
             return JOptionPane.YES_OPTION;
-        } else {
-            DoNotAskAgainConfirmDialog confirmDialog = new DoNotAskAgainConfirmDialog(message, localeManager);
-            result = JOptionPane.showOptionDialog(
-                    parentComponent, confirmDialog, title, optionType,
-                    messageType, null, null, null
-            );
-            if (confirmDialog.isDoNotAskAgainSelected()) {
-                prefs.putBoolean(prefsKey, true);
-            }
         }
+
+        DoNotAskAgainConfirmDialog confirmDialog = new DoNotAskAgainConfirmDialog(message, localeManager);
+
+        result = JOptionPane.showOptionDialog(
+                parentComponent, confirmDialog, title, optionType,
+                messageType, null, null, null
+        );
+
+        if (confirmDialog.isDoNotAskAgainSelected()) {
+            prefs.putBoolean(prefsKey, true);
+        }
+
         return result;
     }
 
