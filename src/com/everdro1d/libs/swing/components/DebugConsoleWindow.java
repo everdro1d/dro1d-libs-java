@@ -406,9 +406,15 @@ public class DebugConsoleWindow extends JFrame {
         this.maximized = !maximized;
     }
 
+
+    // overload for default color based on darkmode
     public static void expandWindowButtonColorChange() {
         boolean darkMode = SwingGUI.isDarkModeActive();
         Color color = new Color(darkMode ? 0xbbbbbb : 0x000000);
+        expandWindowButtonColorChange(color);
+    }
+
+    public static void expandWindowButtonColorChange(Color color) {
         if (DebugConsoleWindow.debugFrame != null) {
             Icon tmp = expandWindowButton.getIcon();
             // set the icon to the colour
