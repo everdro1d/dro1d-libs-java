@@ -1,9 +1,5 @@
 package com.everdro1d.libs.swing;
 
-import com.everdro1d.libs.core.ApplicationCore;
-import com.everdro1d.libs.core.LocaleManager;
-import com.everdro1d.libs.core.Utils;
-import com.everdro1d.libs.swing.components.DoNotAskAgainConfirmDialog;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -14,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
-import java.util.prefs.Preferences;
 
 public class SwingGUI {
 
