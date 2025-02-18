@@ -400,7 +400,6 @@ public class DebugConsoleWindow extends JFrame {
 
         debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
 
-
         expandWindowButtonColorChange();
 
         this.maximized = !maximized;
