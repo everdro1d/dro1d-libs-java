@@ -78,18 +78,81 @@ public class SwingGUI {
      * @param fontName the name of the font to use
      */
     public static void uiSetup(boolean isDarkModeActive, String fontName, int fontSize) {
-        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
         Color txtColor = new Color(isDarkModeActive ? 0xbbbbbb : 0x000000);
-        UIManager.put("Component.arc", 10);
-        UIManager.put("TextComponent.arc", 10);
+        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeActive ? 0x4c4c4c : 0xb4b4b4);
+        Color tertiaryColor = new Color(isDarkModeActive ? 0xe0e0e0 : 0x303234);
+        Color accentColor = new Color(isDarkModeActive ? 0x758E4F : 0x568e4f);
+        Color highlightColor = new Color(isDarkModeActive ? 0x393e32 : 0x9bb798);
+        Color focusColor = new Color(isDarkModeActive ? 0x505c3d : 0x719e6c);
+
+        Font font = new Font(fontName, Font.PLAIN, fontSize);
+        int arc = 10;
+
+        // Default components
+        UIManager.put("Component.arc", arc);
+        UIManager.put("TextComponent.arc", arc);
+        
+        UIManager.put("Component.focusColor",focusColor);
+
+        // Separator
         UIManager.put("Separator.stripeWidth", 10);
+        
+        // CheckBox -- see this for other icon modifications
+        UIManager.put("CheckBox.arc",arc);
+        {
+            // not selected
+            UIManager.put("CheckBox.icon.background", secondaryColor);
+            UIManager.put("CheckBox.icon.hoverBackground", highlightColor);
+            UIManager.put("CheckBox.icon.focusedBackground", highlightColor);
+            UIManager.put("CheckBox.icon.pressedBackground", secondaryColor);
+            UIManager.put("CheckBox.icon.borderColor", focusColor);
+            UIManager.put("CheckBox.icon.hoverBorderColor", focusColor);
+            UIManager.put("CheckBox.icon.focusedBorderColor", accentColor);
+            UIManager.put("CheckBox.icon.focusColor", highlightColor);
+            UIManager.put("CheckBox.icon.pressedBorderColor", accentColor);
+            // selected
+            UIManager.put("CheckBox.icon.checkmarkColor", accentColor);
+            UIManager.put("CheckBox.icon.selectedBackground", highlightColor);
+            UIManager.put("CheckBox.icon.hoverSelectedBackground", highlightColor);
+            UIManager.put("CheckBox.icon.focusedSelectedBackground", highlightColor);
+            UIManager.put("CheckBox.icon.pressedSelectedBackground", secondaryColor);
+            UIManager.put("CheckBox.icon.selectedBorderColor", focusColor);
+            UIManager.put("CheckBox.icon.hoverSelectedBorderColor", focusColor);
+            UIManager.put("CheckBox.icon.focusedSelectedBorderColor", accentColor);
+            UIManager.put("CheckBox.icon.pressedSelectedBorderColor", accentColor);
+        }
+
+        // RootPane (the base jframe)
         UIManager.put("RootPane.background", mainColor);
         UIManager.put("RootPane.foreground", txtColor);
 
-        UIManager.put("OptionPane.minimumSize",new Dimension(300, 100));
-        UIManager.put("OptionPane.messageFont", new Font(fontName, Font.PLAIN, fontSize));
-        UIManager.put("OptionPane.buttonFont", new Font(fontName, Font.PLAIN, fontSize));
+        // Panel
+        UIManager.put("Panel.background", mainColor);
+        UIManager.put("Panel.foreground", txtColor);
+        UIManager.put("Panel.font", font);
 
+        // OptionPane
+        UIManager.put("OptionPane.minimumSize", new Dimension(300, 100));
+        UIManager.put("OptionPane.messageFont", font);
+        UIManager.put("OptionPane.buttonFont", font);
+
+        // TabbedPane
+        UIManager.put("TabbedPane.tabArc",arc);
+        UIManager.put("TabbedPane.buttonArc",arc);
+
+        UIManager.put("TabbedPane.background", mainColor);
+        UIManager.put("TabbedPane.hoverColor",secondaryColor);
+        UIManager.put("TabbedPane.selectedBackground",highlightColor);
+        UIManager.put("TabbedPane.focusColor",focusColor);
+        UIManager.put("TabbedPane.foreground", txtColor);
+
+        UIManager.put("TabbedPane.underlineColor", accentColor);
+        UIManager.put("TabbedPane.inactiveUnderlineColor", accentColor);
+
+        UIManager.put("TabbedPane.font", font);
+
+        // FileChooser
         UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
     }
 
