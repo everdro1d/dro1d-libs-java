@@ -5,11 +5,13 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class SwingGUI {
 
@@ -490,4 +492,54 @@ public class SwingGUI {
     public static boolean isDarkModeActive() {
         return UIManager.getLookAndFeel().getName().contains("FlatLaf Dark");
     }
-}
+
+    public static boolean canHoldText(JComponent component) {
+        return component instanceof JTextComponent || component instanceof JLabel;
+    }
+
+    public static void updateFrameColors(JFrame frame, boolean isDarkModeEnabled) {
+        //TODO separate colors into file
+        Color txtColor = new Color(isDarkModeEnabled ? 0xbbbbbb : 0x000000);
+        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeEnabled ? 0x4c4c4c : 0xb4b4b4);
+        Color tertiaryColor = new Color(isDarkModeEnabled ? 0x616365 : 0xc2c2c2);
+        Color accentColor = new Color(isDarkModeEnabled ? 0x758E4F : 0x568e4f);
+        Color highlightColor = new Color(isDarkModeEnabled ? 0x393e32 : 0x9bb798);
+        Color focusColor = new Color(isDarkModeEnabled ? 0x505c3d : 0x719e6c);
+
+        frame.getContentPane().setBackground(mainColor);
+        frame.setBackground(mainColor);
+
+        ArrayList<JComponent> frameComponents = getAllComponents(frame);
+
+        for (JComponent component : frameComponents) {
+            if (canHoldText(component)) {
+                component.setForeground(txtColor);
+                System.out.println(component.getClass().getName());
+            }
+        }
+
+        lightOrDarkMode(isDarkModeEnabled,new JFrame[]{frame});
+
+
+    }
+
+    public static ArrayList<JComponent> getAllComponents(JFrame frame) {
+        return getAllComponents(frame.getContentPane());
+    }
+
+    public static ArrayList<JComponent> getAllComponents(Container container) {
+        ArrayList<JComponent> components = new ArrayList<>();
+        for (Component c : container.getComponents()) {
+            if (c instanceof JComponent) { // Only include JComponents
+                components.add((JComponent) c);
+            }
+            if (c instanceof Container) {  // If it’s a container, check its children
+                components.addAll(getAllComponents((Container) c));
+            }
+        }
+
+        return components;
+    }
+
+    }
