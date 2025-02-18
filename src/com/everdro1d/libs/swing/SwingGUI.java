@@ -24,17 +24,22 @@ public class SwingGUI {
         if (flatLaf) {
             FlatLightLaf.setup();
 
+            // optionally enable darkmode
             if (hasDarkMode) {
                 FlatDarkLaf.setup();
             }
-        } else {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
-                System.err.println("Could not set look and feel of application.");
-            }
+
+            return;
         }
+
+        // fallback from flatlaf
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.err.println("Could not set look and feel of application.");
+        }
+
     }
 
     /**
