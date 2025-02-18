@@ -49,7 +49,8 @@ public class SettingsWindow extends JFrame {
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
     private final int fontSize;
-    
+    private final LinkedHashMap<String, JPanel> settingsTabPanelMap;
+
     // End of variables -----------------------------------------------------------------------------------------------|
 
     /**
@@ -57,11 +58,15 @@ public class SettingsWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LocaleManager)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
-    public SettingsWindow(JFrame parent, Preferences prefs, boolean debug) {
-        this(parent, "Tahoma", 16, prefs, debug, null);
+    public SettingsWindow(
+            JFrame parent,
+            Preferences prefs, boolean debug,
+            LinkedHashMap<String, JPanel> settingsTabPanelMap
+    ) {
+        this(parent, "Tahoma", 16, prefs, debug, null, settingsTabPanelMap);
     }
 
     /**
@@ -70,11 +75,15 @@ public class SettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
-    public SettingsWindow(JFrame parent, Preferences prefs, boolean debug, LocaleManager localeManager) {
-        this(parent, "Tahoma", 16, prefs, debug, localeManager);
+    public SettingsWindow(
+            JFrame parent, Preferences prefs,
+            boolean debug, LocaleManager localeManager,
+            LinkedHashMap<String, JPanel> settingsTabPanelMap
+    ) {
+        this(parent, "Tahoma", 16, prefs, debug, localeManager, settingsTabPanelMap);
     }
 
     /**
@@ -85,12 +94,19 @@ public class SettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean)
+     * @param settingsTabPanelMap a map of tabs and their contents
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
      */
-    public SettingsWindow(JFrame parent, String fontName, int fontSize, Preferences prefs, boolean debug, LocaleManager localeManager) {
+    public SettingsWindow(
+            JFrame parent, String fontName,
+            int fontSize, Preferences prefs,
+            boolean debug, LocaleManager localeManager,
+            LinkedHashMap<String, JPanel> settingsTabPanelMap
+    ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.debug = debug;
+        this.settingsTabPanelMap = settingsTabPanelMap;
 
         if (localeManager != null) {
             SettingsWindow.localeManager = localeManager;
@@ -194,7 +210,17 @@ public class SettingsWindow extends JFrame {
             centerPanel.setLayout(new BorderLayout());
             mainPanel.add(centerPanel, BorderLayout.CENTER);
             {
-                menuItemsTabbedPane = new DualAxisTabbedPane(null);// TODO: implement DualAxisTabbedPane first
+
+
+                menuItemsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+                menuItemsTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+                menuItemsTabbedPane.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT - BORDER_PADDING_HEIGHT * 2));
+                centerPanel.add(menuItemsTabbedPane, BorderLayout.CENTER);
+                {
+                    for (Map.Entry<String, JPanel> entry : settingsTabPanelMap.entrySet()) {
+                        menuItemsTabbedPane.addTab(entry.getKey(), entry.getValue());
+                    }
+                }
             }
 
             southPanel = new JPanel();
