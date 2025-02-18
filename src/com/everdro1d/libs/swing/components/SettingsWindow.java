@@ -196,6 +196,48 @@ public class SettingsWindow extends JFrame {
             {
                 menuItemsTabbedPane = new DualAxisTabbedPane(null);// TODO: implement DualAxisTabbedPane first
             }
+
+            southPanel = new JPanel();
+            southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+            mainPanel.add(southPanel, BorderLayout.SOUTH);
+            {
+                leftSouthPanel = new JPanel();
+                leftSouthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                leftSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth + 50, BORDER_PADDING_HEIGHT));
+                southPanel.add(leftSouthPanel);
+                {
+                    importSettings = new JButton("Import");
+                    leftSouthPanel.add(importSettings);
+                    importSettings.addActionListener(e -> {
+                        // import settings
+                    });
+
+                    exportSettings = new JButton("Export");
+                    leftSouthPanel.add(exportSettings);
+                    exportSettings.addActionListener(e -> {
+                        // export settings
+                    });
+                }
+
+                rightSouthPanel = new JPanel();
+                rightSouthPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                rightSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth - 50, BORDER_PADDING_HEIGHT));
+                southPanel.add(rightSouthPanel);
+                {
+                    saveSettings = new JButton("Save");
+                    rightSouthPanel.add(saveSettings);
+                    saveSettings.addActionListener(e -> {
+                        // save settings and close
+                    });
+
+                    cancelSettings = new JButton("Cancel");
+                    rightSouthPanel.add(cancelSettings);
+                    cancelSettings.addActionListener(e -> {
+                        // cancel settings and close
+                    });
+                }
+            }
         }
     }
 
