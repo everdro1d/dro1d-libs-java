@@ -10,6 +10,7 @@ import com.everdro1d.libs.swing.SwingGUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -43,7 +44,7 @@ public class SettingsWindow extends JFrame {
     private boolean debug;
     private boolean maximized;
     private final int WINDOW_WIDTH = 600;
-    private final int WINDOW_HEIGHT = 360;
+    private final int WINDOW_HEIGHT = 800;
     private final int EDGE_PADDING_WIDTH = 15;
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
@@ -199,31 +200,34 @@ public class SettingsWindow extends JFrame {
     }
 
     private void resizeWindow(boolean maximized) {
-        int i;
+        float i;
         if (!maximized) {
-            i = 2;
+            i = 1.4f;
             expandWindowButton.setIcon(iconShrink);
             if (debug) System.out.println("Maximized settings window.");
         } else {
-            i = 1;
+            i = 1.0f;
             expandWindowButton.setIcon(iconExpand);
             if (debug) System.out.println("Minimized settings window.");
         }
-        settingsFrame.setSize(new Dimension(WINDOW_WIDTH * i, WINDOW_HEIGHT * i));
+        int newWidth = Math.round(WINDOW_WIDTH * i);
+        int newHeight = Math.round(WINDOW_HEIGHT * (i - 0.2f));
+
+        settingsFrame.setSize(new Dimension(newWidth, newHeight));
 
         leftNorthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
-        ));
+                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+        );
         rightNorthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
-        ));
+                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+        );
 
         leftSouthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT
-        ));
+                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT)
+        );
         rightSouthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT
-        ));
+                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
+        );
 
         SwingGUI.setLocationOnResize(settingsFrame, true);
 
