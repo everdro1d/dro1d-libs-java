@@ -22,26 +22,32 @@ public class SettingsWindow extends JFrame {
     public static JFrame settingsFrame;
         private JPanel mainPanel;
             private JPanel northPanel;
-                private JPanel leftNorthPanel;
-                    private JLabel titleLabel;
-                    private String titleText = "Settings";
-                private JPanel rightNorthPanel;
-                    public static JButton expandWindowButton;
-                        private Icon iconExpand;
-                        private Icon iconShrink;
+                private JPanel upperNorthPanel;
+                    private JPanel leftUpperNorthPanel;
+                        private JLabel titleLabel;
+                        private String titleText = "Settings";
+                    private JPanel rightUpperNorthPanel;
+                        public static JButton expandWindowButton;
+                            private Icon iconExpand;
+                            private Icon iconShrink;
+                    private WindowDependentSeparator northPanelSeparator;
             private JPanel centerPanel;
                 private JTabbedPane menuItemsTabbedPane;
             private JPanel southPanel;
-                private JPanel leftSouthPanel;
-                    private JButton importSettings;
-                    private JButton exportSettings;
-                private JPanel rightSouthPanel;
-                    private JButton saveSettings;
-                    private JButton cancelSettings;
+                private WindowDependentSeparator southPanelSeparator;
+                private JPanel lowerSouthPanel;
+                    private JPanel leftLowerSouthPanel;
+                        private JButton importSettings;
+                        private JButton exportSettings;
+                    private JPanel rightLowerSouthPanel;
+                        private JButton saveSettings;
+                        private JButton cancelSettings;
+
 
     // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
     private boolean debug;
+    private boolean darkMode = false;
     private boolean maximized;
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 800;
@@ -58,15 +64,15 @@ public class SettingsWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent,
-            Preferences prefs, boolean debug,
+            Preferences prefs, boolean debug, boolean darkMode,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
-        this(parent, "Tahoma", 16, prefs, debug, null, settingsTabPanelMap);
+        this(parent, "Tahoma", 16, prefs, debug, darkMode, null, settingsTabPanelMap);
     }
 
     /**
@@ -75,15 +81,15 @@ public class SettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent, Preferences prefs,
-            boolean debug, LocaleManager localeManager,
+            boolean debug, boolean darkMode, LocaleManager localeManager,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
-        this(parent, "Tahoma", 16, prefs, debug, localeManager, settingsTabPanelMap);
+        this(parent, "Tahoma", 16, prefs, debug, darkMode, localeManager, settingsTabPanelMap);
     }
 
     /**
@@ -95,17 +101,18 @@ public class SettingsWindow extends JFrame {
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
      * @param settingsTabPanelMap a map of tabs and their contents
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent, String fontName,
             int fontSize, Preferences prefs,
-            boolean debug, LocaleManager localeManager,
+            boolean debug, boolean darkMode, LocaleManager localeManager,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.debug = debug;
+        this.darkMode = darkMode;
         this.settingsTabPanelMap = settingsTabPanelMap;
 
         if (localeManager != null) {
@@ -119,6 +126,9 @@ public class SettingsWindow extends JFrame {
 
         initializeWindowProperties(parent);
         initializeGUIComponents(prefs);
+
+        SwingGUI.updateFrameColors(settingsFrame,darkMode);
+        expandWindowButtonColorChange(); //TODO isolate into component
 
         settingsFrame.setVisible(true);
 
@@ -156,54 +166,65 @@ public class SettingsWindow extends JFrame {
         {
             // Add components here
             northPanel = new JPanel();
-            northPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            northPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+            northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+            northPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 20));
             mainPanel.add(northPanel, BorderLayout.NORTH);
             int halfSizePanelWidth = (WINDOW_WIDTH - (BORDER_PADDING_WIDTH * 2)) / 2;
             {
-
-                leftNorthPanel = new JPanel();
-                leftNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                leftNorthPanel.setAlignmentY(TOP_ALIGNMENT);
-                leftNorthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
-                northPanel.add(leftNorthPanel);
+                upperNorthPanel = new JPanel();
+                upperNorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                upperNorthPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+                northPanel.add(upperNorthPanel);
                 {
-                    leftNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
+                    leftUpperNorthPanel = new JPanel();
+                    leftUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    leftUpperNorthPanel.setAlignmentY(TOP_ALIGNMENT);
+                    leftUpperNorthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
+                    upperNorthPanel.add(leftUpperNorthPanel);
+                    {
+                        leftUpperNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
-                    titleLabel = new JLabel(titleText);
-                    int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
-                    titleLabel.setPreferredSize(
-                            new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
-                    );
-                    titleLabel.setFont(new Font(fontName, Font.BOLD, fontSize + 4));
-                    titleLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-                    leftNorthPanel.add(titleLabel);
+                        titleLabel = new JLabel(titleText);
+                        int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
+                        titleLabel.setPreferredSize(
+                                new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
+                        );
+                        titleLabel.setFont(new Font(fontName, Font.BOLD, fontSize + 4));
+                        titleLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+                        leftUpperNorthPanel.add(titleLabel);
+                    }
+
+                    rightUpperNorthPanel = new JPanel();
+                    rightUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                    rightUpperNorthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
+                    upperNorthPanel.add(rightUpperNorthPanel);
+                    {
+                        expandWindowButton = new JButton();
+                        expandWindowButton.setBorderPainted(false);
+                        expandWindowButton.setContentAreaFilled(false);
+                        expandWindowButton.setFocusPainted(false);
+                        expandWindowButton.setMargin(new Insets(0, 0, 15, 0));
+
+                        ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
+                                this.getClass());
+                        ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/shrink.png",
+                                this.getClass());
+                        iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+                        iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+
+                        expandWindowButton.setIcon(iconExpand);
+                        expandWindowButtonColorChange();
+
+                        expandWindowButton.addActionListener(e -> resizeWindow(maximized));
+                        rightUpperNorthPanel.add(expandWindowButton);
+                    }
                 }
 
-                rightNorthPanel = new JPanel();
-                rightNorthPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-                rightNorthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
-                northPanel.add(rightNorthPanel);
-                {
-                    expandWindowButton = new JButton();
-                    expandWindowButton.setBorderPainted(false);
-                    expandWindowButton.setContentAreaFilled(false);
-                    expandWindowButton.setFocusPainted(false);
-                    expandWindowButton.setMargin(new Insets(0,0,15,0));
+                northPanelSeparator =
+                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 2);
+                northPanel.add(northPanelSeparator);
 
-                    ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
-                            this.getClass());
-                    ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/shrink.png",
-                            this.getClass());
-                    iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-                    iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-
-                    expandWindowButton.setIcon(iconExpand);
-                    expandWindowButtonColorChange();
-
-                    expandWindowButton.addActionListener(e -> resizeWindow(maximized));
-                    rightNorthPanel.add(expandWindowButton);
-                }
+                northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             }
 
             centerPanel = new JPanel();
@@ -222,44 +243,60 @@ public class SettingsWindow extends JFrame {
             }
 
             southPanel = new JPanel();
-            southPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+            southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
+            southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 20));
             mainPanel.add(southPanel, BorderLayout.SOUTH);
             {
-                leftSouthPanel = new JPanel();
-                leftSouthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                leftSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth + 50, BORDER_PADDING_HEIGHT));
-                southPanel.add(leftSouthPanel);
+                southPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+                southPanelSeparator =
+                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 2);
+                southPanel.add(southPanelSeparator);
+
+                lowerSouthPanel = new JPanel();
+                lowerSouthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                lowerSouthPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+                southPanel.add(lowerSouthPanel);
                 {
-                    importSettings = new JButton("Import");
-                    leftSouthPanel.add(importSettings);
-                    importSettings.addActionListener(e -> {
-                        // import settings
-                    });
+                    leftLowerSouthPanel = new JPanel();
+                    leftLowerSouthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    leftLowerSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth + 50, BORDER_PADDING_HEIGHT));
+                    lowerSouthPanel.add(leftLowerSouthPanel);
+                    {
+                        importSettings = new JButton("Import");
+                        importSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        leftLowerSouthPanel.add(importSettings);
+                        importSettings.addActionListener(e -> {
+                            // import settings
+                        });
 
-                    exportSettings = new JButton("Export");
-                    leftSouthPanel.add(exportSettings);
-                    exportSettings.addActionListener(e -> {
-                        // export settings
-                    });
-                }
+                        exportSettings = new JButton("Export");
+                        exportSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        leftLowerSouthPanel.add(exportSettings);
+                        exportSettings.addActionListener(e -> {
+                            // export settings
+                        });
+                    }
 
-                rightSouthPanel = new JPanel();
-                rightSouthPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-                rightSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth - 50, BORDER_PADDING_HEIGHT));
-                southPanel.add(rightSouthPanel);
-                {
-                    saveSettings = new JButton("Save");
-                    rightSouthPanel.add(saveSettings);
-                    saveSettings.addActionListener(e -> {
-                        // save settings and close
-                    });
+                    rightLowerSouthPanel = new JPanel();
+                    rightLowerSouthPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                    rightLowerSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth - 50, BORDER_PADDING_HEIGHT));
+                    lowerSouthPanel.add(rightLowerSouthPanel);
+                    {
+                        saveSettings = new JButton("Save");
+                        saveSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        rightLowerSouthPanel.add(saveSettings);
+                        saveSettings.addActionListener(e -> {
+                            // save settings and close
+                        });
 
-                    cancelSettings = new JButton("Cancel");
-                    rightSouthPanel.add(cancelSettings);
-                    cancelSettings.addActionListener(e -> {
-                        // cancel settings and close
-                    });
+                        cancelSettings = new JButton("Cancel");
+                        cancelSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        rightLowerSouthPanel.add(cancelSettings);
+                        cancelSettings.addActionListener(e -> {
+                            // cancel settings and close
+                        });
+                    }
                 }
             }
         }
@@ -297,6 +334,7 @@ public class SettingsWindow extends JFrame {
 
         SwingGUI.setLocationOnResize(settingsFrame, true);
 
+        northPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH,2);
         expandWindowButtonColorChange();
 
         this.maximized = !maximized;
