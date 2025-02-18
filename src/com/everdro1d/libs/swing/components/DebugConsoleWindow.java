@@ -415,12 +415,13 @@ public class DebugConsoleWindow extends JFrame {
     }
 
     public static void expandWindowButtonColorChange(Color color) {
-        if (DebugConsoleWindow.debugFrame != null) {
-            Icon tmp = expandWindowButton.getIcon();
-            // set the icon to the colour
-            Icon icon = SwingGUI.changeIconColor(tmp, color);
-            expandWindowButton.setIcon(icon);
+        if (DebugConsoleWindow.debugFrame == null) {
+            return;
         }
+        Icon tmp = expandWindowButton.getIcon();
+        // set the icon to the colour
+        Icon icon = SwingGUI.changeIconColor(tmp, color);
+        expandWindowButton.setIcon(icon);
     }
 
     private String getLogFileName() {
