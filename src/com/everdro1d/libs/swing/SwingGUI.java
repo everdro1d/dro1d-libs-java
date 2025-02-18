@@ -108,11 +108,13 @@ public class SwingGUI {
             UIManager.put("CheckBox.icon.hoverBackground", highlightColor);
             UIManager.put("CheckBox.icon.focusedBackground", highlightColor);
             UIManager.put("CheckBox.icon.pressedBackground", secondaryColor);
+
             UIManager.put("CheckBox.icon.borderColor", focusColor);
             UIManager.put("CheckBox.icon.hoverBorderColor", focusColor);
             UIManager.put("CheckBox.icon.focusedBorderColor", accentColor);
             UIManager.put("CheckBox.icon.focusColor", highlightColor);
             UIManager.put("CheckBox.icon.pressedBorderColor", accentColor);
+
             // selected
             UIManager.put("CheckBox.icon.checkmarkColor", accentColor);
             UIManager.put("CheckBox.icon.selectedBackground", highlightColor);
@@ -140,20 +142,22 @@ public class SwingGUI {
         UIManager.put("OptionPane.buttonFont", font);
 
         // TabbedPane
-        UIManager.put("TabbedPane.tabArc",arc);
-        UIManager.put("TabbedPane.buttonArc",arc);
+        {
+            UIManager.put("TabbedPane.tabArc", arc);
+            UIManager.put("TabbedPane.buttonArc", arc);
 
-        UIManager.put("TabbedPane.background", mainColor);
-        UIManager.put("TabbedPane.hoverColor",secondaryColor);
-        UIManager.put("TabbedPane.selectedBackground",highlightColor);
-        UIManager.put("TabbedPane.focusColor",focusColor);
-        UIManager.put("TabbedPane.foreground", txtColor);
+            UIManager.put("TabbedPane.background", mainColor);
+            UIManager.put("TabbedPane.hoverColor", secondaryColor);
+            UIManager.put("TabbedPane.selectedBackground", highlightColor);
+            UIManager.put("TabbedPane.focusColor", focusColor);
+            UIManager.put("TabbedPane.foreground", txtColor);
 
-        UIManager.put("TabbedPane.underlineColor", accentColor);
-        UIManager.put("TabbedPane.inactiveUnderlineColor", accentColor);
+            UIManager.put("TabbedPane.underlineColor", accentColor);
+            UIManager.put("TabbedPane.inactiveUnderlineColor", accentColor);
+            UIManager.put("TabbedPane.contentAreaColor", tertiaryColor);
 
-        UIManager.put("TabbedPane.font", font);
-
+            UIManager.put("TabbedPane.font", font);
+        }
         // FileChooser
         UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
     }
