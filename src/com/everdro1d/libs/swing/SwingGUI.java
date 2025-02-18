@@ -96,7 +96,9 @@ public class SwingGUI {
         UIManager.put("Component.focusColor",focusColor);
 
         // Separator
+        UIManager.put("Separator.arc",10);
         UIManager.put("Separator.stripeWidth", 10);
+        UIManager.put("Separator.foreground",tertiaryColor);
         
         // CheckBox -- see this for other icon modifications
         UIManager.put("CheckBox.arc",arc);
