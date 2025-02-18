@@ -23,8 +23,7 @@ public class SwingGUI {
     public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode) {
         if (flatLaf) {
             FlatLightLaf.setup();
-
-            // optionally enable darkmode
+            // optionally activate darkmode
             if (hasDarkMode) {
                 FlatDarkLaf.setup();
             }
@@ -46,15 +45,15 @@ public class SwingGUI {
      * Used to enable dark mode for the application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
-     * @param isDarkModeActive whether to enable dark mode
+     * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
      */
-    public static void lightOrDarkMode(boolean isDarkModeActive, JFrame[] frames) {
-        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeActive ? 0xe0e0e0 : 0x303234);
+    public static void lightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
+        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeEnabled ? 0xe0e0e0 : 0x303234);
 
         try {
-            LookAndFeel laf = isDarkModeActive ? new FlatDarkLaf() : new FlatLightLaf();
+            LookAndFeel laf = isDarkModeEnabled ? new FlatDarkLaf() : new FlatLightLaf();
             UIManager.setLookAndFeel( laf );
             UIManager.put("RootPane.background", mainColor);
             UIManager.put("RootPane.foreground", secondaryColor);
@@ -74,17 +73,18 @@ public class SwingGUI {
 
     /**
      * Set the default UI settings for the application.
-     * @param isDarkModeActive whether to enable dark mode
+     * @param isDarkModeEnabled whether to enable dark mode
      * @param fontName the name of the font to use
      */
-    public static void uiSetup(boolean isDarkModeActive, String fontName, int fontSize) {
-        Color txtColor = new Color(isDarkModeActive ? 0xbbbbbb : 0x000000);
-        Color mainColor = new Color(isDarkModeActive ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeActive ? 0x4c4c4c : 0xb4b4b4);
-        Color tertiaryColor = new Color(isDarkModeActive ? 0xe0e0e0 : 0x303234);
-        Color accentColor = new Color(isDarkModeActive ? 0x758E4F : 0x568e4f);
-        Color highlightColor = new Color(isDarkModeActive ? 0x393e32 : 0x9bb798);
-        Color focusColor = new Color(isDarkModeActive ? 0x505c3d : 0x719e6c);
+    public static void uiSetup(boolean isDarkModeEnabled, String fontName, int fontSize) {
+        //TODO separate colors into file
+        Color txtColor = new Color(isDarkModeEnabled ? 0xbbbbbb : 0x000000);
+        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
+        Color secondaryColor = new Color(isDarkModeEnabled ? 0x4c4c4c : 0xb4b4b4);
+        Color tertiaryColor = new Color(isDarkModeEnabled ? 0x616365 : 0xc2c2c2);
+        Color accentColor = new Color(isDarkModeEnabled ? 0x758E4F : 0x568e4f);
+        Color highlightColor = new Color(isDarkModeEnabled ? 0x393e32 : 0x9bb798);
+        Color focusColor = new Color(isDarkModeEnabled ? 0x505c3d : 0x719e6c);
 
         Font font = new Font(fontName, Font.PLAIN, fontSize);
         int arc = 10;
@@ -123,7 +123,7 @@ public class SwingGUI {
             UIManager.put("CheckBox.icon.pressedSelectedBorderColor", accentColor);
         }
 
-        // RootPane (the base jframe)
+        // RootPane (the base JFrame)
         UIManager.put("RootPane.background", mainColor);
         UIManager.put("RootPane.foreground", txtColor);
 
