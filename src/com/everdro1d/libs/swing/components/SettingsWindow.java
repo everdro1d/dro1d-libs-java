@@ -45,7 +45,7 @@ public class SettingsWindow extends JFrame {
     private boolean maximized;
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 800;
-    private final int EDGE_PADDING_WIDTH = 15;
+    private final int BORDER_PADDING_WIDTH = 15;
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
     private final int fontSize;
@@ -159,7 +159,7 @@ public class SettingsWindow extends JFrame {
             northPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
             northPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
             mainPanel.add(northPanel, BorderLayout.NORTH);
-            int halfSizePanelWidth = (WINDOW_WIDTH - (EDGE_PADDING_WIDTH * 2)) / 2;
+            int halfSizePanelWidth = (WINDOW_WIDTH - (BORDER_PADDING_WIDTH * 2)) / 2;
             {
 
                 leftNorthPanel = new JPanel();
@@ -210,8 +210,6 @@ public class SettingsWindow extends JFrame {
             centerPanel.setLayout(new BorderLayout());
             mainPanel.add(centerPanel, BorderLayout.CENTER);
             {
-
-
                 menuItemsTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
                 menuItemsTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
                 menuItemsTabbedPane.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT - BORDER_PADDING_HEIGHT * 2));
@@ -283,18 +281,18 @@ public class SettingsWindow extends JFrame {
 
         settingsFrame.setSize(new Dimension(newWidth, newHeight));
 
-        leftNorthPanel.setPreferredSize(new Dimension(
-                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+        leftUpperNorthPanel.setPreferredSize(new Dimension(
+                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
         );
-        rightNorthPanel.setPreferredSize(new Dimension(
-                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+        rightUpperNorthPanel.setPreferredSize(new Dimension(
+                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
         );
 
-        leftSouthPanel.setPreferredSize(new Dimension(
-                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT)
+        leftLowerSouthPanel.setPreferredSize(new Dimension(
+                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT)
         );
-        rightSouthPanel.setPreferredSize(new Dimension(
-                (newWidth - (EDGE_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
+        rightLowerSouthPanel.setPreferredSize(new Dimension(
+                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
         );
 
         SwingGUI.setLocationOnResize(settingsFrame, true);
