@@ -87,7 +87,7 @@ public class SettingsWindow extends JFrame {
     }
 
     /**
-     * Create a debug console window.
+     * Create a settings window.
      * @param parent frame to latch onto if called from another window
      * @param fontName the name of the font to use
      * @param fontSize the size of the font to use
