@@ -304,14 +304,20 @@ public class SettingsWindow extends JFrame {
         this.maximized = !maximized;
     }
 
+    // overload for default color based on darkmode
     public static void expandWindowButtonColorChange() {
         boolean darkMode = SwingGUI.isDarkModeActive();
         Color color = new Color(darkMode ? 0xbbbbbb : 0x000000);
-        if (DebugConsoleWindow.debugFrame != null) {
-            Icon tmp = expandWindowButton.getIcon();
-            // set the icon to the colour
-            Icon icon = SwingGUI.changeIconColor(tmp, color);
-            expandWindowButton.setIcon(icon);
+        expandWindowButtonColorChange(color);
+    }
+
+    public static void expandWindowButtonColorChange(Color color) {
+        if (SettingsWindow.settingsFrame == null) {
+            return;
         }
+        Icon tmp = expandWindowButton.getIcon();
+        // set the icon to the colour
+        Icon icon = SwingGUI.changeIconColor(tmp, color);
+        expandWindowButton.setIcon(icon);
     }
 }
