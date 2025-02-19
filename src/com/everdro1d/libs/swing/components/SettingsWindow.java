@@ -455,9 +455,7 @@ public abstract class SettingsWindow extends JFrame {
 
     // overload for default color based on darkmode
     public static void expandWindowButtonColorChange() {
-        boolean darkMode = SwingGUI.isDarkModeActive();
-        Color color = new Color(darkMode ? 0xbbbbbb : 0x000000);
-        expandWindowButtonColorChange(color);
+        expandWindowButtonColorChange(UIManager.getColor("RootPane.foreground"));
     }
 
     public static void expandWindowButtonColorChange(Color color) {
