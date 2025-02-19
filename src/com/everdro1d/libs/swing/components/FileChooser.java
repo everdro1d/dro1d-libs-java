@@ -55,6 +55,9 @@ public class FileChooser extends JFileChooser {
 
     /**
      * Create a generic file chooser dialog allowing selection of both files and directories.
+     * @param path The directory to open the dialog in.
+     * @param dialogTitle The title of the dialog.
+     * @param localeManager the locale manager to use for the file chooser
      */
     public FileChooser(String path, String dialogTitle, LocaleManager localeManager) {
         this(path, dialogTitle, true, true, false,
@@ -66,6 +69,7 @@ public class FileChooser extends JFileChooser {
      * @param path The directory to open the dialog in.
      * @param dialogTitle The title of the dialog.
      * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
+     * @param localeManager the locale manager to use for the file chooser
      */
     public FileChooser(String path, String dialogTitle, boolean selectFiles, LocaleManager localeManager) {
         this(path, dialogTitle, selectFiles, !selectFiles, false, null,
@@ -77,6 +81,7 @@ public class FileChooser extends JFileChooser {
      * @param path The directory to open the dialog in.
      * @param dialogTitle The title of the dialog.
      * @param extension The extension to filter files by. ex. "txt"
+     * @param localeManager the locale manager to use for the file chooser
      */
     public FileChooser(String path, String dialogTitle, String extension, LocaleManager localeManager) {
         this(path, dialogTitle, true, false, true, extension,
@@ -89,6 +94,7 @@ public class FileChooser extends JFileChooser {
      * @param dialogTitle The title of the dialog.
      * @param selectFiles Whether to show files in the dialog. If false, only directories will be shown.
      * @param customMessage Custom message to show in the description area.
+     * @param localeManager the locale manager to use for the file chooser
      */
     public FileChooser(String path, String dialogTitle, boolean selectFiles, String customMessage,
                        LocaleManager localeManager) {
@@ -99,11 +105,11 @@ public class FileChooser extends JFileChooser {
     /**
      * Create a file chooser dialog.
      * @param path The directory to open the dialog in.
+     * @param dialogTitle The title of the dialog.
      * @param selectFiles Whether to show files in the dialog.
      * @param selectDirectories Whether to show directories in the dialog.
      * @param filterByExtension Whether to filter files by extension.
      * @param extension The extension to filter files by. Dependent on filterByExtension. ex. "txt"
-     * @param dialogTitle The title of the dialog.
      * @param useCustomMessage whether to use a custom message for the description
      * @param customMessage the message to use for custom message
      * @param localeManager the locale manager to use for the file chooser
