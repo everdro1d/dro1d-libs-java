@@ -1,6 +1,9 @@
 package com.everdro1d.libs.swing;
 
+import com.everdro1d.libs.swing.themes.EverDarkLaf;
+import com.everdro1d.libs.swing.themes.EverLightLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.imageio.ImageIO;
@@ -24,12 +27,12 @@ public class SwingGUI {
      */
     public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode) {
         if (flatLaf) {
-            FlatLightLaf.setup();
+            FlatLaf.registerCustomDefaultsSource("com.everdro1d.libs.swing.themes");
+            EverLightLaf.setup();
             // optionally activate darkmode
             if (hasDarkMode) {
-                FlatDarkLaf.setup();
+                EverDarkLaf.setup();
             }
-
             return;
         }
 
@@ -40,32 +43,19 @@ public class SwingGUI {
             e.printStackTrace(System.err);
             System.err.println("Could not set look and feel of application.");
         }
-
     }
 
     /**
-     * Used to enable dark mode for the application.
+     * Used to enable dark mode for the running application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
      */
     public static void lightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
-        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeEnabled ? 0xe0e0e0 : 0x303234);
-
         try {
-            LookAndFeel laf = isDarkModeEnabled ? new FlatDarkLaf() : new FlatLightLaf();
+            LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
             UIManager.setLookAndFeel( laf );
-            UIManager.put("RootPane.background", mainColor);
-            UIManager.put("RootPane.foreground", secondaryColor);
-
-            for (JFrame frame : frames) {
-                if (frame != null) { // because for some reason the title bar color doesn't change with the L&F
-                    frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", mainColor);
-                    frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", secondaryColor);
-                }
-            }
         } catch (Exception ex) {
             System.err.println("Could not set look and feel of application.");
         } finally {
@@ -75,93 +65,22 @@ public class SwingGUI {
 
     /**
      * Set the default UI settings for the application.
-     * @param isDarkModeEnabled whether to enable dark mode
      * @param fontName the name of the font to use
      */
-    public static void uiSetup(boolean isDarkModeEnabled, String fontName, int fontSize) {
-        //TODO separate colors into file
-        Color txtColor = new Color(isDarkModeEnabled ? 0xbbbbbb : 0x000000);
-        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeEnabled ? 0x4c4c4c : 0xb4b4b4);
-        Color tertiaryColor = new Color(isDarkModeEnabled ? 0x616365 : 0xc2c2c2);
-        Color accentColor = new Color(isDarkModeEnabled ? 0x758E4F : 0x568e4f);
-        Color highlightColor = new Color(isDarkModeEnabled ? 0x393e32 : 0x9bb798);
-        Color focusColor = new Color(isDarkModeEnabled ? 0x505c3d : 0x719e6c);
-
+    public static void uiSetup(String fontName, int fontSize) {
         Font font = new Font(fontName, Font.PLAIN, fontSize);
-        int arc = 10;
-
-        // Default components
-        UIManager.put("Component.arc", arc);
-        UIManager.put("TextComponent.arc", arc);
-        
-        UIManager.put("Component.focusColor",focusColor);
-
-        // Separator
-        UIManager.put("Separator.arc",10);
-        UIManager.put("Separator.stripeWidth", 10);
-        UIManager.put("Separator.foreground",tertiaryColor);
-        
-        // CheckBox -- see this for other icon modifications
-        UIManager.put("CheckBox.arc",arc);
-        {
-            // not selected
-            UIManager.put("CheckBox.icon.background", secondaryColor);
-            UIManager.put("CheckBox.icon.hoverBackground", highlightColor);
-            UIManager.put("CheckBox.icon.focusedBackground", highlightColor);
-            UIManager.put("CheckBox.icon.pressedBackground", secondaryColor);
-
-            UIManager.put("CheckBox.icon.borderColor", focusColor);
-            UIManager.put("CheckBox.icon.hoverBorderColor", focusColor);
-            UIManager.put("CheckBox.icon.focusedBorderColor", accentColor);
-            UIManager.put("CheckBox.icon.focusColor", highlightColor);
-            UIManager.put("CheckBox.icon.pressedBorderColor", accentColor);
-
-            // selected
-            UIManager.put("CheckBox.icon.checkmarkColor", accentColor);
-            UIManager.put("CheckBox.icon.selectedBackground", highlightColor);
-            UIManager.put("CheckBox.icon.hoverSelectedBackground", highlightColor);
-            UIManager.put("CheckBox.icon.focusedSelectedBackground", highlightColor);
-            UIManager.put("CheckBox.icon.pressedSelectedBackground", secondaryColor);
-            UIManager.put("CheckBox.icon.selectedBorderColor", focusColor);
-            UIManager.put("CheckBox.icon.hoverSelectedBorderColor", focusColor);
-            UIManager.put("CheckBox.icon.focusedSelectedBorderColor", accentColor);
-            UIManager.put("CheckBox.icon.pressedSelectedBorderColor", accentColor);
-        }
-
-        // RootPane (the base JFrame)
-        UIManager.put("RootPane.background", mainColor);
-        UIManager.put("RootPane.foreground", txtColor);
-
-        // Panel
-        UIManager.put("Panel.background", mainColor);
-        UIManager.put("Panel.foreground", txtColor);
-        UIManager.put("Panel.font", font);
 
         // OptionPane
-        UIManager.put("OptionPane.minimumSize", new Dimension(300, 100));
-        UIManager.put("OptionPane.messageFont", font);
-        UIManager.put("OptionPane.buttonFont", font);
+        UIManager.put("OptionPane.minimumSize",new Dimension(300, 100));
+        UIManager.put("OptionPane.messageFont",font);
+        UIManager.put("OptionPane.buttonFont",font);
 
         // TabbedPane
-        {
-            UIManager.put("TabbedPane.tabArc", arc);
-            UIManager.put("TabbedPane.buttonArc", arc);
+        UIManager.put("TabbedPane.font",font);
 
-            UIManager.put("TabbedPane.background", mainColor);
-            UIManager.put("TabbedPane.hoverColor", secondaryColor);
-            UIManager.put("TabbedPane.selectedBackground", highlightColor);
-            UIManager.put("TabbedPane.focusColor", focusColor);
-            UIManager.put("TabbedPane.foreground", txtColor);
-
-            UIManager.put("TabbedPane.underlineColor", accentColor);
-            UIManager.put("TabbedPane.inactiveUnderlineColor", accentColor);
-            UIManager.put("TabbedPane.contentAreaColor", tertiaryColor);
-
-            UIManager.put("TabbedPane.font", font);
-        }
         // FileChooser
-        UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
+        UIManager.put("FileChooser.noPlacesBar",Boolean.TRUE);
+
     }
 
     /**
@@ -490,7 +409,7 @@ public class SwingGUI {
     }
 
     public static boolean isDarkModeActive() {
-        return UIManager.getLookAndFeel().getName().contains("FlatLaf Dark");
+        return UIManager.getLookAndFeel().getName().toLowerCase().contains("dark");
     }
 
     public static boolean canHoldText(JComponent component) {
@@ -498,30 +417,17 @@ public class SwingGUI {
     }
 
     public static void updateFrameColors(JFrame frame, boolean isDarkModeEnabled) {
-        //TODO separate colors into file
-        Color txtColor = new Color(isDarkModeEnabled ? 0xbbbbbb : 0x000000);
-        Color mainColor = new Color(isDarkModeEnabled ? 0x2B2B2B : 0xe1e1e1);
-        Color secondaryColor = new Color(isDarkModeEnabled ? 0x4c4c4c : 0xb4b4b4);
-        Color tertiaryColor = new Color(isDarkModeEnabled ? 0x616365 : 0xc2c2c2);
-        Color accentColor = new Color(isDarkModeEnabled ? 0x758E4F : 0x568e4f);
-        Color highlightColor = new Color(isDarkModeEnabled ? 0x393e32 : 0x9bb798);
-        Color focusColor = new Color(isDarkModeEnabled ? 0x505c3d : 0x719e6c);
-
-        frame.getContentPane().setBackground(mainColor);
-        frame.setBackground(mainColor);
+        frame.getContentPane().setBackground(UIManager.getColor("RootPane.background"));
+        frame.setBackground(UIManager.getColor("RootPane.background"));
 
         ArrayList<JComponent> frameComponents = getAllComponents(frame);
 
         for (JComponent component : frameComponents) {
             if (canHoldText(component)) {
-                component.setForeground(txtColor);
-                System.out.println(component.getClass().getName());
+                component.setForeground(UIManager.getColor("RootPane.foreground"));
             }
         }
-
         lightOrDarkMode(isDarkModeEnabled,new JFrame[]{frame});
-
-
     }
 
     public static ArrayList<JComponent> getAllComponents(JFrame frame) {
