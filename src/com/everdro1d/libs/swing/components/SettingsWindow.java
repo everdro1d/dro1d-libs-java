@@ -6,16 +6,17 @@ package com.everdro1d.libs.swing.components;
 
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.swing.SwingGUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.util.*;
 import java.util.prefs.Preferences;
 
-public class SettingsWindow extends JFrame {
+public abstract class SettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
@@ -40,12 +41,13 @@ public class SettingsWindow extends JFrame {
                         private JButton importSettings;
                         private JButton exportSettings;
                     private JPanel rightLowerSouthPanel;
-                        private JButton saveSettings;
+                        private JButton applySettings;
                         private JButton cancelSettings;
 
 
     // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
+    private Preferences prefs;
     private boolean debug;
     private boolean darkMode = false;
     private boolean maximized;
@@ -111,6 +113,7 @@ public class SettingsWindow extends JFrame {
     ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
+        this.prefs = prefs;
         this.debug = debug;
         this.darkMode = darkMode;
         this.settingsTabPanelMap = settingsTabPanelMap;
@@ -125,14 +128,15 @@ public class SettingsWindow extends JFrame {
         } else System.out.println("LocaleManager is null. SettingsWindow will launch without localization.");
 
         initializeWindowProperties(parent);
-        initializeGUIComponents(prefs);
+        initializeGUIComponents();
 
-        SwingGUI.updateFrameColors(settingsFrame,darkMode);
         expandWindowButtonColorChange(); //TODO isolate into component
 
         settingsFrame.setVisible(true);
 
         SwingGUI.setHandCursorToClickableComponents(settingsFrame);
+
+        applySettings.requestFocusInWindow();
     }
 
     private void addClassToLocale() {
@@ -159,7 +163,7 @@ public class SettingsWindow extends JFrame {
         settingsFrame.setLocationRelativeTo(parent);
     }
 
-    private void initializeGUIComponents(Preferences prefs) {
+    private void initializeGUIComponents() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         settingsFrame.add(mainPanel);
@@ -200,10 +204,8 @@ public class SettingsWindow extends JFrame {
                     upperNorthPanel.add(rightUpperNorthPanel);
                     {
                         expandWindowButton = new JButton();
-                        expandWindowButton.setBorderPainted(false);
-                        expandWindowButton.setContentAreaFilled(false);
-                        expandWindowButton.setFocusPainted(false);
-                        expandWindowButton.setMargin(new Insets(0, 0, 15, 0));
+                        expandWindowButton.setBackground(upperNorthPanel.getBackground());
+                        expandWindowButton.setMargin(new Insets(2, 2, 2, 2));
 
                         ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
                                 this.getClass());
@@ -267,14 +269,16 @@ public class SettingsWindow extends JFrame {
                         importSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         leftLowerSouthPanel.add(importSettings);
                         importSettings.addActionListener(e -> {
-                            // import settings
+                            String filePath = getFilePathUser(false);
+                            importSettings(filePath);
                         });
 
                         exportSettings = new JButton("Export");
                         exportSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         leftLowerSouthPanel.add(exportSettings);
                         exportSettings.addActionListener(e -> {
-                            // export settings
+                            String filePath = getFilePathUser(true);
+                            exportSettings(filePath);
                         });
                     }
 
@@ -283,11 +287,13 @@ public class SettingsWindow extends JFrame {
                     rightLowerSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth - 50, BORDER_PADDING_HEIGHT));
                     lowerSouthPanel.add(rightLowerSouthPanel);
                     {
-                        saveSettings = new JButton("Save");
-                        saveSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        rightLowerSouthPanel.add(saveSettings);
-                        saveSettings.addActionListener(e -> {
+                        applySettings = new JButton("OK");
+                        applySettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        rightLowerSouthPanel.add(applySettings);
+                        applySettings.addActionListener(e -> {
                             // save settings and close
+                            applySettings();
+                            //settingsFrame.dispose();
                         });
 
                         cancelSettings = new JButton("Cancel");
@@ -295,11 +301,118 @@ public class SettingsWindow extends JFrame {
                         rightLowerSouthPanel.add(cancelSettings);
                         cancelSettings.addActionListener(e -> {
                             // cancel settings and close
+                            // if settingsChanged then add confirm dialog beforehand
+                            settingsFrame.dispose();
                         });
                     }
                 }
             }
         }
+
+        JRootPane rootPane = SwingUtilities.getRootPane(applySettings);
+        rootPane.setDefaultButton(applySettings);
+    }
+
+    public void importSettings(String filePath) {
+        if (filePath.isEmpty()) return;
+
+        int success;
+        try {
+            InputStream isNode = new BufferedInputStream(
+                    new FileInputStream(filePath)
+            );
+            Preferences.importPreferences(isNode);
+            if (debug) System.out.println("Read settings from file.");
+            success = 0;
+        } catch (Exception ex) {
+            success = 1;
+            ex.printStackTrace(System.err);
+        }
+
+        if (success == 0) {
+            if (debug)
+                System.out.println("Successfully imported settings from .xml file. Showing message.");
+            JOptionPane.showMessageDialog(settingsFrame,
+                    "Successfully imported from:" + " \"" + filePath + "\"", "Success!",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+        //TODO refresh panels with updated prefs
+    }
+
+    public void exportSettings(String filePath) {
+        if (filePath.isEmpty()) return;
+
+        int success;
+        try {
+            OutputStream osNode = new BufferedOutputStream(
+                    new FileOutputStream(filePath)
+            );
+            prefs.exportNode(osNode);
+            if (debug) System.out.println("Wrote settings to file.");
+            success = 0;
+        } catch (Exception ex) {
+            success = 1;
+            ex.printStackTrace(System.err);
+        }
+
+        if (success == 0) {
+            if (debug)
+                System.out.println("Successfully saved settings as .xml file. Showing message.");
+            JOptionPane.showMessageDialog(settingsFrame,
+                    "Successfully saved to:" + " \"" + filePath + "\"", "Success!",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            Files.openInFileManager(filePath);
+        }
+    }
+
+    /**
+     * Implement your actual save mechanism here.
+     */
+    public abstract void applySettings();
+
+    private String getFilePathUser(boolean export) {
+        String settingsFilePath = openFileChooser(
+                prefs.get("settingsFilePath", ""),
+                export
+        );
+        if (settingsFilePath.contains("Cancel-")) return "";
+
+        prefs.put("settingsFilePath", settingsFilePath);
+
+        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + "exported_settings.xml";
+
+        if (debug) System.out.println("Settings file at: " + settingsFilePath);
+
+        return settingsFilePath;
+    }
+
+    private static String openFileChooser(
+            String existingFilePath, boolean export) {
+        String output = System.getProperty("user.home");
+
+        Boolean old = UIManager.getBoolean("FileChooser.readOnly");
+        UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+        FileChooser fileChooser = new FileChooser(
+                output,
+                (export ? "Save To" : "Read From"),
+                false,
+                "exported_settings.xml",
+                localeManager
+        );
+        UIManager.put("FileChooser.readOnly", old);
+
+        int returnValue = fileChooser.showOpenDialog(settingsFrame);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            output = fileChooser.getSelectedFile().getAbsolutePath();
+        } else {
+            output = "Cancel-" + existingFilePath;
+        }
+
+        return output;
     }
 
     private void resizeWindow(boolean maximized) {
