@@ -61,6 +61,7 @@ public class SwingGUI {
      * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
+     * @param contrastTitleBars whether to use contrasting titleBar colors
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames, boolean contrastTitleBars) {
         try {
@@ -70,6 +71,16 @@ public class SwingGUI {
 
             LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
             UIManager.setLookAndFeel( laf );
+
+            if (contrastTitleBars) {
+                for (JFrame frame : frames) {
+                    if (frame != null) { // because for some reason the title bar color doesn't change with the L&F
+                        frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", UIManager.getColor("TitlePane.background"));
+                        frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", UIManager.getColor("TitlePane.foreground"));
+                    }
+                }
+            }
+
         } catch (Exception ex) {
             System.err.println("Could not set EverDarkLaf as application look and feel. Using Fallback.");
             JOptionPane.showMessageDialog(frames[0], "Dark mode does not exist. The appearance of this dialog represents an error.\n" +
