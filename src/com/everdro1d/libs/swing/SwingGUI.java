@@ -71,7 +71,9 @@ public class SwingGUI {
             LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
             UIManager.setLookAndFeel( laf );
         } catch (Exception ex) {
-            System.err.println("Could not set look and feel of application.");
+            System.err.println("Could not set EverDarkLaf as application look and feel. Using Fallback.");
+            JOptionPane.showMessageDialog(frames[0], "Dark mode does not exist. The appearance of this dialog represents an error.\n" +
+                    "Contact the dev and ask them to check where \"switchLightOrDarkMode\" is called.", "ERROR", JOptionPane.ERROR_MESSAGE);
         } finally {
             for (JFrame frame : frames) if (frame != null) SwingUtilities.updateComponentTreeUI(frame);
         }
