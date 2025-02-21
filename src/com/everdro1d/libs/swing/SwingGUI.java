@@ -64,6 +64,10 @@ public class SwingGUI {
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames, boolean contrastTitleBars) {
         try {
+            if (!UIManager.getLookAndFeel().getName().toLowerCase().contains("ever")) {
+                throw new Exception();
+            }
+
             LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
             UIManager.setLookAndFeel( laf );
         } catch (Exception ex) {
