@@ -16,9 +16,7 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.nio.file.FileSystems;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
@@ -36,7 +34,7 @@ public class DebugConsoleWindow extends JFrame {
                 private JPanel rightNorthPanel;
                     private JLabel numberOfLinesLabel;
                         private String numberOfLinesText = "Number of Lines:";
-                    public static JButton expandWindowButton;
+                    public static JButton resizeWindowButton;
                         private Icon iconExpand;
                         private Icon iconShrink;
             private JPanel centerPanel;
@@ -220,24 +218,35 @@ public class DebugConsoleWindow extends JFrame {
                     numberOfLinesLabel.setVerticalAlignment(SwingConstants.TOP);
                     rightNorthPanel.add(numberOfLinesLabel);
 
-                    expandWindowButton = new JButton();
-                    expandWindowButton.setBorderPainted(false);
-                    expandWindowButton.setContentAreaFilled(false);
-                    expandWindowButton.setFocusPainted(false);
-                    expandWindowButton.setMargin(new Insets(0,0,15,0));
+                    resizeWindowButton = new ResizeWindowButton(
+                            debugFrame,
+                            rightNorthPanel,
+                            WINDOW_WIDTH,
+                            WINDOW_HEIGHT,
+                            2f,
+                            2f,
+                            debug
+                    ) {
+                        @Override
+                        public void customResizeActions() {
+                            leftNorthPanel.setPreferredSize(new Dimension(
+                                    (getNewWidth() - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
+                            ));
+                            rightNorthPanel.setPreferredSize(new Dimension(
+                                    (getNewWidth() - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
+                            ));
 
-                    ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
-                            this.getClass());
-                    ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/shrink.png",
-                            this.getClass());
-                    iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-                    iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+                            leftSouthPanel.setPreferredSize(new Dimension(
+                                    (getNewWidth() - (EDGE_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT
+                            ));
+                            rightSouthPanel.setPreferredSize(new Dimension(
+                                    (getNewWidth() - (EDGE_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT
+                            ));
 
-                    expandWindowButton.setIcon(iconExpand);
-                    expandWindowButtonColorChange();
-
-                    expandWindowButton.addActionListener(e -> resizeWindow(maximized));
-                    rightNorthPanel.add(expandWindowButton);
+                            debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
+                        }
+                    };
+                    rightNorthPanel.add(resizeWindowButton);
                 }
             }
 
@@ -367,60 +376,6 @@ public class DebugConsoleWindow extends JFrame {
                 westPanel.setPreferredSize(new Dimension(EDGE_PADDING_WIDTH + 10, 10));
             }
         }
-    }
-
-    private void resizeWindow(boolean maximized) {
-        int i;
-        if (!maximized) {
-            i = 2;
-            expandWindowButton.setIcon(iconShrink);
-            if (debug) System.out.println("Maximized debug console.");
-        } else {
-            i = 1;
-            expandWindowButton.setIcon(iconExpand);
-            if (debug) System.out.println("Minimized debug console.");
-        }
-        debugFrame.setSize(new Dimension(WINDOW_WIDTH * i, WINDOW_HEIGHT * i));
-
-        leftNorthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
-        ));
-        rightNorthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT
-        ));
-
-        leftSouthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT
-        ));
-        rightSouthPanel.setPreferredSize(new Dimension(
-                (WINDOW_WIDTH * i - (EDGE_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT
-        ));
-
-        SwingGUI.setLocationOnResize(debugFrame, true);
-
-        debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
-
-        expandWindowButtonColorChange();
-
-        this.maximized = !maximized;
-    }
-
-
-    // overload for default color based on darkmode
-    public static void expandWindowButtonColorChange() {
-        boolean darkMode = SwingGUI.isDarkModeActive();
-        Color color = new Color(darkMode ? 0xbbbbbb : 0x000000);
-        expandWindowButtonColorChange(color);
-    }
-
-    public static void expandWindowButtonColorChange(Color color) {
-        if (DebugConsoleWindow.debugFrame == null) {
-            return;
-        }
-        Icon tmp = expandWindowButton.getIcon();
-        // set the icon to the colour
-        Icon icon = SwingGUI.changeIconColor(tmp, color);
-        expandWindowButton.setIcon(icon);
     }
 
     private String getLogFileName() {

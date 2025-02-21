@@ -28,9 +28,7 @@ public abstract class SettingsWindow extends JFrame {
                         private JLabel titleLabel;
                         private String titleText = "Settings";
                     private JPanel rightUpperNorthPanel;
-                        public static JButton expandWindowButton;
-                            private Icon iconExpand;
-                            private Icon iconShrink;
+                        public static JButton resizeWindowButton;
                     private WindowDependentSeparator northPanelSeparator;
             private JPanel centerPanel;
                 private JTabbedPane menuItemsTabbedPane;
@@ -50,7 +48,6 @@ public abstract class SettingsWindow extends JFrame {
     private Preferences prefs;
     private boolean debug;
     private boolean darkMode = false;
-    private boolean maximized;
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 800;
     private final int BORDER_PADDING_WIDTH = 15;
@@ -130,8 +127,6 @@ public abstract class SettingsWindow extends JFrame {
         initializeWindowProperties(parent);
         initializeGUIComponents();
 
-        expandWindowButtonColorChange(); //TODO isolate into component
-
         settingsFrame.setVisible(true);
 
         SwingGUI.setHandCursorToClickableComponents(settingsFrame);
@@ -203,22 +198,35 @@ public abstract class SettingsWindow extends JFrame {
                     rightUpperNorthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
                     upperNorthPanel.add(rightUpperNorthPanel);
                     {
-                        expandWindowButton = new JButton();
-                        expandWindowButton.setBackground(upperNorthPanel.getBackground());
-                        expandWindowButton.setMargin(new Insets(2, 2, 2, 2));
+                        resizeWindowButton = new ResizeWindowButton(
+                                settingsFrame,
+                                rightUpperNorthPanel,
+                                WINDOW_WIDTH,
+                                WINDOW_HEIGHT,
+                                1.4f,
+                                1.2f,
+                                debug
+                        ) {
+                            @Override
+                            public void customResizeActions() {
+                                leftUpperNorthPanel.setPreferredSize(new Dimension(
+                                        (getNewWidth() - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+                                );
+                                rightUpperNorthPanel.setPreferredSize(new Dimension(
+                                        (getNewWidth() - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
+                                );
 
-                        ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
-                                this.getClass());
-                        ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/shrink.png",
-                                this.getClass());
-                        iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-                        iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+                                leftLowerSouthPanel.setPreferredSize(new Dimension(
+                                        (getNewWidth() - (BORDER_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT)
+                                );
+                                rightLowerSouthPanel.setPreferredSize(new Dimension(
+                                        (getNewWidth() - (BORDER_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
+                                );
 
-                        expandWindowButton.setIcon(iconExpand);
-                        expandWindowButtonColorChange();
-
-                        expandWindowButton.addActionListener(e -> resizeWindow(maximized));
-                        rightUpperNorthPanel.add(expandWindowButton);
+                                northPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH,2);
+                            }
+                        };
+                        rightUpperNorthPanel.add(resizeWindowButton);
                     }
                 }
 
@@ -413,58 +421,5 @@ public abstract class SettingsWindow extends JFrame {
         }
 
         return output;
-    }
-
-    private void resizeWindow(boolean maximized) {
-        float i;
-        if (!maximized) {
-            i = 1.4f;
-            expandWindowButton.setIcon(iconShrink);
-            if (debug) System.out.println("Maximized settings window.");
-        } else {
-            i = 1.0f;
-            expandWindowButton.setIcon(iconExpand);
-            if (debug) System.out.println("Minimized settings window.");
-        }
-        int newWidth = Math.round(WINDOW_WIDTH * i);
-        int newHeight = Math.round(WINDOW_HEIGHT * (i - 0.2f));
-
-        settingsFrame.setSize(new Dimension(newWidth, newHeight));
-
-        leftUpperNorthPanel.setPreferredSize(new Dimension(
-                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
-        );
-        rightUpperNorthPanel.setPreferredSize(new Dimension(
-                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2, BORDER_PADDING_HEIGHT)
-        );
-
-        leftLowerSouthPanel.setPreferredSize(new Dimension(
-                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2 + 50, BORDER_PADDING_HEIGHT)
-        );
-        rightLowerSouthPanel.setPreferredSize(new Dimension(
-                (newWidth - (BORDER_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
-        );
-
-        SwingGUI.setLocationOnResize(settingsFrame, true);
-
-        northPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH,2);
-        expandWindowButtonColorChange();
-
-        this.maximized = !maximized;
-    }
-
-    // overload for default color based on darkmode
-    public static void expandWindowButtonColorChange() {
-        expandWindowButtonColorChange(UIManager.getColor("RootPane.foreground"));
-    }
-
-    public static void expandWindowButtonColorChange(Color color) {
-        if (SettingsWindow.settingsFrame == null) {
-            return;
-        }
-        Icon tmp = expandWindowButton.getIcon();
-        // set the icon to the colour
-        Icon icon = SwingGUI.changeIconColor(tmp, color);
-        expandWindowButton.setIcon(icon);
     }
 }
