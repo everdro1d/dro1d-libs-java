@@ -436,7 +436,7 @@ public class SwingGUI {
     }
 
     public static boolean isDarkModeActive() {
-        return UIManager.getLookAndFeel().getName().toLowerCase().contains("dark");
+        return UIManager.getLookAndFeel().getName().toLowerCase().contains("dark") && FlatLaf.isLafDark();
     }
 
     public static boolean canHoldText(JComponent component) {
