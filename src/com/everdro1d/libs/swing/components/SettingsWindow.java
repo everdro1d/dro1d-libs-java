@@ -47,7 +47,6 @@ public abstract class SettingsWindow extends JFrame {
     private static LocaleManager localeManager;
     private Preferences prefs;
     private boolean debug;
-    private boolean darkMode = false;
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 800;
     private final int BORDER_PADDING_WIDTH = 15;
@@ -63,15 +62,15 @@ public abstract class SettingsWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent,
-            Preferences prefs, boolean debug, boolean darkMode,
+            Preferences prefs, boolean debug,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
-        this(parent, "Tahoma", 16, prefs, debug, darkMode, null, settingsTabPanelMap);
+        this(parent, "Tahoma", 16, prefs, debug, null, settingsTabPanelMap);
     }
 
     /**
@@ -80,15 +79,15 @@ public abstract class SettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, boolean, LocaleManager, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent, Preferences prefs,
-            boolean debug, boolean darkMode, LocaleManager localeManager,
+            boolean debug, LocaleManager localeManager,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
-        this(parent, "Tahoma", 16, prefs, debug, darkMode, localeManager, settingsTabPanelMap);
+        this(parent, "Tahoma", 16, prefs, debug, localeManager, settingsTabPanelMap);
     }
 
     /**
@@ -100,19 +99,18 @@ public abstract class SettingsWindow extends JFrame {
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
      * @param settingsTabPanelMap a map of tabs and their contents
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, boolean, LinkedHashMap)
+     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
      */
     public SettingsWindow(
             JFrame parent, String fontName,
             int fontSize, Preferences prefs,
-            boolean debug, boolean darkMode, LocaleManager localeManager,
+            boolean debug, LocaleManager localeManager,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
     ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.prefs = prefs;
         this.debug = debug;
-        this.darkMode = darkMode;
         this.settingsTabPanelMap = settingsTabPanelMap;
 
         if (localeManager != null) {

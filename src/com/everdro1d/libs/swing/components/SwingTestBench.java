@@ -12,6 +12,7 @@ import java.util.prefs.Preferences;
 public class SwingTestBench {
     private static boolean darkMode = true;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
+    private static JFrame[] frameArr = new JFrame[2];
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -28,7 +29,7 @@ public class SwingTestBench {
             p.put("ababa", "wow");
             p.put("sntoehu", "teuho");
 
-            SettingsWindow s = new SettingsWindow(null, p, true, darkMode, settingsMap) {
+            SettingsWindow s = new SettingsWindow(null, p, true, settingsMap) {
                 public void applySettings() {
                     System.out.println("Oops");
                     SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
