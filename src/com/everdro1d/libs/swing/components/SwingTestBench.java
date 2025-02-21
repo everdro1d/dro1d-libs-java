@@ -15,7 +15,7 @@ public class SwingTestBench {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            SwingGUI.setLookAndFeel(true, darkMode);
+            SwingGUI.setupLookAndFeel(true, darkMode);
             SwingGUI.uiSetup("Tahoma", 18);
             System.out.println(SwingGUI.isDarkModeActive());
 
@@ -31,13 +31,15 @@ public class SwingTestBench {
             SettingsWindow s = new SettingsWindow(null, p, true, darkMode, settingsMap) {
                 public void applySettings() {
                     System.out.println("Oops");
-                    SwingGUI.lightOrDarkMode(!darkMode, new JFrame[]{this});
-                    expandWindowButtonColorChange();
+                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
                     darkMode = !darkMode; //TODO super dang simple dark mode switch
                 }
             };
 
-            SwingGUI.lightOrDarkMode(darkMode, new JFrame[]{s});
+            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
+
+            frameArr[0] = s;
+            frameArr[1] = d;
         });
     }
 }

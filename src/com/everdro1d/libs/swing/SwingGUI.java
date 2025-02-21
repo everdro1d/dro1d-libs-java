@@ -2,9 +2,7 @@ package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.swing.themes.EverDarkLaf;
 import com.everdro1d.libs.swing.themes.EverLightLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -22,17 +20,17 @@ public class SwingGUI {
 
     /**
      * Set the look and feel of the application.
-     * @param flatLaf whether to use FlatLaf (defaults to system look and feel)
-     * @param hasDarkMode whether to enable dark mode (FlatLaf only)
+     * @param useFlatLaf whether to use FlatLaf (defaults to system look and feel)
+     * @param allowDarkMode whether to enable dark mode (FlatLaf only)
      */
-    public static void setLookAndFeel(boolean flatLaf, boolean hasDarkMode) {
-        if (flatLaf) {
+    public static void setupLookAndFeel(boolean useFlatLaf, boolean allowDarkMode) {
+        if (useFlatLaf) {
             FlatLaf.registerCustomDefaultsSource("com.everdro1d.libs.swing.themes");
             EverLightLaf.setup();
-            // optionally activate darkmode
-            if (hasDarkMode) {
+            if (allowDarkMode) {
                 EverDarkLaf.setup();
             }
+
             return;
         }
 
@@ -49,10 +47,22 @@ public class SwingGUI {
      * Used to enable dark mode for the running application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
+     *
+     * @param isDarkModeEnabled whether to enable dark mode
+     * @param frames            array of JFrames to update
+     */
+    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
+        switchLightOrDarkMode(isDarkModeEnabled, frames, false);
+    }
+
+    /**
+     * Used to enable dark mode for the running application.
+     * <p>
+     * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
      */
-    public static void lightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
+    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames, boolean contrastTitleBars) {
         try {
             LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
             UIManager.setLookAndFeel( laf );
@@ -427,7 +437,7 @@ public class SwingGUI {
                 component.setForeground(UIManager.getColor("RootPane.foreground"));
             }
         }
-        lightOrDarkMode(isDarkModeEnabled,new JFrame[]{frame});
+        switchLightOrDarkMode(isDarkModeEnabled,new JFrame[]{frame});
     }
 
     public static ArrayList<JComponent> getAllComponents(JFrame frame) {

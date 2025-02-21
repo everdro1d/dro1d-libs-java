@@ -13,9 +13,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.prefs.Preferences;
 
-import static com.everdro1d.libs.swing.SwingGUI.setLookAndFeel;
+import static com.everdro1d.libs.swing.SwingGUI.setupLookAndFeel;
 
 public class FileChooser extends JFileChooser {
     // UI text
@@ -238,7 +237,7 @@ public class FileChooser extends JFileChooser {
         filesOnlyDescription = varMap.getOrDefault("filesOnlyDescription", filesOnlyDescription);
         anyFileOrDirectory = varMap.getOrDefault("anyFileOrDirectory", anyFileOrDirectory);
 
-        setLookAndFeel(true, false);
+        setupLookAndFeel(true, false);
         setApproveButtonText(approveButtonText);
         UIManager.put("FileChooser.lookInLabelText", lookInLabelText);
         UIManager.put("FileChooser.saveInLabelText", saveInLabelText);
