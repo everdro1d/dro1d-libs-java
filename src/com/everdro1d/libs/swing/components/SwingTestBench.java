@@ -21,7 +21,6 @@ public class SwingTestBench {
             System.out.println(SwingGUI.isDarkModeActive());
 
             LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
-            //TODO actually do something with the JPanels
             settingsMap.put("General", new JPanel());
             settingsMap.put("Appearance", new JPanel());
             settingsMap.put("Advanced", new JPanel());
@@ -31,9 +30,7 @@ public class SwingTestBench {
 
             SettingsWindow s = new SettingsWindow(null, p, true, settingsMap) {
                 public void applySettings() {
-                    System.out.println("Oops");
-                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
-                    darkMode = !darkMode; //TODO super dang simple dark mode switch
+
                 }
             };
 
