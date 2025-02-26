@@ -5,8 +5,8 @@
 package com.everdro1d.libs.swing.test;
 
 import com.everdro1d.libs.swing.SwingGUI;
-import com.everdro1d.libs.swing.components.DebugConsoleWindow;
-import com.everdro1d.libs.swing.components.SettingsWindow;
+import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
+import com.everdro1d.libs.swing.windows.SettingsWindow;
 
 import javax.swing.*;
 import java.util.LinkedHashMap;

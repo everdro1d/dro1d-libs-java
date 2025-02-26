@@ -2,7 +2,7 @@
  * Copyright (c) dro1dDev 2025.                                                                   *
  **************************************************************************************************/
 
-package com.everdro1d.libs.swing.components;
+package com.everdro1d.libs.swing.dialogs;
 
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
