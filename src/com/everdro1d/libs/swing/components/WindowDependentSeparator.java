@@ -43,7 +43,6 @@ public class WindowDependentSeparator extends JPanel {
      */
     private WindowDependentSeparator(JFrame frame, boolean subtract, float percentOfWidth, int amtSubtract, int height) {
         updateSize(frame, subtract, percentOfWidth, amtSubtract, height);
-        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -54,7 +53,7 @@ public class WindowDependentSeparator extends JPanel {
      */
     public void updateWidth(JFrame frame, float percentOfWidth) {
         updateSize(frame, false, percentOfWidth, 0, getHeight());
-        setBackground(UIManager.getColor("Separator.foreground"));
+
     }
 
     /**
@@ -65,7 +64,6 @@ public class WindowDependentSeparator extends JPanel {
      */
     public void updateSize(JFrame frame, float percentOfWidth, int height) {
         updateSize(frame, false, percentOfWidth, 0, height);
-        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -76,7 +74,6 @@ public class WindowDependentSeparator extends JPanel {
      */
     public void updateWidth(JFrame frame, int amtSubtract) {
         updateSize(frame, true, 0.0F, amtSubtract, getHeight());
-        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -87,7 +84,6 @@ public class WindowDependentSeparator extends JPanel {
      */
     public void updateSize(JFrame frame, int amtSubtract, int height) {
         updateSize(frame, true, 0.0F, amtSubtract, height);
-        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -113,5 +109,11 @@ public class WindowDependentSeparator extends JPanel {
         this.setPreferredSize(nd);
         this.setMaximumSize(nd);
         this.setSize(nd);
+    }
+
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        setBackground(UIManager.getColor("Separator.foreground"));
     }
 }
