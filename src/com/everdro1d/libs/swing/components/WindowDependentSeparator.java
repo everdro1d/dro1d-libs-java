@@ -4,6 +4,8 @@
 
 package com.everdro1d.libs.swing.components;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -43,6 +45,7 @@ public class WindowDependentSeparator extends JPanel {
      */
     private WindowDependentSeparator(JFrame frame, boolean subtract, float percentOfWidth, int amtSubtract, int height) {
         updateSize(frame, subtract, percentOfWidth, amtSubtract, height);
+        putClientProperty(FlatClientProperties.STYLE, "arc: @arc");
     }
 
     /**
