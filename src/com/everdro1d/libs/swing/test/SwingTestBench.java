@@ -5,7 +5,6 @@
 package com.everdro1d.libs.swing.test;
 
 import com.everdro1d.libs.swing.SwingGUI;
-import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
 import com.everdro1d.libs.swing.windows.SettingsWindow;
 
 import javax.swing.*;
@@ -15,7 +14,7 @@ import java.util.prefs.Preferences;
 public class SwingTestBench {
     private static boolean darkMode = true;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
-    private static JFrame[] frameArr = new JFrame[2];
+    private static JFrame[] frameArr = new JFrame[1];
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -33,14 +32,12 @@ public class SwingTestBench {
 
             SettingsWindow s = new SettingsWindow(null, p, true, settingsMap) {
                 public void applySettings() {
-
+                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
+                    darkMode = !darkMode;
                 }
             };
 
-            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
-
             frameArr[0] = s;
-            frameArr[1] = d;
         });
     }
 }
