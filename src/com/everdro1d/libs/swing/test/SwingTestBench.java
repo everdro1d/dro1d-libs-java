@@ -2,9 +2,12 @@
  * Copyright (c) dro1dDev 2025.                                                                   *
  **************************************************************************************************/
 
-package com.everdro1d.libs.swing.components;
+package com.everdro1d.libs.swing.test;
 
 import com.everdro1d.libs.swing.SwingGUI;
+import com.everdro1d.libs.swing.components.DebugConsoleWindow;
+import com.everdro1d.libs.swing.components.SettingsWindow;
+
 import javax.swing.*;
 import java.util.LinkedHashMap;
 import java.util.prefs.Preferences;
