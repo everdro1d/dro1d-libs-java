@@ -223,7 +223,8 @@ public abstract class SettingsWindow extends JFrame {
                                         (getNewWidth() - (BORDER_PADDING_WIDTH * 2)) / 2 - 50, BORDER_PADDING_HEIGHT)
                                 );
 
-                                northPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH,2);
+                                northPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH);
+                                southPanelSeparator.updateWidth(settingsFrame,BORDER_PADDING_WIDTH);
                             }
                         };
                         rightUpperNorthPanel.add(resizeWindowButton);

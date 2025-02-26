@@ -7,7 +7,7 @@ package com.everdro1d.libs.swing.components;
 import javax.swing.*;
 import java.awt.*;
 
-public class WindowDependentSeparator extends JSeparator {
+public class WindowDependentSeparator extends JPanel {
 
     /**
      * Creates a separator dependent on a % of the frame width.
@@ -42,18 +42,41 @@ public class WindowDependentSeparator extends JSeparator {
      * @param height         how many px tall should the bar be
      */
     private WindowDependentSeparator(JFrame frame, boolean subtract, float percentOfWidth, int amtSubtract, int height) {
-        updateWidth(frame, subtract, percentOfWidth, amtSubtract, height);
+        updateSize(frame, subtract, percentOfWidth, amtSubtract, height);
+        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
      * Updates an existing separator dependent on a % of the frame width.
-     *
+     * Uses current height.
+     * @param frame          to base width off of
+     * @param percentOfWidth what % of the total should the separator fill
+     */
+    public void updateWidth(JFrame frame, float percentOfWidth) {
+        updateSize(frame, false, percentOfWidth, 0, getHeight());
+        setBackground(UIManager.getColor("Separator.foreground"));
+    }
+
+    /**
+     * Updates an existing separator dependent on a % of the frame width.
      * @param frame          to base width off of
      * @param percentOfWidth what % of the total should the separator fill
      * @param height         how many px tall should the bar be
      */
-    public void updateWidth(JFrame frame, float percentOfWidth, int height) {
-        updateWidth(frame, false, percentOfWidth, 0, height);
+    public void updateSize(JFrame frame, float percentOfWidth, int height) {
+        updateSize(frame, false, percentOfWidth, 0, height);
+        setBackground(UIManager.getColor("Separator.foreground"));
+    }
+
+    /**
+     * Updates an existing separator dependent on (frameWidth - (amtSubtract * 2)).
+     * Uses current height.
+     * @param frame       to base width off of
+     * @param amtSubtract number of px to subtract from width
+     */
+    public void updateWidth(JFrame frame, int amtSubtract) {
+        updateSize(frame, true, 0.0F, amtSubtract, getHeight());
+        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -62,8 +85,9 @@ public class WindowDependentSeparator extends JSeparator {
      * @param amtSubtract number of px to subtract from width
      * @param height      how many px tall should the bar be
      */
-    public void updateWidth(JFrame frame, int amtSubtract, int height) {
-        updateWidth(frame, true, 0.0F, amtSubtract, height);
+    public void updateSize(JFrame frame, int amtSubtract, int height) {
+        updateSize(frame, true, 0.0F, amtSubtract, height);
+        setBackground(UIManager.getColor("Separator.foreground"));
     }
 
     /**
@@ -76,7 +100,7 @@ public class WindowDependentSeparator extends JSeparator {
      * @param amtSubtract    number of px to subtract from width
      * @param height         how many px tall should the bar be
      */
-    private void updateWidth(JFrame frame, boolean subtract, float percentOfWidth, int amtSubtract, int height) {
+    private void updateSize(JFrame frame, boolean subtract, float percentOfWidth, int amtSubtract, int height) {
         int width;
         if (subtract) {
             width = (percentOfWidth != 0.0F)
@@ -84,8 +108,10 @@ public class WindowDependentSeparator extends JSeparator {
                     : frame.getWidth() - (amtSubtract * 2);
         } else width = Math.round(frame.getWidth() * percentOfWidth);
 
-        this.setMinimumSize(new Dimension(width, height));
-        this.setPreferredSize(new Dimension(width, height));
-        this.setMaximumSize(new Dimension(width, height));
+        Dimension nd = new Dimension(width, height);
+        this.setMinimumSize(nd);
+        this.setPreferredSize(nd);
+        this.setMaximumSize(nd);
+        this.setSize(nd);
     }
 }
