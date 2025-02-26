@@ -232,7 +232,7 @@ public abstract class SettingsWindow extends JFrame {
                 }
 
                 northPanelSeparator =
-                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 2);
+                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 1);
                 northPanel.add(northPanelSeparator);
 
                 northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -261,7 +261,7 @@ public abstract class SettingsWindow extends JFrame {
                 southPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
                 southPanelSeparator =
-                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 2);
+                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 1);
                 southPanel.add(southPanelSeparator);
 
                 lowerSouthPanel = new JPanel();
