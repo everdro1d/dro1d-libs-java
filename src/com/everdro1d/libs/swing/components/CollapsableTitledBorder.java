@@ -11,18 +11,42 @@ import java.util.function.Consumer;
 
 public class CollapsableTitledBorder extends TitledBorder {
 
+    private static boolean showTabbedPaneSeparators;
+
+    public CollapsableTitledBorder(
+            JComponent panel, String titleText, boolean expandedDefault,
+            boolean exclusive, int panelExpandedHeight, boolean showTabbedPaneSeparators
+    ) {
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, showTabbedPaneSeparators);
+    }
+
+    public CollapsableTitledBorder(
+            JComponent panel, String titleText, boolean expandedDefault,
+            boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight, boolean showTabbedPaneSeparators
+    ) {
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null, showTabbedPaneSeparators);
+    }
+
+    public CollapsableTitledBorder(
+            JComponent panel, String titleText, boolean expandedDefault,
+            boolean exclusive, int panelExpandedHeight,
+            Consumer<JTabbedPane> tabbedPaneExpandFunc, boolean showTabbedPaneSeparators
+    ) {
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc, showTabbedPaneSeparators);
+    }
+
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight
     ) {
-        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50);
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, false);
     }
 
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight
     ) {
-        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null);
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null, false);
     }
 
     public CollapsableTitledBorder(
@@ -30,19 +54,21 @@ public class CollapsableTitledBorder extends TitledBorder {
             boolean exclusive, int panelExpandedHeight,
             Consumer<JTabbedPane> tabbedPaneExpandFunc
     ) {
-        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc);
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc, false);
     }
 
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight,
-            Consumer<JTabbedPane> tabbedPaneExpandFunc
+            Consumer<JTabbedPane> tabbedPaneExpandFunc, boolean showTabbedPaneSeparators
     ) {
         super(titleText);
 
         if (!(panel instanceof JPanel || panel instanceof JTabbedPane)) {
             return;
         }
+
+        this.showTabbedPaneSeparators = showTabbedPaneSeparators;
 
         CollapsableTitledBorderMouseAdapter adapter = new CollapsableTitledBorderMouseAdapter(
                 panel, titleText, expandedDefault, panelExpandedHeight, panelCollapsedHeight,
@@ -133,6 +159,11 @@ public class CollapsableTitledBorder extends TitledBorder {
                     tabbedPane.setTabComponentAt(i, panelExpanded ? null : new JLabel());
                 }
                 if (panelExpanded) tabbedPaneExpandFunc.accept(tabbedPane);
+
+                if (showTabbedPaneSeparators) {
+                    UIManager.put("TabbedPane.showTabSeparators", panelExpanded);
+                    tabbedPane.updateUI();
+                }
 
             } else {
                 for (Component c : panel.getComponents()) {
