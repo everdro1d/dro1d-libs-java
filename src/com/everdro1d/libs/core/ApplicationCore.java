@@ -45,7 +45,7 @@ public final class ApplicationCore {
      * @param githubURL the URL of the GitHub releases page
      * @return the latest version # as a String
      * <p>Example Output: - "1.2.1"
-     * @see com.everdro1d.libs.swing.SwingGUI#updateCheckerDialog(String, JFrame, boolean, String, String, Preferences)
+     * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog
      */
     public static String getLatestVersion(String githubURL) {
         try {
