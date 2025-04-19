@@ -311,6 +311,14 @@ public class LocaleManager {
         return Arrays.stream(LocaleMap.keySet().toArray(new String[0])).toList();
     }
 
+    public List<String> getComponentsInClassMap(String className) {
+        return Arrays.stream(LocaleMap.get(className).keySet().toArray(new String[0])).toList();
+    }
+
+    public List<String> getVariablesInComponentMap(String className, String componentName) {
+        return Arrays.stream(LocaleMap.get(className).get(componentName).keySet().toArray(new String[0])).toList();
+    }
+
     /**
      * Gets the map of the locale for a specific class
      *
