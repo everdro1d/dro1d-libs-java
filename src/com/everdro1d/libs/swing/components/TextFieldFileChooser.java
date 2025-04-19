@@ -23,16 +23,28 @@ public class TextFieldFileChooser extends JComponent {
     // End of variables -----------------------------------------------------------------------------------------------|
 
     // Constructors ---------------------------------------------------------------------------------------------------|
+    public TextFieldFileChooser(LocaleManager localeManager, String defaultPath) {
+        this(localeManager, true, true, defaultPath);
+    }
+
+    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, String defaultPath) {
+        this(localeManager, selectFiles, false, defaultPath);
+    }
+
     public TextFieldFileChooser(LocaleManager localeManager) {
-        this(localeManager, true, true);
+        this(localeManager, true, true, null);
     }
 
     public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles) {
-        this(localeManager, selectFiles, false);
+        this(localeManager, selectFiles, false, null);
     }
 
     public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories) {
-        this.textField = new JTextField();
+        this(localeManager, selectFiles, selectDirectories, null);
+    }
+
+    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories, String defaultPath) {
+        this.textField = new JTextField(defaultPath);
         this.button = new JButton("...");
         this.fileChooser = new FileChooser(getText(), "Select path:",
                 selectFiles, selectDirectories, false, null,
