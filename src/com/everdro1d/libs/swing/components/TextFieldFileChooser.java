@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.function.BiConsumer;
 
-/**
+/** TODO implement locale. refer to DebugConsoleWindow
  * A custom JComponent that combines a JTextField and a JButton to allow the user to select a file from the file system.
  * and then write the path to the JTextField. Also allows the user to manually enter the path into the JTextField and
  * open the FileChooser to that path.
