@@ -6,10 +6,8 @@ package com.everdro1d.libs.core;
 
 import com.everdro1d.libs.io.Files;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.json.JSONWriter;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -83,25 +81,39 @@ public class LocaleManager {
      * @param fileName The name of the file to load the locale from **without the file extension** ex: locale_eng
      */
     public void loadLocaleFromFile(String fileName) {
-        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase())) {
             System.err.println("Invalid locale");
             return;
         }
+
         boolean exists = checkForLocaleFile(fileName);
         if (!exists) {
             System.err.println("Locale file does not exist, defaulting to English.");
             fileName = "locale_eng";
-            boolean exists1 = checkForLocaleFile(fileName);
-            if (!exists1) {
+            if (!checkForLocaleFile(fileName)) {
                 System.err.println("Default locale file does not exist, stopping load...");
                 return;
             }
         }
 
-        String filePath = localeDirPath + "/" + fileName + ".json";
-        try (FileReader reader = new FileReader(filePath)) {
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject root = new JSONObject(tokener);
+        Path filePath = localeDirPath.resolve(fileName + ".json");
+        try {
+            String fileContent = java.nio.file.Files.readString(filePath).trim();
+
+            // locale exists? for real this time ;)
+            if (fileContent.isEmpty()) {
+                System.err.println("Locale file is empty, treating as if no locale file was found.");
+                return;
+            }
+
+            // validate json file
+            if (!fileContent.startsWith("{") || !fileContent.endsWith("}")) {
+                System.err.println("Locale file is not JSON formatted. It must start with '{' and end with '}'.");
+                return;
+            }
+
+            // parse json
+            JSONObject root = new JSONObject(fileContent);
 
             for (String className : root.keySet()) {
                 JSONObject uiComponents = root.getJSONObject(className);
@@ -122,7 +134,7 @@ public class LocaleManager {
                 LocaleMap.put(className, uiComponentMap);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error reading locale file: " + filePath, e);
         }
     }
 
