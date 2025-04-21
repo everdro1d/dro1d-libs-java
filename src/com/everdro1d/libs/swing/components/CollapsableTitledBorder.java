@@ -164,6 +164,7 @@ public class CollapsableTitledBorder extends TitledBorder {
                 }
                 if (panelExpanded) tabbedPaneExpandFunc.accept(tabbedPane);
 
+                // tabbed pane cannot be hidden as the border is on the tabbed pane
                 if (showTabbedPaneSeparators) {
                     UIManager.put("TabbedPane.showTabSeparators", panelExpanded);
                     tabbedPane.updateUI();
