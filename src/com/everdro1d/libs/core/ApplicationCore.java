@@ -6,9 +6,7 @@ package com.everdro1d.libs.core;
 
 import com.everdro1d.libs.commands.*;
 
-import javax.swing.*;
 import java.net.*;
-import java.util.prefs.Preferences;
 
 public final class ApplicationCore {
     private ApplicationCore() {}
