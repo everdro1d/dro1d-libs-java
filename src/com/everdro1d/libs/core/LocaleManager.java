@@ -76,11 +76,15 @@ public class LocaleManager {
 
     /**
      * Loads a locale from a file. Defaults to English if the file does not exist.
-     * Expects "locale_[id]"
+     * Expects "locale_[id]". If only "[id]", then prepends "locale_"
      *
-     * @param fileName The name of the file to load the locale from **without the file extension** ex: locale_eng
+     * @param localeFileName The name of the file or locale to load the locale from
+     *                       **without the file extension** ex: "locale_eng" or "eng".
      */
-    public void loadLocaleFromFile(String fileName) {
+    public void loadLocaleFromFile(String localeFileName) {
+        String fileName = localeFileName.startsWith("locale_")
+            ? localeFileName : "locale_" + localeFileName;
+
         if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase())) {
             System.err.println("Invalid locale");
             return;
@@ -138,11 +142,24 @@ public class LocaleManager {
         }
     }
 
-    public void saveLocaleToFile(String fileName, Map<String, Map<String, Map<String, String>>> localeMap, boolean overwrite) {
-        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase()) ) {
+    /**
+     * Saves a locale file from a localeMap
+     * Expects "locale_[id]". If only "[id]", then prepends "locale_"
+     *
+     * @param localeFileName The name of the file or locale to load the locale from
+     *                       **without the file extension** ex: "locale_eng" or "eng".
+     * @param localeMap the locale map
+     * @param overwrite whether to overwrite any existing file with the same name
+     */
+    public void saveLocaleToFile(String localeFileName, Map<String, Map<String, Map<String, String>>> localeMap, boolean overwrite) {
+        String fileName = localeFileName.startsWith("locale_")
+                ? localeFileName : "locale_" + localeFileName;
+
+        if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase())) {
             System.err.println("Invalid locale");
             return;
         }
+
         boolean exists = checkForLocaleFile(fileName);
         if (exists && !overwrite) {
             System.err.println("Locale file already exists. Overwrite is disabled, stopping...");
