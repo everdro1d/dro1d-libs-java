@@ -128,7 +128,7 @@ public class FileChooser extends JFileChooser {
             if (!localeManager.getClassesInLocaleMap().contains("FileChooser")
                     || !localeManager.getComponentsInClassMap("FileChooser").contains("Defaults")
             ) {
-                addClassToLocale();
+                addComponentToClassInLocale();
             }
 
             useLocale();
@@ -172,7 +172,7 @@ public class FileChooser extends JFileChooser {
         });
     }
 
-    private void addClassToLocale() {
+    private void addComponentToClassInLocale() {
         Map<String, String> fileChooserMap = new TreeMap<>();
             fileChooserMap.put("lookInLabelText", lookInLabelText);
             fileChooserMap.put("saveInLabelText", saveInLabelText);
