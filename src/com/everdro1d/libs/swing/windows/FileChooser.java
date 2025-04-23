@@ -242,7 +242,7 @@ public class FileChooser extends JFileChooser {
         filesOnlyDescription = varMap.getOrDefault("filesOnlyDescription", filesOnlyDescription);
         anyFileOrDirectory = varMap.getOrDefault("anyFileOrDirectory", anyFileOrDirectory);
 
-        setupLookAndFeel(true, false);
+        setupLookAndFeel(true, SwingGUI.isDarkModeActive());
         setApproveButtonText(approveButtonText);
         UIManager.put("FileChooser.lookInLabelText", lookInLabelText);
         UIManager.put("FileChooser.saveInLabelText", saveInLabelText);

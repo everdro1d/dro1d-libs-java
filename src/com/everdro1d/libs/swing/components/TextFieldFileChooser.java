@@ -22,7 +22,7 @@ public class TextFieldFileChooser extends JComponent {
     // Variables ------------------------------------------------------------------------------------------------------|
     private final JTextField textField;
     private final JButton button;
-    private final FileChooser fileChooser;
+    private FileChooser fileChooser;
 
     // End of variables -----------------------------------------------------------------------------------------------|
 
@@ -50,9 +50,6 @@ public class TextFieldFileChooser extends JComponent {
     public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories, String defaultPath) {
         this.textField = new JTextField(defaultPath);
         this.button = new JButton("...");
-        this.fileChooser = new FileChooser(getText(), "Select path:",
-                selectFiles, selectDirectories, false, null,
-                false, null, localeManager);
 
         // Create a JPanel with a FlowLayout and add the button to it
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -79,6 +76,10 @@ public class TextFieldFileChooser extends JComponent {
         setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
         button.addActionListener(e -> {
+            this.fileChooser = new FileChooser(getText(), "Select path:",
+                    selectFiles, selectDirectories, false, null,
+                    false, null, localeManager);
+
             fileChooser.setCurrentDirectory(new File(getText()));
             fileChooser.showOpenDialog(this.getRootPane());
 
