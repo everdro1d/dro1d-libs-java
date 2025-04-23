@@ -312,10 +312,24 @@ public class LocaleManager {
     }
 
     public List<String> getComponentsInClassMap(String className) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return new ArrayList<>();
+        }
+
         return Arrays.stream(LocaleMap.get(className).keySet().toArray(new String[0])).toList();
     }
 
     public List<String> getVariablesInComponentMap(String className, String componentName) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return new ArrayList<>();
+        }
+        if (!LocaleMap.get(className).containsKey(componentName)) {
+            System.err.println("Component not found in locale map under this class: " + componentName);
+            return new ArrayList<>();
+        }
+
         return Arrays.stream(LocaleMap.get(className).get(componentName).keySet().toArray(new String[0])).toList();
     }
 
@@ -326,6 +340,11 @@ public class LocaleManager {
      * @return Map
      */
     public Map<String, Map<String, String>> getClassSpecificMap(String className) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return new HashMap<>();
+        }
+
         return LocaleMap.get(className);
     }
 
@@ -336,6 +355,11 @@ public class LocaleManager {
      * @return Map
      */
     public Map<String, String> getAllVariablesWithinClassSpecificMap(String className) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return new HashMap<>();
+        }
+
         Map<String, String> allVariables = new TreeMap<>();
         for (Map.Entry<String, Map<String, String>> entry : LocaleMap.get(className).entrySet()) {
             allVariables.putAll(entry.getValue());
@@ -372,6 +396,15 @@ public class LocaleManager {
      * @return Map
      */
     public Map<String, String> getComponentSpecificMap(String className, String componentName) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return new HashMap<>();
+        }
+        if (!LocaleMap.get(className).containsKey(componentName)) {
+            System.err.println("Component not found in locale map under this class: " + componentName);
+            return new HashMap<>();
+        }
+
         return LocaleMap.get(className).get(componentName);
     }
 
@@ -383,6 +416,11 @@ public class LocaleManager {
      * @param map           the map of the locale
      */
     public void addComponentSpecificMap(String className, String componentName, Map<String, String> map) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return;
+        }
+
         LocaleMap.get(className).put(componentName, map);
         localeMapUpdated();
     }
@@ -394,6 +432,11 @@ public class LocaleManager {
      * @param componentName The name of the component to remove
      */
     public void removeComponentSpecificMap(String className, String componentName) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return;
+        }
+
         LocaleMap.get(className).remove(componentName);
         localeMapUpdated();
     }
@@ -407,6 +450,19 @@ public class LocaleManager {
      * @return String
      */
     public String getVariableSpecificMap(String className, String componentName, String variableName) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return null;
+        }
+        if (!LocaleMap.get(className).containsKey(componentName)) {
+            System.err.println("Component not found in locale map under this class: " + componentName);
+            return null;
+        }
+        if (!LocaleMap.get(className).get(componentName).containsKey(variableName)) {
+            System.err.println("Variable not found in locale map under this component: " + variableName);
+            return null;
+        }
+
         return LocaleMap.get(className).get(componentName).get(variableName);
     }
 
@@ -419,6 +475,15 @@ public class LocaleManager {
      * @param text          the text of the locale
      */
     public void addVariableSpecificMap(String className, String componentName, String variableName, String text) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return;
+        }
+        if (!LocaleMap.get(className).containsKey(componentName)) {
+            System.err.println("Component not found in locale map under this class: " + componentName);
+            return;
+        }
+
         LocaleMap.get(className).get(componentName).put(variableName, text);
         localeMapUpdated();
     }
@@ -431,6 +496,15 @@ public class LocaleManager {
      * @param variableName  The name of the variable to remove
      */
     public void removeVariableSpecificMap(String className, String componentName, String variableName) {
+        if (!LocaleMap.containsKey(className)) {
+            System.err.println("Class not found in locale map: " + className);
+            return;
+        }
+        if (!LocaleMap.get(className).containsKey(componentName)) {
+            System.err.println("Component not found in locale map under this class: " + componentName);
+            return;
+        }
+
         LocaleMap.get(className).get(componentName).remove(variableName);
         localeMapUpdated();
     }
