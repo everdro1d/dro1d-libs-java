@@ -6,6 +6,7 @@ package com.everdro1d.libs.swing.test;
 
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
+import com.everdro1d.libs.swing.components.TextFieldFileChooser;
 import com.everdro1d.libs.swing.windows.SettingsWindow;
 
 import javax.swing.*;
@@ -27,7 +28,12 @@ public class SwingTestBench {
             localeManager.loadLocaleFromFile("eng");
 
             LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
-            settingsMap.put("General", new JPanel());
+
+            JPanel settingsPanel = new JPanel();
+            TextFieldFileChooser textFieldFileChooser = new TextFieldFileChooser(localeManager, "SettingsPanel_TextField");
+            settingsPanel.add(textFieldFileChooser);
+
+            settingsMap.put("General", settingsPanel);
             settingsMap.put("Appearance", new JPanel());
             settingsMap.put("Advanced", new JPanel());
 
