@@ -124,11 +124,15 @@ public class FileChooser extends JFileChooser {
         if (localeManager != null) {
             this.localeManager = localeManager;
 
-            // if the locale does not contain the class, add it and it's components
-            if (!localeManager.getClassesInLocaleMap().contains("FileChooser")) {
+            // if the locale does not contain the class or string defaults, add them
+            if (!localeManager.getClassesInLocaleMap().contains("FileChooser")
+                    || !localeManager.getComponentsInClassMap("FileChooser").contains("Defaults")
+            ) {
                 addClassToLocale();
             }
+
             useLocale();
+
         } else System.out.println("LocaleManager is null. FileChooser will launch without localization.");
 
         setPreferredSize(new Dimension(600, 450));
@@ -169,10 +173,7 @@ public class FileChooser extends JFileChooser {
     }
 
     private void addClassToLocale() {
-        Map<String, Map<String, String>> map = new TreeMap<>();
-            map.put("Main", new TreeMap<>());
-
-        Map<String, String> fileChooserMap = map.get("Main");
+        Map<String, String> fileChooserMap = new TreeMap<>();
             fileChooserMap.put("lookInLabelText", lookInLabelText);
             fileChooserMap.put("saveInLabelText", saveInLabelText);
             fileChooserMap.put("upFolderToolTipText", upFolderToolTipText);
@@ -202,11 +203,15 @@ public class FileChooser extends JFileChooser {
             fileChooserMap.put("filesOnlyDescription", filesOnlyDescription);
             fileChooserMap.put("anyFileOrDirectory", anyFileOrDirectory);
 
-        localeManager.addClassSpecificMap("FileChooser", map);
+        if (!localeManager.getClassesInLocaleMap().contains("FileChooser")) {
+            localeManager.addClassSpecificMap("FileChooser", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("FileChooser", "Defaults", fileChooserMap);
     }
 
     private void useLocale() {
-        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("FileChooser");
+        Map<String, String> varMap = localeManager.getComponentSpecificMap("FileChooser", "Defaults");
 
         lookInLabelText = varMap.getOrDefault("lookInLabelText", lookInLabelText);
         saveInLabelText = varMap.getOrDefault("saveInLabelText", saveInLabelText);
