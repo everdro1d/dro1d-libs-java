@@ -4,6 +4,7 @@
 
 package com.everdro1d.libs.swing.test;
 
+import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.windows.SettingsWindow;
 
@@ -22,6 +23,8 @@ public class SwingTestBench {
             SwingGUI.uiSetup("Tahoma", 18);
             System.out.println(SwingGUI.isDarkModeActive());
 
+            LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
+
             LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
             settingsMap.put("General", new JPanel());
             settingsMap.put("Appearance", new JPanel());
@@ -30,7 +33,7 @@ public class SwingTestBench {
             p.put("ababa", "wow");
             p.put("sntoehu", "teuho");
 
-            SettingsWindow s = new SettingsWindow(null, p, true, settingsMap) {
+            SettingsWindow s = new SettingsWindow(null, p, true, localeManager, settingsMap) {
                 public void applySettings() {
                     SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
                     darkMode = !darkMode;
