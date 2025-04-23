@@ -82,7 +82,12 @@ public class TextFieldFileChooser extends JComponent {
             fileChooser.setCurrentDirectory(new File(getText()));
             fileChooser.showOpenDialog(this.getRootPane());
 
-            setText(fileChooser.getSelectedFile().getAbsolutePath());
+            File file = fileChooser.getSelectedFile();
+            if (file == null) {
+                return;
+            }
+
+            setText(file.getAbsolutePath());
         });
     }
 
