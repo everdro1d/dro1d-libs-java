@@ -24,6 +24,7 @@ public class SwingTestBench {
             System.out.println(SwingGUI.isDarkModeActive());
 
             LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
+            localeManager.loadLocaleFromFile("eng");
 
             LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
             settingsMap.put("General", new JPanel());
