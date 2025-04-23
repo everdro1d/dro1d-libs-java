@@ -10,6 +10,8 @@ import com.everdro1d.libs.swing.windows.FileChooser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
 /**
@@ -20,9 +22,11 @@ import java.util.function.BiConsumer;
 public class TextFieldFileChooser extends JComponent {
 
     // Variables ------------------------------------------------------------------------------------------------------|
+    private String dialogTitle = "Select path:";
     private final JTextField textField;
     private final JButton button;
     private FileChooser fileChooser;
+    private LocaleManager localeManager;
 
     // End of variables -----------------------------------------------------------------------------------------------|
 
@@ -48,6 +52,20 @@ public class TextFieldFileChooser extends JComponent {
     }
 
     public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories, String defaultPath) {
+        if (localeManager != null) {
+            this.localeManager = localeManager;
+
+            // if the locale does not contain the class or string defaults, add them
+            if (!localeManager.getClassesInLocaleMap().contains("FileChooser")
+                    || !localeManager.getComponentsInClassMap("FileChooser").contains("TextFieldFileChooser")
+            ) {
+                addComponentToClassInLocale();
+            }
+
+            useLocale();
+
+        } else System.out.println("LocaleManager is null. TextFieldFileChooser will init without localization.");
+
         this.textField = new JTextField(defaultPath);
         this.button = new JButton("...");
 
@@ -76,7 +94,7 @@ public class TextFieldFileChooser extends JComponent {
         setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
         button.addActionListener(e -> {
-            this.fileChooser = new FileChooser(getText(), "Select path:",
+            this.fileChooser = new FileChooser(getText(), dialogTitle,
                     selectFiles, selectDirectories, false, null,
                     false, null, localeManager);
 
@@ -90,6 +108,24 @@ public class TextFieldFileChooser extends JComponent {
 
             setText(file.getAbsolutePath());
         });
+    }
+
+    private void addComponentToClassInLocale() {
+        Map<String, String> fileChooserMap = new TreeMap<>();
+        fileChooserMap.put("dialogTitle", dialogTitle);
+
+        if (!localeManager.getClassesInLocaleMap().contains("FileChooser")) {
+            localeManager.addClassSpecificMap("FileChooser", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("FileChooser", "TextFieldFileChooser", fileChooserMap);
+    }
+
+    private void useLocale() {
+        Map<String, String> varMap =
+                localeManager.getComponentSpecificMap("FileChooser", "TextFieldFileChooser");
+
+        dialogTitle = varMap.getOrDefault("dialogTitle", dialogTitle);
     }
 
     // Getters and Setters --------------------------------------------------------------------------------------------|
