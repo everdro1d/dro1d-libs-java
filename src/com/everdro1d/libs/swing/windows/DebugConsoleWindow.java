@@ -36,8 +36,6 @@ public class DebugConsoleWindow extends JFrame {
                     private JLabel numberOfLinesLabel;
                         private String numberOfLinesText = "Number of Lines:";
                     public static JButton resizeWindowButton;
-                        private Icon iconExpand;
-                        private Icon iconShrink;
             private JPanel centerPanel;
                 private JScrollPane debugScrollPane;
                     private JTextArea debugTextArea;
@@ -62,7 +60,6 @@ public class DebugConsoleWindow extends JFrame {
     // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
     private boolean debug;
-    private boolean maximized;
     private int numberOfLines = 0;
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 360;
