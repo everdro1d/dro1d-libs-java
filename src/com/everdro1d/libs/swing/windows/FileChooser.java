@@ -163,7 +163,7 @@ public class FileChooser extends JFileChooser {
             @Override
             public String getDescription() {
                 if (useCustomMessage) return customMessage;
-                if (filterByExtension) return extension.toUpperCase() + extensionFilterDescription + " (*." + extension + ")";
+                if (filterByExtension) return extension.toUpperCase() + " " + extensionFilterDescription + " (*." + extension + ")";
 
                 if (selectionMode == JFileChooser.DIRECTORIES_ONLY) return directoryOnlyDescription;
                 if (selectionMode == JFileChooser.FILES_ONLY) return filesOnlyDescription;
