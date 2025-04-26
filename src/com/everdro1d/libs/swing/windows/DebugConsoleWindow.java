@@ -115,6 +115,7 @@ public class DebugConsoleWindow extends JFrame {
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("DebugConsoleWindow")) {
                 addClassToLocale();
+                addFileChooserComponentToLocale();
             }
             useLocale();
         } else System.out.println("LocaleManager is null. DebugConsoleWindow will launch without localization.");
@@ -130,21 +131,29 @@ public class DebugConsoleWindow extends JFrame {
     private void addClassToLocale() {
         Map<String, Map<String, String>> map = new TreeMap<>();
         map.put("Main", new TreeMap<>());
-        map.put("FileChooser", new TreeMap<>());
         Map<String, String> mainMap = map.get("Main");
-        Map<String, String> fileChooserMap = map.get("FileChooser");
         mainMap.put("titleText", titleText);
         mainMap.put("numberOfLinesText", numberOfLinesText);
         mainMap.put("clearButtonText", clearButtonText);
         mainMap.put("copyButtonText", copyButtonText);
         mainMap.put("saveButtonText", saveButtonText);
+        mainMap.put("closeButtonText", closeButtonText);
+
+        localeManager.addClassSpecificMap("DebugConsoleWindow", map);
+    }
+
+    private void addFileChooserComponentToLocale() {
+        Map<String, String> fileChooserMap = new TreeMap<>();
         fileChooserMap.put("savedSuccessDialogMessage", savedSuccessDialogMessage);
         fileChooserMap.put("savedSuccessDialogTitle", savedSuccessDialogTitle);
         fileChooserMap.put("fileChooserTitle", fileChooserTitle);
         fileChooserMap.put("fileChooserCustomMessage", fileChooserCustomMessage);
-        mainMap.put("closeButtonText", closeButtonText);
 
-        localeManager.addClassSpecificMap("DebugConsoleWindow", map);
+        if (!localeManager.getClassesInLocaleMap().contains("FileChooser")) {
+            localeManager.addClassSpecificMap("FileChooser", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("FileChooser", "DebugConsoleWindow", fileChooserMap);
     }
 
     private void useLocale() {
@@ -155,11 +164,13 @@ public class DebugConsoleWindow extends JFrame {
         clearButtonText = varMap.getOrDefault("clearButtonText", clearButtonText);
         copyButtonText = varMap.getOrDefault("copyButtonText", copyButtonText);
         saveButtonText = varMap.getOrDefault("saveButtonText", saveButtonText);
-        savedSuccessDialogMessage = varMap.getOrDefault("savedSuccessDialogMessage", savedSuccessDialogMessage);
-        savedSuccessDialogTitle = varMap.getOrDefault("savedSuccessDialogTitle", savedSuccessDialogTitle);
-        fileChooserTitle = varMap.getOrDefault("fileChooserTitle", fileChooserTitle);
-        fileChooserCustomMessage = varMap.getOrDefault("fileChooserCustomMessage", fileChooserCustomMessage);
         closeButtonText = varMap.getOrDefault("closeButtonText", closeButtonText);
+
+        Map<String, String> fileChooserMap = localeManager.getComponentSpecificMap("FileChooser", "DebugConsoleWindow");
+        savedSuccessDialogMessage = fileChooserMap.getOrDefault("savedSuccessDialogMessage", savedSuccessDialogMessage);
+        savedSuccessDialogTitle = fileChooserMap.getOrDefault("savedSuccessDialogTitle", savedSuccessDialogTitle);
+        fileChooserTitle = fileChooserMap.getOrDefault("fileChooserTitle", fileChooserTitle);
+        fileChooserCustomMessage = fileChooserMap.getOrDefault("fileChooserCustomMessage", fileChooserCustomMessage);
     }
 
     private void initializeWindowProperties(JFrame parent) {
