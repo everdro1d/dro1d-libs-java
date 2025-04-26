@@ -99,9 +99,13 @@ public class TextFieldFileChooser extends JComponent {
                     false, null, localeManager);
 
             fileChooser.setCurrentDirectory(new File(getText()));
-            fileChooser.showOpenDialog(this.getRootPane());
+            int returnValue = fileChooser.showOpenDialog(this.getRootPane());
 
-            File file = fileChooser.getSelectedFile();
+            File file = null;
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                file = fileChooser.getSelectedFile();
+            }
+
             if (file == null) {
                 return;
             }
