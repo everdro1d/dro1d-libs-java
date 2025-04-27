@@ -195,11 +195,11 @@ public class Files {
 
             // parse content
             String[] lines = fileContent.split("\n");
-            String[] keys = lines[0].split("=");
-            String[] values = lines[1].split("=");
 
-            for (int i = 0, keysLength = keys.length; i < keysLength; i++) {
-                map.put(keys[i], values[i]);
+            for (String line : lines) {
+                String key = line.trim().split("=")[0];
+                String value = line.trim().split("=").length > 1 ? line.trim().split("=")[1] : "";
+                map.put(key, value);
             }
             return map;
         } catch (IOException e) {
