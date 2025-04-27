@@ -389,7 +389,7 @@ public class DebugConsoleWindow extends JFrame {
 
     private String getLogFileName() {
         String dateTime = Utils.getSanitizedCurrentTime(true, true, false);
-        return FileSystems.getDefault().getSeparator() + "DEBUG_LOG_[" + dateTime + "].txt";
+        return FileSystems.getDefault().getSeparator() + "DEBUG_LOG_" + dateTime + ".txt";
     }
 
     private void updateNumberOfLines(int numberOfLines) {

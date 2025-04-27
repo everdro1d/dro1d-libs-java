@@ -64,8 +64,7 @@ public class Utils {
      */
     public static String getSanitizedCurrentTime(boolean includeDate, boolean includeTime, boolean includeMillis) {
         return getCurrentTime(includeDate, includeTime, includeMillis)
-                .replace(" ", "_")
-                .replaceAll(":", "!");
+                .replaceAll("[ :]", "_");
     }
 
     /**
