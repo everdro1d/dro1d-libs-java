@@ -4,13 +4,14 @@
 
 package com.everdro1d.libs.core;
 
+import com.everdro1d.libs.io.SyncPipe;
+
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class Utils {
@@ -166,6 +167,58 @@ public class Utils {
             System.out.print(indentString + "}");
         } else {
             System.out.print("\"" + map + "\"");
+        }
+    }
+
+
+    /**
+     * Run a command in the system shell.
+     * @param cmd          the command to run
+     * @param pipeToSysOut whether to pipe the output to System.out
+     */
+    public static void runCommand(ArrayList<String> cmd, boolean pipeToSysOut) {
+        runCommand(cmd, null, false, pipeToSysOut);
+    }
+
+
+    /**
+     * Run a command in the system shell.
+     * @param cmd          the command to run
+     * @param pwd          the working directory
+     * @param pipeToSysOut whether to pipe the output to System.out
+     */
+    public static void runCommand(ArrayList<String> cmd, String pwd, boolean pipeToSysOut) {
+        runCommand(cmd, pwd, false, pipeToSysOut);
+    }
+
+    /**
+     * Run a command in the system shell.
+     * @param cmd          the command to run
+     * @param pwd          the working directory
+     * @param debug        whether to print debug information
+     * @param pipeToSysOut whether to pipe the output to System.out
+     */
+    public static void runCommand(ArrayList<String> cmd, String pwd, boolean debug, boolean pipeToSysOut) {
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        if (pwd != null && new File(pwd).exists()) {
+            pb.directory(new File(pwd));
+        }
+        Process p;
+        try {
+            p = pb.start();
+            new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
+            if (pipeToSysOut) try (Scanner scanner = new Scanner(p.getInputStream())) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (!line.isEmpty()) {
+                        if (debug) System.out.println(line);
+                    }
+                }
+            }
+            p.waitFor();
+            if (debug) System.out.println(p.exitValue());
+        } catch (Exception e) {
+            if (debug) e.printStackTrace(System.err);
         }
     }
 }
