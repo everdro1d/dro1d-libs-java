@@ -109,7 +109,7 @@ public class Files {
     }
 
     /**
-     * Open a directory in the file manager, and select the file.
+     * Open a directory in the file manager and select the file.
      * @param path the path to the file
      */
     public static void openInFileManager(String path) {
