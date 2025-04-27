@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -230,6 +231,14 @@ public class Files {
             java.nio.file.Files.createFile(filePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        // sort the map naturally first so the file is not all over the place
+        List<Map.Entry<String, String>> sortedEntries = new ArrayList<>(map.entrySet());
+        sortedEntries.sort(Map.Entry.comparingByKey());
+        map = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : sortedEntries) {
+            map.put(entry.getKey(), entry.getValue());
         }
 
         try (FileWriter wr = new FileWriter(filePath.toString())) {
