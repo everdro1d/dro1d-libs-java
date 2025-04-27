@@ -168,15 +168,13 @@ public class Files {
         if (os.equals("Windows")) {
             if (!(path.contains(":") && path.contains("\\"))) return false;
         } else if (os.equals("macOS") || os.equals("Unix")) {
-            if (!path.contains("/")) return false;
+            if (!path.contains("/") || path.contains(":")) return false;
         } else {
             System.err.println("Unsupported OS: " + os + ". Cannot check file path. Assuming true.");
         }
 
-        if (!(new java.io.File(path).exists() || new java.io.File(path).isDirectory())) {
-            return false;
-        }
-
-        return true;
+        return new File(path).exists() || new File(path).isDirectory();
     }
+
+
 }
