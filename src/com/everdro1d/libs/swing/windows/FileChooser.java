@@ -154,11 +154,17 @@ public class FileChooser extends JFileChooser {
         this.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
-                if (filterByExtension) return f.getName().toLowerCase().endsWith(extension);
                 // TODO: save file into existing file add overwrite dialog.
                 //       do same for existing file has same name.
                 //       consider adding presets for file chooser config.
 
+                if (filterByExtension) {
+                    boolean doesExtensionMatch = f.getName().toLowerCase().endsWith(extension.toLowerCase());
+                    if (f.isDirectory()) {
+                        return doesExtensionMatch || f.isDirectory();
+                    }
+                    return doesExtensionMatch;
+                }
 
                 if (selectionMode == JFileChooser.DIRECTORIES_ONLY) return f.isDirectory();
                 if (selectionMode == JFileChooser.FILES_ONLY) return f.isFile();
