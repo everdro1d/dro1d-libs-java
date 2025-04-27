@@ -50,7 +50,7 @@ public abstract class SettingsWindow extends JFrame {
     private Preferences prefs;
     private boolean debug;
     private final int WINDOW_WIDTH = 600;
-    private final int WINDOW_HEIGHT = 800;
+    private final int WINDOW_HEIGHT = 700;
     private final int BORDER_PADDING_WIDTH = 15;
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
