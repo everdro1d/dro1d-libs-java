@@ -8,6 +8,7 @@ import com.everdro1d.libs.core.ApplicationCore;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
@@ -16,9 +17,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -176,5 +175,71 @@ public class Files {
         return new File(path).exists() || new File(path).isDirectory();
     }
 
+    public static Map<String,String> loadMapFromFile(String fileName) {
+        Path filePath = Path.of(fileName);
+        if (!java.nio.file.Files.exists(filePath)) {
+            System.err.println("File does not exist: " + fileName);
+            return null;
+        }
 
+        try {
+            String fileContent = java.nio.file.Files.readString(filePath).trim();
+
+            // anything exists in file?
+            if (fileContent.isEmpty()) {
+                System.err.println("File is empty. Stopping load...");
+                return null;
+            }
+
+            Map<String,String> map = new HashMap<>();
+
+            // parse content
+            String[] lines = fileContent.split("\n");
+            String[] keys = lines[0].split("=");
+            String[] values = lines[1].split("=");
+
+            for (int i = 0, keysLength = keys.length; i < keysLength; i++) {
+                map.put(keys[i], values[i]);
+            }
+            return map;
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading locale file: " + filePath, e);
+        }
+    }
+
+    public static void saveMapToFile(String path, String fileName, Map<String, String> map, boolean overwrite) {
+        Path filePath = Path.of(path + File.separator + fileName + ".txt");
+        if (java.nio.file.Files.exists(filePath)) {
+            if (!overwrite) {
+                System.err.println("File with that name already exists. Overwrite is disabled, stopping...");
+                return;
+            }
+
+            try {
+                if (!Files.isFileInUse(filePath)) {
+                    java.nio.file.Files.delete(filePath);
+                } else {
+                    throw new IOException("The file is in use");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            java.nio.file.Files.createFile(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (FileWriter wr = new FileWriter(filePath.toString())) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                wr.write(entry.getKey() + "=" + entry.getValue() + System.lineSeparator());
+            }
+            wr.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
