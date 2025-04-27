@@ -7,6 +7,7 @@ package com.everdro1d.libs.swing.test;
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.TextFieldFileChooser;
+import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
 import com.everdro1d.libs.swing.windows.SettingsWindow;
 
 import javax.swing.*;
@@ -46,6 +47,8 @@ public class SwingTestBench {
                     darkMode = !darkMode;
                 }
             };
+
+            new DebugConsoleWindow(SettingsWindow.settingsFrame,p,true);
 
             frameArr[0] = s;
         });
