@@ -58,6 +58,17 @@ public class Utils {
     }
 
     /**
+     *
+     * @see #getCurrentTime(boolean, boolean, boolean)
+     * @return file system safe output of related method
+     */
+    public static String getSanitizedCurrentTime(boolean includeDate, boolean includeTime, boolean includeMillis) {
+        return getCurrentTime(includeDate, includeTime, includeMillis)
+                .replace(" ", "_")
+                .replaceAll(":", "!");
+    }
+
+    /**
      * Test if the string contains any of the strings in the array.
      * @param matchingArray the array of strings to match
      * @param testString the string to test
