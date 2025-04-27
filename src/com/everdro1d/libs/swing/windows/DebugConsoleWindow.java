@@ -115,6 +115,9 @@ public class DebugConsoleWindow extends JFrame {
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("DebugConsoleWindow")) {
                 addClassToLocale();
+            }
+            if (!localeManager.getClassesInLocaleMap().contains("FileChooser")
+                    || !localeManager.getComponentsInClassMap("FileChooser").contains("DebugConsoleWindow")) {
                 addFileChooserComponentToLocale();
             }
             useLocale();
