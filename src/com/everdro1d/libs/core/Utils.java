@@ -96,7 +96,7 @@ public class Utils {
      * @return a set of values
      * <p>Example: An inner map with video extensions and audio codecs,
      * I want to get all the video extensions where the audio codec is "video only"
-     * <p>Set<String> values = getUniqueValues("EXT", option -> option.get("ACODEC").equals("video only"));
+     * <p>Set<String> values = extractUniqueValuesByPredicate("EXT", option -> option.get("ACODEC").equals("video only"));
      * <p>System.out.println(values);
      * <p>Output: [mp4, webm, mkv]
      */
