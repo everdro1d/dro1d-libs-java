@@ -434,7 +434,7 @@ public class DebugConsoleWindow extends JFrame {
         String output = System.getProperty("user.home");
 
         FileChooser fileChooser = new FileChooser(
-                output, fileChooserTitle, false, fileChooserCustomMessage+ "- *.txt", localeManager);
+                output, fileChooserTitle, false, fileChooserCustomMessage+ " - *.txt", localeManager);
 
         int returnValue = fileChooser.showOpenDialog(debugFrame);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
