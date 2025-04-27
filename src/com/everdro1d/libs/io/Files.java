@@ -203,7 +203,7 @@ public class Files {
             }
             return map;
         } catch (IOException e) {
-            throw new RuntimeException("Error reading locale file: " + filePath, e);
+            throw new RuntimeException("Error reading file: " + filePath, e);
         }
     }
 
