@@ -143,7 +143,8 @@ public class FileChooser extends JFileChooser {
         int selectionMode = selectFiles ?
                 ( selectDirectories
                         ? JFileChooser.FILES_AND_DIRECTORIES
-                        : JFileChooser.FILES_ONLY ) : JFileChooser.DIRECTORIES_ONLY;
+                        : JFileChooser.FILES_ONLY
+                ) : JFileChooser.DIRECTORIES_ONLY;
 
         setFileSelectionMode(selectionMode);
         setAcceptAllFileFilterUsed(false);
