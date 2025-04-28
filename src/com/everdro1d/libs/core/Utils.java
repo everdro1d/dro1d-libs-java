@@ -221,4 +221,19 @@ public class Utils {
             if (debug) e.printStackTrace(System.err);
         }
     }
+
+    public static String reverseKeyFromValueInMap(String value, Map<String, String> map) {
+        if (!map.containsValue(value)) {
+            System.err.println("Given Map does not contain such a value. Please check again.");
+            return null;
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (Objects.equals(entry.getValue(), value)) {
+                return entry.getKey();
+            }
+        }
+        System.err.println("The value exists in the map, but no matching key-value pair is found during the iteration.\n"
+                + "Check if key=null, or if map is modified during check.");
+        return null;
+    }
 }
