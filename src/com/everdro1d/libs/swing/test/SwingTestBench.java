@@ -7,8 +7,8 @@ package com.everdro1d.libs.swing.test;
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.TextFieldFileChooser;
-import com.everdro1d.libs.swing.windows.BasicSettingsWindow;
-import com.everdro1d.libs.swing.windows.AdvancedSettingsWindow;
+import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
+import com.everdro1d.libs.swing.windows.settings.AdvancedSettingsWindow;
 
 
 import javax.swing.*;
@@ -29,41 +29,41 @@ public class SwingTestBench {
             LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
             localeManager.loadLocaleFromFile(p.get("currentLocale","eng"));
 
-//            JPanel panel = new JPanel();
-//            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//            JLabel label = new JLabel("Beep");
-//            panel.add(label);
-//
-//            BasicSettingsWindow s = new BasicSettingsWindow(
-//                    null, "Tahoma", 16, p,
-//                    true, localeManager, panel
-//            ) {
-//                public void applySettings() {
-//                    localeManager.reloadLocaleInProgram(p.get("currentLocale", "eng"));
-//                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
-//                    darkMode = !darkMode;
-//                }
-//            };
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            JLabel label = new JLabel("Beep");
+            panel.add(label);
 
-            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
-
-            JPanel settingsPanel = new JPanel();
-            TextFieldFileChooser textFieldFileChooser = new TextFieldFileChooser(localeManager, "SettingsPanel_TextField");
-            settingsPanel.add(textFieldFileChooser);
-
-            settingsMap.put("General", settingsPanel);
-            settingsMap.put("Appearance", new JPanel());
-            settingsMap.put("Advanced", new JPanel());
-
-            p.put("ababa", "wow");
-            p.put("sntoehu", "teuho");
-
-            AdvancedSettingsWindow s = new AdvancedSettingsWindow(null, p, true, localeManager, settingsMap) {
+            BasicSettingsWindow s = new BasicSettingsWindow(
+                    null, "Tahoma", 16, p,
+                    true, localeManager, panel
+            ) {
                 public void applySettings() {
+                    localeManager.reloadLocaleInProgram(p.get("currentLocale", "eng"));
                     SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
                     darkMode = !darkMode;
                 }
             };
+
+//            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
+//
+//            JPanel settingsPanel = new JPanel();
+//            TextFieldFileChooser textFieldFileChooser = new TextFieldFileChooser(localeManager, "SettingsPanel_TextField");
+//            settingsPanel.add(textFieldFileChooser);
+//
+//            settingsMap.put("General", settingsPanel);
+//            settingsMap.put("Appearance", new JPanel());
+//            settingsMap.put("Advanced", new JPanel());
+//
+//            p.put("ababa", "wow");
+//            p.put("sntoehu", "teuho");
+//
+//            AdvancedSettingsWindow s = new AdvancedSettingsWindow(null, p, true, localeManager, settingsMap) {
+//                public void applySettings() {
+//                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
+//                    darkMode = !darkMode;
+//                }
+//            };
 
 //            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
 
