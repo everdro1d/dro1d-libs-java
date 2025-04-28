@@ -62,4 +62,12 @@ public final class ApplicationCore {
         }
         return null;
     }
+
+    public static String getApplicationName() {
+        String mainClassName = System.getProperty("sun.java.command");
+        if (mainClassName != null && mainClassName.contains(" ")) {
+            mainClassName = mainClassName.split(" ")[0];
+        }
+        return mainClassName != null ? mainClassName : "UnknownApplication";
+    }
 }
