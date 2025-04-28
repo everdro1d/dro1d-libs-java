@@ -65,9 +65,19 @@ public final class ApplicationCore {
 
     public static String getApplicationName() {
         String mainClassName = System.getProperty("sun.java.command");
-        if (mainClassName != null && mainClassName.contains(" ")) {
-            mainClassName = mainClassName.split(" ")[0];
+        if (mainClassName != null) {
+            String[] parts = mainClassName.split("\\.");
+            int comIndex = -1;
+            for (int i = 0; i < parts.length; i++) {
+                if (parts[i].equals("com")) {
+                    comIndex = i;
+                    break;
+                }
+            }
+            if (comIndex != -1 && comIndex + 2 < parts.length) {
+                return String.join(".", parts[comIndex + 1], parts[comIndex + 2]);
+            }
         }
-        return mainClassName != null ? mainClassName : "UnknownApplication";
+        return "UnknownApplication";
     }
 }
