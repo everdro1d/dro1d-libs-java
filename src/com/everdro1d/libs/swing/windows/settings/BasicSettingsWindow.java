@@ -55,8 +55,8 @@ public abstract class BasicSettingsWindow extends JFrame {
     private static LocaleManager localeManager;
     private Preferences prefs;
     private boolean debug;
-    private final int WINDOW_WIDTH = 400;
-    private final int WINDOW_HEIGHT = 350;
+    private final int WINDOW_WIDTH = 500;
+    private final int WINDOW_HEIGHT = 400;
     private final int BORDER_PADDING_WIDTH = 15;
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
