@@ -7,8 +7,9 @@ package com.everdro1d.libs.swing.test;
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.TextFieldFileChooser;
-import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
-import com.everdro1d.libs.swing.windows.SettingsWindow;
+import com.everdro1d.libs.swing.windows.BasicSettingsWindow;
+import com.everdro1d.libs.swing.windows.AdvancedSettingsWindow;
+
 
 import javax.swing.*;
 import java.util.LinkedHashMap;
@@ -17,7 +18,7 @@ import java.util.prefs.Preferences;
 public class SwingTestBench {
     private static boolean darkMode = true;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
-    private static JFrame[] frameArr = new JFrame[1];
+    private static JFrame[] frameArr = new JFrame[2];
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -26,7 +27,23 @@ public class SwingTestBench {
             System.out.println(SwingGUI.isDarkModeActive());
 
             LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
-            localeManager.loadLocaleFromFile("eng");
+            localeManager.loadLocaleFromFile(p.get("currentLocale","eng"));
+
+//            JPanel panel = new JPanel();
+//            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//            JLabel label = new JLabel("Beep");
+//            panel.add(label);
+//
+//            BasicSettingsWindow s = new BasicSettingsWindow(
+//                    null, "Tahoma", 16, p,
+//                    true, localeManager, panel
+//            ) {
+//                public void applySettings() {
+//                    localeManager.reloadLocaleInProgram(p.get("currentLocale", "eng"));
+//                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
+//                    darkMode = !darkMode;
+//                }
+//            };
 
             LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
 
@@ -41,16 +58,17 @@ public class SwingTestBench {
             p.put("ababa", "wow");
             p.put("sntoehu", "teuho");
 
-            SettingsWindow s = new SettingsWindow(null, p, true, localeManager, settingsMap) {
+            AdvancedSettingsWindow s = new AdvancedSettingsWindow(null, p, true, localeManager, settingsMap) {
                 public void applySettings() {
                     SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
                     darkMode = !darkMode;
                 }
             };
 
-            new DebugConsoleWindow(SettingsWindow.settingsFrame,p,true);
+//            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
 
             frameArr[0] = s;
+//            frameArr[1] = d;
         });
     }
 }
