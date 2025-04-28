@@ -71,9 +71,39 @@ public class LocaleManager {
         String[] codes = getISOCodes();
         Arrays.sort(codes);
         for (String code : codes) {
+            if (code.isBlank()) continue;
             String name = Locale.of(code).getDisplayLanguage();
             validLocaleMap.put(code, name);
         }
+        fixValidLocaleNames();
+        addValidLocales();
+    }
+
+    private void fixValidLocaleNames() {
+        // Fixes
+        validLocaleMap.put("ces", "Czech");
+        validLocaleMap.put("deu", "German");
+        validLocaleMap.put("cym", "Welsh");
+        validLocaleMap.put("ell", "Greek");
+        validLocaleMap.put("eus", "Basque");
+        validLocaleMap.put("fas", "Persian");
+        validLocaleMap.put("fra", "French");
+        validLocaleMap.put("hye", "Armenian");
+        validLocaleMap.put("kat", "Georgian");
+        validLocaleMap.put("mkd", "Macedonian");
+        validLocaleMap.put("mri", "Māori");
+        validLocaleMap.put("msa", "Malay");
+        validLocaleMap.put("mya", "Burmese");
+        validLocaleMap.put("nld", "Dutch");
+        validLocaleMap.put("ron", "Romanian");
+        validLocaleMap.put("slk", "Slovak");
+        validLocaleMap.put("sqi", "Albanian");
+        validLocaleMap.put("zho", "Chinese");
+    }
+
+    private void addValidLocales() {
+        // Additions
+        validLocaleMap.put("cmn", "Mandarin");
     }
 
     /**
@@ -562,6 +592,22 @@ public class LocaleManager {
 
     public String getCurrentLocale() {
         return currentLocale;
+    }
+
+    public String getCurrentLocaleName() {
+        return validLocaleMap.get(currentLocale);
+    }
+
+    public Map<String,String> getAvailableLocales() {
+        Map<String,String> availableLocales = new HashMap<>();
+        // match valid locales with locales that exist in the locale directory
+        for (String code : validLocaleMap.keySet()) {
+            String fileName = "locale_" + code;
+            if (checkForLocaleFile(fileName)) {
+                availableLocales.put(code, validLocaleMap.get(code));
+            }
+        }
+        return availableLocales;
     }
 
     // LocaleChangeListener methods -------------------------------------------------------------------------------|
