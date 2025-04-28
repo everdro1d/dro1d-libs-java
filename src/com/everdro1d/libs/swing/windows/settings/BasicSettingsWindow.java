@@ -286,7 +286,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                             }
                             applySettings();
                             // TODO: if locale changed prompt restart
-                            settingsFrame.dispose();
+                            this.dispose();
                         });
 
                         cancelSettings = new JButton(cancelText);
@@ -295,7 +295,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         cancelSettings.addActionListener(e -> {
                             // cancel changes and close
                             // TODO: if settingsChanged then add confirm dialog beforehand
-                            settingsFrame.dispose();
+                            this.dispose();
                         });
                     }
                 }

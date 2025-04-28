@@ -305,7 +305,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
                         applySettings.addActionListener(e -> {
                             // save settings and close
                             applySettings();
-                            //settingsFrame.dispose();
+                            //this.dispose();
                         });
 
                         cancelSettings = new JButton("Cancel");
@@ -314,7 +314,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
                         cancelSettings.addActionListener(e -> {
                             // cancel settings and close
                             // if settingsChanged then add confirm dialog beforehand
-                            settingsFrame.dispose();
+                            this.dispose();
                         });
                     }
                 }
