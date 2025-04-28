@@ -132,6 +132,7 @@ public class LocaleManager {
         if (!exists) {
             System.err.println("Locale file does not exist, defaulting to English.");
             fileName = "locale_eng";
+            currentLocale = "eng";
             if (!checkForLocaleFile(fileName)) {
                 System.err.println("Default locale file does not exist, stopping load...");
                 return;
