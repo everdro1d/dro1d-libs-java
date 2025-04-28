@@ -1,4 +1,4 @@
-package com.everdro1d.libs.swing.windows;
+package com.everdro1d.libs.swing.windows.settings;
 
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
-import static com.everdro1d.libs.swing.windows.SettingsWindowCommon.*;
+import static com.everdro1d.libs.swing.windows.settings.SettingsWindowCommon.*;
 
 public abstract class BasicSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|

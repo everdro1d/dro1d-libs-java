@@ -1,7 +1,8 @@
-package com.everdro1d.libs.swing.windows;
+package com.everdro1d.libs.swing.windows.settings;
 
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.io.Files;
+import com.everdro1d.libs.swing.windows.FileChooser;
 
 import javax.swing.*;
 import java.io.*;

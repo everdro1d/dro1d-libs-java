@@ -2,7 +2,7 @@
  * dro1dDev 2025.                                                                                 *
  **************************************************************************************************/
 
-package com.everdro1d.libs.swing.windows;
+package com.everdro1d.libs.swing.windows.settings;
 
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
@@ -15,7 +15,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.prefs.Preferences;
 
-import static com.everdro1d.libs.swing.windows.SettingsWindowCommon.*;
+import static com.everdro1d.libs.swing.windows.settings.SettingsWindowCommon.*;
 
 public abstract class AdvancedSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
