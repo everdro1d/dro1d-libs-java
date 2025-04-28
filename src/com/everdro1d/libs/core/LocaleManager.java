@@ -117,6 +117,12 @@ public class LocaleManager {
         String fileName = localeFileName.startsWith("locale_")
             ? localeFileName : "locale_" + localeFileName;
 
+        String[] code = fileName.split("_");
+        if (code.length == 1 || code[1] == null || code[1].isBlank()) {
+            System.err.println("Locale changed but missing, defaulting to English.");
+            fileName = "locale_eng";
+        }
+
         if (!isLocaleCodeValid(fileName.split("_")[1].toLowerCase())) {
             System.err.println("Invalid locale");
             return;
