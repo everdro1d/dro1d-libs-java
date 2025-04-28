@@ -364,6 +364,7 @@ public class LocaleManager {
         return LocaleMap;
     }
 
+    // TODO: organize this
     // Modifies the LocaleMap -----------------------------------------------------------------------------------------|
     /**
      * Sets the map of the locale, with the outermost key being the Class Name of the UI component, and the second key being the
