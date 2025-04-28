@@ -20,6 +20,8 @@ import java.util.*;
  */
 public class LocaleManager {
 
+    private final List<LocaleChangeListener> localeChangeListeners = new ArrayList<>();
+
     // Uses tree map to sort the locales in alphabetical order by their ISO 639 codes
     Map<String, String> validLocaleMap = new TreeMap<>();
 
@@ -291,6 +293,20 @@ public class LocaleManager {
         }
     }
 
+    /**
+     *
+     * ex: localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
+     * @param newLocale
+     */
+    public void reloadLocaleInProgram(String newLocale) {
+        if (!isLocaleCodeValid(newLocale)) {
+            System.err.println("Invalid locale");
+            return;
+        }
+        loadLocaleFromFile(newLocale);
+        notifyLocaleChange();
+    }
+
     // Getters and Setters --------------------------------------------------------------------------------------------|
 
     /**
@@ -547,4 +563,33 @@ public class LocaleManager {
     public String getCurrentLocale() {
         return currentLocale;
     }
+
+    // LocaleChangeListener methods -------------------------------------------------------------------------------|
+
+    /**
+     * Adds a listener to the list of listeners
+     * @param listener The listener to add
+     */
+    public void addLocaleChangeListener(LocaleChangeListener listener) {
+        localeChangeListeners.add(listener);
+    }
+
+    /**
+     * Removes a listener from the list of listeners
+     * @param listener The listener to remove
+     */
+    public void removeLocaleChangeListener(LocaleChangeListener listener) {
+        localeChangeListeners.remove(listener);
+    }
+
+    /**
+     * Notifies all listeners of a locale change
+     */
+    public void notifyLocaleChange() {
+        for (LocaleChangeListener listener : localeChangeListeners) {
+            listener.onLocaleChange();
+        }
+    }
+
+
 }
