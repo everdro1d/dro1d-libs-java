@@ -9,6 +9,8 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.prefs.Preferences;
 
+import static com.everdro1d.libs.core.ApplicationCore.getApplicationName;
+
 public class SettingsWindowCommon {
     public static void importSettings(
             String filePath, boolean debug,
@@ -86,7 +88,7 @@ public class SettingsWindowCommon {
 
         prefs.put("settingsFilePath", settingsFilePath);
 
-        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + "exported_settings.xml";
+        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + getApplicationName() + "_exported_settings.xml";
 
         if (debug) System.out.println("Settings file at: " + settingsFilePath);
 
@@ -104,8 +106,9 @@ public class SettingsWindowCommon {
         FileChooser fileChooser = new FileChooser(
                 output,
                 (export ? "Save To" : "Read From"),
-                false,
-                "exported_settings.xml",
+                !export, true, true,
+                "xml", true,
+                (export ? (getApplicationName() + "_exported_settings.xml") : "*.xml"),
                 localeManager
         );
         UIManager.put("FileChooser.readOnly", old);
