@@ -185,7 +185,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
                         titleLabel = new JLabel(titleText);
                         int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
                         titleLabel.setPreferredSize(
-                                new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
+                                new Dimension((int) leftUpperNorthPanel.getPreferredSize().getWidth() - mac, BORDER_PADDING_HEIGHT - 10)
                         );
                         titleLabel.setFont(new Font(fontName, Font.BOLD, fontSize + 4));
                         titleLabel.setVerticalAlignment(SwingConstants.BOTTOM);
