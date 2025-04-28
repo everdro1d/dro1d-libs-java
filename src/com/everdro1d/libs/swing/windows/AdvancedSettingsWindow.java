@@ -6,19 +6,18 @@ package com.everdro1d.libs.swing.windows;
 
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
-import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.ResizeWindowButton;
 import com.everdro1d.libs.swing.components.WindowDependentSeparator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.nio.file.FileSystems;
 import java.util.*;
 import java.util.prefs.Preferences;
 
-public abstract class SettingsWindow extends JFrame {
+import static com.everdro1d.libs.swing.windows.SettingsWindowCommon.*;
+
+public abstract class AdvancedSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
@@ -64,10 +63,10 @@ public abstract class SettingsWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
-    public SettingsWindow(
+    public AdvancedSettingsWindow(
             JFrame parent,
             Preferences prefs, boolean debug,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
@@ -81,10 +80,10 @@ public abstract class SettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
-     * @see SettingsWindow#SettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
+     * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
+     * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
-    public SettingsWindow(
+    public AdvancedSettingsWindow(
             JFrame parent, Preferences prefs,
             boolean debug, LocaleManager localeManager,
             LinkedHashMap<String, JPanel> settingsTabPanelMap
@@ -101,9 +100,9 @@ public abstract class SettingsWindow extends JFrame {
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
      * @param settingsTabPanelMap a map of tabs and their contents
-     * @see SettingsWindow#SettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
+     * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
      */
-    public SettingsWindow(
+    public AdvancedSettingsWindow(
             JFrame parent, String fontName,
             int fontSize, Preferences prefs,
             boolean debug, LocaleManager localeManager,
@@ -116,13 +115,13 @@ public abstract class SettingsWindow extends JFrame {
         this.settingsTabPanelMap = settingsTabPanelMap;
 
         if (localeManager != null) {
-            SettingsWindow.localeManager = localeManager;
+            AdvancedSettingsWindow.localeManager = localeManager;
             // if the locale does not contain the class, add it and it's components
-            if (!localeManager.getClassesInLocaleMap().contains("SettingsWindow")) {
+            if (!localeManager.getClassesInLocaleMap().contains("AdvancedSettingsWindow")) {
                 addClassToLocale();
             }
             useLocale();
-        } else System.out.println("LocaleManager is null. SettingsWindow will launch without localization.");
+        } else System.out.println("LocaleManager is null. AdvancedSettingsWindow will launch without localization.");
 
         initializeWindowProperties(parent);
         initializeGUIComponents();
@@ -140,11 +139,11 @@ public abstract class SettingsWindow extends JFrame {
         Map<String, String> mainMap = map.get("Main");
         mainMap.put("titleText", titleText);
 
-        localeManager.addClassSpecificMap("SettingsWindow", map);
+        localeManager.addClassSpecificMap("AdvancedSettingsWindow", map);
     }
 
     private void useLocale() {
-        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("SettingsWindow");
+        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("AdvancedSettingsWindow");
 
         titleText = varMap.getOrDefault("titleText", titleText);
     }
@@ -278,16 +277,20 @@ public abstract class SettingsWindow extends JFrame {
                         importSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         leftLowerSouthPanel.add(importSettings);
                         importSettings.addActionListener(e -> {
-                            String filePath = getFilePathUser(false);
-                            importSettings(filePath);
+                            String filePath = getFilePathUser(
+                                    false, debug, settingsFrame, localeManager, prefs
+                            );
+                            importSettings(filePath, debug, settingsFrame);
                         });
 
                         exportSettings = new JButton("Export");
                         exportSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         leftLowerSouthPanel.add(exportSettings);
                         exportSettings.addActionListener(e -> {
-                            String filePath = getFilePathUser(true);
-                            exportSettings(filePath);
+                            String filePath = getFilePathUser(
+                                    true, debug, settingsFrame, localeManager, prefs
+                            );
+                            exportSettings(filePath, debug, settingsFrame, prefs);
                         });
                     }
 
@@ -322,105 +325,8 @@ public abstract class SettingsWindow extends JFrame {
         rootPane.setDefaultButton(applySettings);
     }
 
-    public void importSettings(String filePath) {
-        if (filePath.isEmpty()) return;
-
-        int success;
-        try {
-            InputStream isNode = new BufferedInputStream(
-                    new FileInputStream(filePath)
-            );
-            Preferences.importPreferences(isNode);
-            if (debug) System.out.println("Read settings from file.");
-            success = 0;
-        } catch (Exception ex) {
-            success = 1;
-            ex.printStackTrace(System.err);
-        }
-
-        if (success == 0) {
-            if (debug)
-                System.out.println("Successfully imported settings from .xml file. Showing message.");
-            JOptionPane.showMessageDialog(settingsFrame,
-                    "Successfully imported from:" + " \"" + filePath + "\"", "Success!",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-
-        //TODO refresh panels with updated prefs
-    }
-
-    public void exportSettings(String filePath) {
-        if (filePath.isEmpty()) return;
-
-        int success;
-        try {
-            OutputStream osNode = new BufferedOutputStream(
-                    new FileOutputStream(filePath)
-            );
-            prefs.exportNode(osNode);
-            if (debug) System.out.println("Wrote settings to file.");
-            success = 0;
-        } catch (Exception ex) {
-            success = 1;
-            ex.printStackTrace(System.err);
-        }
-
-        if (success == 0) {
-            if (debug)
-                System.out.println("Successfully saved settings as .xml file. Showing message.");
-            JOptionPane.showMessageDialog(settingsFrame,
-                    "Successfully saved to:" + " \"" + filePath + "\"", "Success!",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-
-            Files.openInFileManager(filePath);
-        }
-    }
-
     /**
      * Implement your actual save mechanism here.
      */
     public abstract void applySettings();
-
-    private String getFilePathUser(boolean export) {
-        String settingsFilePath = openFileChooser(
-                prefs.get("settingsFilePath", ""),
-                export
-        );
-        if (settingsFilePath.contains("Cancel-")) return "";
-
-        prefs.put("settingsFilePath", settingsFilePath);
-
-        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + "exported_settings.xml";
-
-        if (debug) System.out.println("Settings file at: " + settingsFilePath);
-
-        return settingsFilePath;
-    }
-
-    private static String openFileChooser(
-            String existingFilePath, boolean export) {
-        String output = System.getProperty("user.home");
-
-        Boolean old = UIManager.getBoolean("FileChooser.readOnly");
-        UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-        FileChooser fileChooser = new FileChooser(
-                output,
-                (export ? "Save To" : "Read From"),
-                false,
-                "exported_settings.xml",
-                localeManager
-        );
-        UIManager.put("FileChooser.readOnly", old);
-
-        int returnValue = fileChooser.showOpenDialog(settingsFrame);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            output = fileChooser.getSelectedFile().getAbsolutePath();
-        } else {
-            output = "Cancel-" + existingFilePath;
-        }
-
-        return output;
-    }
 }
