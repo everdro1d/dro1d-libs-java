@@ -55,7 +55,10 @@ public final class ApplicationCore {
             String location = connection.getHeaderField("Location");
             connection.disconnect();
             if (location != null) {
-                return location.split("/v")[1];
+                String[] s = location.split("/v");
+                if (s.length > 1) return s[1];
+                System.err.println("Error: No valid version tag found in URL: " + location);
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
