@@ -6,17 +6,15 @@ package com.everdro1d.libs.swing.test;
 
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
-import com.everdro1d.libs.swing.components.TextFieldFileChooser;
+import com.everdro1d.libs.swing.dialogs.SimpleWorkingDialog;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
-import com.everdro1d.libs.swing.windows.settings.AdvancedSettingsWindow;
 
 
 import javax.swing.*;
-import java.util.LinkedHashMap;
 import java.util.prefs.Preferences;
 
 public class SwingTestBench {
-    private static boolean darkMode = true;
+    private static boolean darkMode = false;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
     private static JFrame[] frameArr = new JFrame[2];
 
@@ -24,7 +22,7 @@ public class SwingTestBench {
         SwingUtilities.invokeLater(() -> {
             SwingGUI.setupLookAndFeel(true, darkMode);
             SwingGUI.uiSetup("Tahoma", 18);
-            System.out.println(SwingGUI.isDarkModeActive());
+            System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
 
             LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
             localeManager.loadLocaleFromFile(p.get("currentLocale","eng"));
@@ -44,6 +42,16 @@ public class SwingTestBench {
                     darkMode = !darkMode;
                 }
             };
+
+            SimpleWorkingDialog diag = new SimpleWorkingDialog(
+                    "Please Wait...", localeManager
+            ) {
+                @Override
+                public void onCancel() {
+                    System.out.println("Cancel pressed");
+                }
+            };
+            diag.showDialog(s);
 
 //            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
 //
