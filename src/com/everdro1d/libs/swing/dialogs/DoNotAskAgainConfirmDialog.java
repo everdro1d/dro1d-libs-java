@@ -22,9 +22,9 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
 
         if (localeManager != null) {
             this.localeManager = localeManager;
-            // if the locale does not contain the class, add it and it's components
-            if (!localeManager.getClassesInLocaleMap().contains("DoNotAskAgainConfirmDialog")) {
-                addClassToLocale();
+            if (!localeManager.getClassesInLocaleMap().contains("Dialogs")
+                    || !localeManager.getComponentsInClassMap("Dialogs").contains("DoNotAskAgainConfirmDialog")) {
+                addComponentToClassInLocale();
             }
             useLocale();
         } else System.out.println("LocaleManager is null. DoNotAskAgainConfirmDialog will launch without localization.");
@@ -82,17 +82,19 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
         return result;
     }
 
-    private void addClassToLocale() {
-        Map<String, Map<String, String>> map = new TreeMap<>();
-        map.put("Main", new TreeMap<>());
-        Map<String, String> mainMap = map.get("Main");
-        mainMap.put("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
+    private void addComponentToClassInLocale() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
 
-        localeManager.addClassSpecificMap("DoNotAskAgainConfirmDialog", map);
+        if (!localeManager.getClassesInLocaleMap().contains("Dialogs")) {
+            localeManager.addClassSpecificMap("Dialogs", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("Dialogs", "DoNotAskAgainConfirmDialog", map);
     }
 
     private void useLocale() {
-        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("DoNotAskAgainConfirmDialog");
+        Map<String, String> varMap = localeManager.getComponentSpecificMap("Dialogs", "DoNotAskAgainConfirmDialog");
         doNotAskAgainCheckBoxText = varMap.getOrDefault("doNotAskAgainCheckBoxText", doNotAskAgainCheckBoxText);
     }
 }
