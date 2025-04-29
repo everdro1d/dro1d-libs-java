@@ -70,6 +70,10 @@ public abstract class SimpleWorkingDialog extends JPanel {
 
     public abstract void onCancel();
 
+    public void dispose() {
+        SwingUtilities.getWindowAncestor(this).dispose();
+    }
+
     private void addComponentToClassInLocale() {
         Map<String, String> map = new TreeMap<>();
         map.put("titleText", titleText);
