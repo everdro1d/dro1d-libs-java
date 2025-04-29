@@ -47,11 +47,9 @@ public class SwingTestBench {
                     "Please Wait...", localeManager
             ) {
                 @Override
-                public void onCancel() {
-                    System.out.println("Cancel pressed");
-                }
+                public void onCancel() {}
             };
-            diag.showDialog(s);
+            diag.showDialog(s, false);
 
 //            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
 //

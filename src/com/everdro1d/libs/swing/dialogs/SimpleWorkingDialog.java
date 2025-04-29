@@ -51,17 +51,20 @@ public abstract class SimpleWorkingDialog extends JPanel {
         add(progressBar, c);
     }
 
-    public void showDialog(JFrame parentFrame) {
-        JOptionPane pane = new JOptionPane(this, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{cancelText}, cancelText);
+    public void showDialog(JFrame parentFrame, boolean cancelable) {
+        Object[] options = cancelable ? new Object[]{cancelText} : new Object[]{};
+        JOptionPane pane = new JOptionPane(this, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, cancelText);
         JDialog d = pane.createDialog(parentFrame, titleText);
         d.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         d.setModal(true);
         d.setVisible(true);
         d.toFront();
-        Object selectedValue = pane.getValue();
-        if (cancelText.equals(selectedValue)) {
-            onCancel();
-            d.dispose();
+        if (cancelable) {
+            Object selectedValue = pane.getValue();
+            if (cancelText.equals(selectedValue)) {
+                onCancel();
+                d.dispose();
+            }
         }
     }
 
