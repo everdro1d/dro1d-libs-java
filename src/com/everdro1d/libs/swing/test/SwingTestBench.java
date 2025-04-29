@@ -13,6 +13,8 @@ import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 import javax.swing.*;
 import java.util.prefs.Preferences;
 
+import static com.everdro1d.libs.core.ApplicationCore.getLatestVersion;
+
 public class SwingTestBench {
     private static boolean darkMode = false;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
@@ -49,7 +51,19 @@ public class SwingTestBench {
                 @Override
                 public void onCancel() {}
             };
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    diag.dispose();
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.err);
+                }
+            }).start();
             diag.showDialog(s, false);
+
+            String str = getLatestVersion("https://github.com/everdro1d/SwingGUIApplicationTemplate/releases/latest");
+            System.out.println(str);
 
 //            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
 //
