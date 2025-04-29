@@ -24,9 +24,9 @@ public class UpdateCheckerDialog {
     private UpdateCheckerDialog(LocaleManager localeManager) {
         if (localeManager != null) {
             this.localeManager = localeManager;
-            // if the locale does not contain the class, add it and it's components
-            if (!localeManager.getClassesInLocaleMap().contains("UpdateCheckerDialog")) {
-                addClassToLocale();
+            if (!localeManager.getClassesInLocaleMap().contains("Dialogs")
+                    || !localeManager.getComponentsInClassMap("Dialogs").contains("UpdateCheckerDialog")) {
+                addComponentToClassInLocale();
             }
             useLocale();
         } else System.out.println("LocaleManager is null. UpdateCheckerDialog will launch without localization.");
@@ -79,18 +79,21 @@ public class UpdateCheckerDialog {
         }
     }
 
-    private void addClassToLocale() {
-        Map<String, Map<String, String>> map = new TreeMap<>();
-        map.put("Main", new TreeMap<>());
-        Map<String, String> mainMap = map.get("Main");
+    private void addComponentToClassInLocale() {
+        Map<String, String> map = new TreeMap<>();
         for (int i = 0; i < updateCheckerDialogText.length; i++) {
-            mainMap.put("updateCheckerDialogText"+i, updateCheckerDialogText[i]);
+            map.put("updateCheckerDialogText"+i, updateCheckerDialogText[i]);
         }
-        localeManager.addClassSpecificMap("UpdateCheckerDialog", map);
+
+        if (!localeManager.getClassesInLocaleMap().contains("Dialogs")) {
+            localeManager.addClassSpecificMap("Dialogs", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("Dialogs", "UpdateCheckerDialog", map);
     }
 
     private void useLocale() {
-        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("UpdateCheckerDialog");
+        Map<String, String> varMap = localeManager.getComponentSpecificMap("Dialogs", "UpdateCheckerDialog");
         for (int i = 0; i < updateCheckerDialogText.length; i++) {
             updateCheckerDialogText[i] = varMap.getOrDefault("updateCheckerDialogText"+i, updateCheckerDialogText[i]);
         }
