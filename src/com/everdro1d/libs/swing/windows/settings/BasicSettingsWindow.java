@@ -48,7 +48,7 @@ public abstract class BasicSettingsWindow extends JFrame {
     // UI Text
     private String titleText = "Settings";
     private String localeBorderTitleText = "Locale";
-    private String localeSwitchLabelText = "Select Locale (Restart Required):";
+    private String localeSwitchLabelText = "Change Language (Restart Required):";
     private String openLocaleDirectoryToolTipText = "Open Locale Directory";
     private String openLocaleRepositoryToolTipText = "Open Locale Website";
     private String generalBorderTitleText = "General";
