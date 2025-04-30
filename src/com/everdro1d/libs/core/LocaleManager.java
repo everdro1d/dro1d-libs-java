@@ -8,6 +8,7 @@ import com.everdro1d.libs.io.Files;
 import org.json.JSONObject;
 import org.json.JSONWriter;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -62,8 +63,10 @@ public class LocaleManager {
     private String currentLocale = "eng";
     private boolean localeMapUpdated = false;
 
-    public LocaleManager(Class<?> mainClazz) {
-        localeDirPath = Path.of(Path.of(Files.getJarPath(mainClazz)).getParent() + "/locale");
+    public LocaleManager() {
+        localeDirPath = Path.of(
+                ApplicationCore.getApplicationConfigDirectory() + File.separator + "locale"
+        );
         initValidLocalesMap();
     }
 
