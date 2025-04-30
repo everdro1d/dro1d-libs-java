@@ -33,7 +33,7 @@ public class Files {
     public static String getJarPath(Class<?> clazz) {
         String jarPath = null;
         try {
-            jarPath = Paths.get(clazz.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString();
+            jarPath = Paths.get(clazz.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
         } catch (URISyntaxException e) {
             e.printStackTrace(System.err);
         }
