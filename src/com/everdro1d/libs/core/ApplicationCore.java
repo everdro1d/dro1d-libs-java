@@ -76,7 +76,8 @@ public final class ApplicationCore {
             String jarFileName = new File(jarPath).getName();
             String[] parts = jarFileName.split("\\.");
             if (parts.length > 0) {
-                return parts[0];
+                String appName = parts[0].replaceAll("\\s+", "-");
+                return appName;
             }
         }
 
