@@ -58,7 +58,9 @@ public abstract class BasicSettingsWindow extends JFrame {
     private String openHelpWebsiteToolTipText = "Open Help Website";
     private String generalBorderTitleText = "General";
     private String importText = "Import";
+    private String importButtonToolTipText = "Import Settings";
     private String exportText = "Export";
+    private String exportButtonToolTipText = "Export Settings";
     private String acceptText = "OK";
     private String cancelText = "Cancel";
 
@@ -114,7 +116,9 @@ public abstract class BasicSettingsWindow extends JFrame {
         Map<String, String> map = new TreeMap<>();
         map.put("titleText", titleText);
         map.put("importText", importText);
+        map.put("importButtonToolTipText", importButtonToolTipText);
         map.put("exportText", exportText);
+        map.put("exportButtonToolTipText", exportButtonToolTipText);
         map.put("acceptText", acceptText);
         map.put("cancelText", cancelText);
         map.put("localeBorderTitleText", localeBorderTitleText);
@@ -142,7 +146,9 @@ public abstract class BasicSettingsWindow extends JFrame {
         openHelpWebsiteToolTipText = varMap.getOrDefault("openHelpWebsiteTooltipText", openHelpWebsiteToolTipText);
         generalBorderTitleText = varMap.getOrDefault("generalBorderTitleText", generalBorderTitleText);
         importText = varMap.getOrDefault("importText", importText);
+        importButtonToolTipText = varMap.getOrDefault("importButtonToolTipText", importButtonToolTipText);
         exportText = varMap.getOrDefault("exportText", exportText);
+        exportButtonToolTipText = varMap.getOrDefault("exportButtonToolTipText", exportButtonToolTipText);
         acceptText = varMap.getOrDefault("acceptText", acceptText);
         cancelText = varMap.getOrDefault("cancelText", cancelText);
     }
@@ -330,6 +336,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                     {
                         importSettingsButton = new JButton(importText);
                         importSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        importSettingsButton.setToolTipText(importButtonToolTipText);
                         leftLowerSouthPanel.add(importSettingsButton);
                         importSettingsButton.addActionListener(e -> {
                             String filePath = getFilePathUser(
@@ -340,6 +347,7 @@ public abstract class BasicSettingsWindow extends JFrame {
 
                         exportSettingsButton = new JButton(exportText);
                         exportSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        exportSettingsButton.setToolTipText(exportButtonToolTipText);
                         leftLowerSouthPanel.add(exportSettingsButton);
                         exportSettingsButton.addActionListener(e -> {
                             String filePath = getFilePathUser(
