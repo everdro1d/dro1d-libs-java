@@ -6,7 +6,10 @@ package com.everdro1d.libs.core;
 
 import com.everdro1d.libs.commands.*;
 
+import java.io.File;
 import java.net.*;
+
+import static com.everdro1d.libs.core.Utils.getUserConfigDirectory;
 
 public final class ApplicationCore {
     private ApplicationCore() {}
@@ -82,5 +85,9 @@ public final class ApplicationCore {
             }
         }
         return "UnknownApplication";
+    }
+
+    public static String getApplicationConfigDirectory() {
+        return getUserConfigDirectory() + File.separator + "dro1dDev" + File.separator + getApplicationName();
     }
 }

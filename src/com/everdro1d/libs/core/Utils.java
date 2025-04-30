@@ -236,4 +236,18 @@ public class Utils {
                 + "Check if key=null, or if map is modified during check.");
         return null;
     }
+
+    public static String getUserConfigDirectory() {
+        String userHome = System.getProperty("user.home");
+        String os = System.getProperty("os.name").toLowerCase();
+        String configDir;
+        if (os.contains("win")) {
+            configDir = userHome + "\\AppData\\Local\\";
+        } else if (os.contains("mac")) {
+            configDir = userHome + "/Library/Application Support/";
+        } else {
+            configDir = userHome + "/.config/";
+        }
+        return configDir;
+    }
 }
