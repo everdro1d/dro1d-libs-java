@@ -19,10 +19,7 @@ public class SettingsWindowCommon {
         if (filePath.isEmpty()) return;
 
         int success;
-        try {
-            InputStream isNode = new BufferedInputStream(
-                    new FileInputStream(filePath)
-            );
+        try (InputStream isNode = new BufferedInputStream(new FileInputStream(filePath))) {
             Preferences.importPreferences(isNode);
             if (debug) System.out.println("Read settings from file.");
             success = 0;
@@ -39,8 +36,6 @@ public class SettingsWindowCommon {
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
-
-        //TODO reload program with updated prefs
     }
 
     public static void exportSettings(
@@ -50,10 +45,7 @@ public class SettingsWindowCommon {
         if (filePath.isEmpty()) return;
 
         int success;
-        try {
-            OutputStream osNode = new BufferedOutputStream(
-                    new FileOutputStream(filePath)
-            );
+        try (OutputStream osNode = new BufferedOutputStream(new FileOutputStream(filePath))) {
             prefs.exportNode(osNode);
             if (debug) System.out.println("Wrote settings to file.");
             success = 0;
