@@ -78,7 +78,7 @@ public final class ApplicationCore {
                 }
             }
             if (comIndex != -1 && comIndex + 2 < parts.length) {
-                return String.join(".", parts[comIndex + 1], parts[comIndex + 2]);
+                return parts[comIndex + 2];
             }
         }
         return "UnknownApplication";
