@@ -191,11 +191,12 @@ public abstract class BasicSettingsWindow extends JFrame {
                     gbcAuto.insets = new Insets(4, 4, 4, 4);
                     autoSettingsPanel.setBorder(BorderFactory.createTitledBorder(
                             settingsPanel.getBorder(), localeBorderTitleText, TitledBorder.LEADING,
-                            TitledBorder.TOP, new Font(fontName, Font.PLAIN, 14)
+                            TitledBorder.TOP, new Font(fontName, Font.PLAIN, fontSize - 2)
                     ));
                     centerPanel.add(autoSettingsPanel, gbc);
                     {
                         localeSwitchLabel = new JLabel(localeSwitchLabelText);
+                        localeSwitchLabel.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         autoSettingsPanel.add(localeSwitchLabel, gbcAuto);
 
                         gbcAuto.gridx++;
@@ -223,7 +224,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                 gbc.weighty = 1;
                 settingsPanel.setBorder(BorderFactory.createTitledBorder(
                         settingsPanel.getBorder(), generalBorderTitleText, TitledBorder.LEADING,
-                        TitledBorder.TOP, new Font(fontName, Font.PLAIN, 14)
+                        TitledBorder.TOP, new Font(fontName, Font.PLAIN, fontSize - 2)
                         )
                 );
                 centerPanel.add(settingsPanel, gbc);
