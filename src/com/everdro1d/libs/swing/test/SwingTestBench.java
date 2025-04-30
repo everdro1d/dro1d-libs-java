@@ -36,7 +36,9 @@ public class SwingTestBench {
 
             BasicSettingsWindow s = new BasicSettingsWindow(
                     null, "Tahoma", 16, p,
-                    true, localeManager, panel
+                    true, localeManager, panel,
+                    "https://github.com/everdro1d/dro1d-libs-java",
+                    "https://everdro1d.github.io/dro1d-libs-java/"
             ) {
                 public void applySettings() {
                     localeManager.reloadLocaleInProgram(p.get("currentLocale", "eng"));
@@ -44,26 +46,6 @@ public class SwingTestBench {
                     darkMode = !darkMode;
                 }
             };
-
-            SimpleWorkingDialog diag = new SimpleWorkingDialog(
-                    "Please Wait...", localeManager
-            ) {
-                @Override
-                public void onCancel() {}
-            };
-
-            new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    diag.dispose();
-                } catch (InterruptedException e) {
-                    e.printStackTrace(System.err);
-                }
-            }).start();
-            diag.showDialog(s, false);
-
-            String str = getLatestVersion("https://github.com/everdro1d/SwingGUIApplicationTemplate/releases/latest");
-            System.out.println(str);
 
 //            LinkedHashMap<String, JPanel> settingsMap = new LinkedHashMap<>();
 //
