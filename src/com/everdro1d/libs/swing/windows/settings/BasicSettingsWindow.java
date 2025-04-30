@@ -3,12 +3,14 @@ package com.everdro1d.libs.swing.windows.settings;
 import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.core.Utils;
+import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.WindowDependentSeparator;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -26,9 +28,11 @@ public abstract class BasicSettingsWindow extends JFrame {
                     private JLabel titleLabel;
                 private WindowDependentSeparator northPanelSeparator;
             private JPanel centerPanel;
-                private JPanel autoSettingsPanel;
+                private JPanel localeSettingsPanel;
                     private JLabel localeSwitchLabel;
                     private JComboBox<String> localeSwitchComboBox;
+                    private JButton openLocaleDirectoryButton;
+                    private JButton openLocaleRepository;
             private JPanel southPanel;
                 private WindowDependentSeparator southPanelSeparator;
                 private JPanel lowerSouthPanel;
@@ -45,6 +49,8 @@ public abstract class BasicSettingsWindow extends JFrame {
     private String titleText = "Settings";
     private String localeBorderTitleText = "Locale";
     private String localeSwitchLabelText = "Select Locale (Restart Required):";
+    private String openLocaleDirectoryToolTipText = "Open Locale Directory";
+    private String openLocaleRepositoryToolTipText = "Open Locale Website";
     private String generalBorderTitleText = "General";
     private String importText = "Import";
     private String exportText = "Export";
@@ -62,17 +68,20 @@ public abstract class BasicSettingsWindow extends JFrame {
     private final String fontName;
     private final int fontSize;
     private String selectedLocale = "";
+    private String localeRepositoryURL;
 
     // End of variables -----------------------------------------------------------------------------------------------|
 
     public BasicSettingsWindow(
             JFrame parent, String fontName, int fontSize, Preferences prefs,
-            boolean debug, LocaleManager localeManager, JPanel settingsPanel
+            boolean debug, LocaleManager localeManager, JPanel settingsPanel,
+            String localeRepositoryURL
     ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.prefs = prefs;
         this.debug = debug;
+        this.localeRepositoryURL = localeRepositoryURL;
 
         if (localeManager != null) {
             BasicSettingsWindow.localeManager = localeManager;
@@ -103,6 +112,8 @@ public abstract class BasicSettingsWindow extends JFrame {
         map.put("cancelText", cancelText);
         map.put("localeBorderTitleText", localeBorderTitleText);
         map.put("localeSwitchLabelText", localeSwitchLabelText);
+        map.put("openLocaleDirectoryButtonText", openLocaleDirectoryToolTipText);
+        map.put("openLocaleRepositoryTooltipText", openLocaleRepositoryToolTipText);
         map.put("generalBorderTitleText", generalBorderTitleText);
 
         if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")) {
@@ -118,6 +129,8 @@ public abstract class BasicSettingsWindow extends JFrame {
         titleText = varMap.getOrDefault("titleText", titleText);
         localeBorderTitleText = varMap.getOrDefault("localeBorderTitleText", localeBorderTitleText);
         localeSwitchLabelText = varMap.getOrDefault("localeSwitchLabelText", localeSwitchLabelText);
+        openLocaleDirectoryToolTipText = varMap.getOrDefault("openLocaleDirectoryButtonText", openLocaleDirectoryToolTipText);
+        openLocaleRepositoryToolTipText = varMap.getOrDefault("openLocaleRepositoryButtonText", openLocaleRepositoryToolTipText);
         generalBorderTitleText = varMap.getOrDefault("generalBorderTitleText", generalBorderTitleText);
         importText = varMap.getOrDefault("importText", importText);
         exportText = varMap.getOrDefault("exportText", exportText);
@@ -182,8 +195,8 @@ public abstract class BasicSettingsWindow extends JFrame {
             mainPanel.add(centerPanel, BorderLayout.CENTER);
             {
                 if (localeManager != null) {
-                    autoSettingsPanel = new JPanel();
-                    autoSettingsPanel.setLayout(new GridBagLayout());
+                    localeSettingsPanel = new JPanel();
+                    localeSettingsPanel.setLayout(new GridBagLayout());
                     GridBagConstraints gbcAuto = new GridBagConstraints();
                     gbcAuto.gridx = 0;
                     gbcAuto.gridy = 0;
@@ -192,21 +205,21 @@ public abstract class BasicSettingsWindow extends JFrame {
                     gbcAuto.fill = GridBagConstraints.HORIZONTAL;
                     gbcAuto.anchor = GridBagConstraints.CENTER;
                     gbcAuto.insets = new Insets(4, 4, 4, 4);
-                    autoSettingsPanel.setBorder(BorderFactory.createTitledBorder(
+                    localeSettingsPanel.setBorder(BorderFactory.createTitledBorder(
                             settingsPanel.getBorder(), localeBorderTitleText, TitledBorder.LEADING,
                             TitledBorder.TOP, new Font(fontName, Font.PLAIN, fontSize - 2)
                     ));
-                    centerPanel.add(autoSettingsPanel, gbc);
+                    centerPanel.add(localeSettingsPanel, gbc);
                     {
                         localeSwitchLabel = new JLabel(localeSwitchLabelText);
                         localeSwitchLabel.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        autoSettingsPanel.add(localeSwitchLabel, gbcAuto);
+                        localeSettingsPanel.add(localeSwitchLabel, gbcAuto);
 
                         gbcAuto.gridx++;
                         gbcAuto.weightx = 1;
                         localeSwitchComboBox = new JComboBox<>();
                         localeSwitchComboBox.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        autoSettingsPanel.add(localeSwitchComboBox, gbcAuto);
+                        localeSettingsPanel.add(localeSwitchComboBox, gbcAuto);
 
                         populateLocaleComboBox(localeSwitchComboBox, localeManager);
 
@@ -220,6 +233,35 @@ public abstract class BasicSettingsWindow extends JFrame {
                             if (selectedLocale != null) {
                                 this.selectedLocale = selectedLocale;
                             }
+                        });
+
+                        gbcAuto.gridx = 3;
+                        gbcAuto.fill = GridBagConstraints.NONE;
+                        gbcAuto.weightx = 0;
+                        openLocaleDirectoryButton = new JButton();
+                        openLocaleDirectoryButton.setPreferredSize(new Dimension(25, 25));
+                        openLocaleDirectoryButton.setIcon(SwingGUI.getApplicationIcon("images/icons/folder.png", this.getClass()));
+                        openLocaleDirectoryButton.setToolTipText(openLocaleDirectoryToolTipText);
+                        localeSettingsPanel.add(openLocaleDirectoryButton, gbcAuto);
+                        openLocaleDirectoryButton.addActionListener(e -> {
+                            Path localePath = localeManager.getLocaleDirPath();
+                            if (localePath != null) {
+                                Files.openInFileManager(localePath.toString());
+                            } else {
+                                System.out.println("Locale path is null.");
+                            }
+                        });
+
+                        gbcAuto.gridx = 4;
+                        gbcAuto.fill = GridBagConstraints.NONE;
+                        gbcAuto.weightx = 0;
+                        openLocaleRepository = new JButton();
+                        openLocaleRepository.setPreferredSize(new Dimension(25, 25));
+                        openLocaleRepository.setIcon(SwingGUI.getApplicationIcon("images/icons/open-external.png", this.getClass()));
+                        openLocaleRepository.setToolTipText(openLocaleRepositoryToolTipText);
+                        localeSettingsPanel.add(openLocaleRepository, gbcAuto);
+                        openLocaleRepository.addActionListener(e -> {
+                            Utils.openLink(localeRepositoryURL);
                         });
                     }
                     gbc.gridy++;
