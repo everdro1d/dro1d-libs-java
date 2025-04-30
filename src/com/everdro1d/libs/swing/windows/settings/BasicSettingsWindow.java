@@ -77,8 +77,9 @@ public abstract class BasicSettingsWindow extends JFrame {
         if (localeManager != null) {
             BasicSettingsWindow.localeManager = localeManager;
             // if the locale does not contain the class, add it and it's components
-            if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")) {
-                addClassToLocale();
+            if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")
+                    || !localeManager.getComponentsInClassMap("BasicSettingsWindow").contains("Defaults")) {
+                addComponentToClassInLocale();
             }
             useLocale();
         } else System.out.println("LocaleManager is null. BasicSettingsWindow will launch without localization.");
@@ -93,24 +94,26 @@ public abstract class BasicSettingsWindow extends JFrame {
         applySettings.requestFocusInWindow();
     }
 
-    private void addClassToLocale() {
-        Map<String, Map<String, String>> map = new TreeMap<>();
-        map.put("Main", new TreeMap<>());
-        Map<String, String> mainMap = map.get("Main");
-        mainMap.put("titleText", titleText);
-        mainMap.put("localeBorderTitleText", localeBorderTitleText);
-        mainMap.put("localeSwitchLabelText", localeSwitchLabelText);
-        mainMap.put("generalBorderTitleText", generalBorderTitleText);
-        mainMap.put("importText", importText);
-        mainMap.put("exportText", exportText);
-        mainMap.put("acceptText", acceptText);
-        mainMap.put("cancelText", cancelText);
+    private void addComponentToClassInLocale() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("titleText", titleText);
+        map.put("importText", importText);
+        map.put("exportText", exportText);
+        map.put("acceptText", acceptText);
+        map.put("cancelText", cancelText);
+        map.put("localeBorderTitleText", localeBorderTitleText);
+        map.put("localeSwitchLabelText", localeSwitchLabelText);
+        map.put("generalBorderTitleText", generalBorderTitleText);
 
-        localeManager.addClassSpecificMap("BasicSettingsWindow", map);
+        if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")) {
+            localeManager.addClassSpecificMap("BasicSettingsWindow", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("BasicSettingsWindow", "Defaults", map);
     }
 
     private void useLocale() {
-        Map<String, String> varMap = localeManager.getAllVariablesWithinClassSpecificMap("BasicSettingsWindow");
+        Map<String, String> varMap = localeManager.getComponentSpecificMap("BasicSettingsWindow", "Defaults");
 
         titleText = varMap.getOrDefault("titleText", titleText);
         localeBorderTitleText = varMap.getOrDefault("localeBorderTitleText", localeBorderTitleText);
