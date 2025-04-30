@@ -6,8 +6,9 @@ package com.everdro1d.libs.core;
 
 import com.everdro1d.libs.commands.*;
 
-import java.io.File;
+import java.io.*;
 import java.net.*;
+import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.core.Utils.getUserConfigDirectory;
 import static com.everdro1d.libs.io.Files.getJarPath;
@@ -102,5 +103,51 @@ public final class ApplicationCore {
 
     public static String getApplicationConfigDirectory(Class<?> clazz) {
         return getUserConfigDirectory() + File.separator + "dro1dDev" + File.separator + getApplicationName(clazz);
+    }
+
+    public static void saveConfigFile(Class<?> clazz, Preferences prefs) {
+        File configFile = new File(getApplicationConfigDirectory(clazz), "config.xml");
+
+        if (configFile.getAbsolutePath().isEmpty()) {
+            return;
+        }
+
+        if (!configFile.getParentFile().exists() && !configFile.getParentFile().mkdirs()) {
+            System.err.println("Failed to create config directory: " + configFile.getParentFile().getAbsolutePath());
+            return;
+        }
+
+        if (!configFile.exists()) {
+            try {
+                if (!configFile.createNewFile()) {
+                    System.err.println("Failed to create config file: " + configFile.getAbsolutePath());
+                    return;
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                return;
+            }
+        }
+
+        try (OutputStream osNode = new BufferedOutputStream(new FileOutputStream(configFile))) {
+            prefs.exportNode(osNode);
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    public static void loadConfigFile(Class<?> clazz) {
+        File configFile = new File(getApplicationConfigDirectory(clazz), "config.xml");
+
+        if (!configFile.exists()) {
+            System.err.println("Config file not found: " + configFile.getAbsolutePath());
+            return;
+        }
+
+        try (InputStream isNode = new BufferedInputStream(new FileInputStream(configFile))) {
+            Preferences.importPreferences(isNode);
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 }
