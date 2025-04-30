@@ -10,6 +10,7 @@ import java.io.File;
 import java.net.*;
 
 import static com.everdro1d.libs.core.Utils.getUserConfigDirectory;
+import static com.everdro1d.libs.io.Files.getJarPath;
 
 public final class ApplicationCore {
     private ApplicationCore() {}
@@ -70,6 +71,16 @@ public final class ApplicationCore {
     }
 
     public static String getApplicationName() {
+        String jarPath = getJarPath(ApplicationCore.class);
+        if (jarPath != null) {
+            String jarFileName = new File(jarPath).getName();
+            String[] parts = jarFileName.split("\\.");
+            if (parts.length > 0) {
+                return parts[0];
+            }
+        }
+
+        // backup for when the application is not a jar
         String mainClassName = System.getProperty("sun.java.command");
         if (mainClassName != null) {
             String[] parts = mainClassName.split("\\.");
@@ -84,6 +95,7 @@ public final class ApplicationCore {
                 return parts[comIndex + 2];
             }
         }
+
         return "UnknownApplication";
     }
 
