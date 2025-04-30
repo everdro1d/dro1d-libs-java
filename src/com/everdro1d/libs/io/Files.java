@@ -41,6 +41,19 @@ public class Files {
     }
 
     /**
+     * Get the directory of the jar file.
+     * @param clazz the class to trace the jar path from
+     * @return the directory of the jar file as a string
+     */
+    public static String getJarDirectory(Class<?> clazz) {
+        String jarPath = getJarPath(clazz);
+        if (jarPath != null) {
+            return new File(jarPath).getParent();
+        }
+        return null;
+    }
+
+    /**
      * Check if a file is in use.
      * @param filePath the path of the file to check
      * @return boolean
