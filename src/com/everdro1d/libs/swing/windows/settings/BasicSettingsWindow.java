@@ -5,6 +5,8 @@ import com.everdro1d.libs.core.LocaleManager;
 import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.swing.SwingGUI;
+import com.everdro1d.libs.swing.components.FlexWidthSeparator;
+import com.everdro1d.libs.swing.components.HyperLinkButton;
 import com.everdro1d.libs.swing.components.WindowDependentSeparator;
 
 import javax.swing.*;
@@ -34,7 +36,9 @@ public abstract class BasicSettingsWindow extends JFrame {
                     private JButton openLocaleDirectoryButton;
                     private JButton openLocaleRepository;
             private JPanel southPanel;
-                private WindowDependentSeparator southPanelSeparator;
+                private JPanel upperSouthPanel;
+                    private FlexWidthSeparator southPanelSeparator;
+                    private HyperLinkButton hyperlinkButton;
                 private JPanel lowerSouthPanel;
                     private JPanel leftLowerSouthPanel;
                         private JButton importSettings;
@@ -51,6 +55,7 @@ public abstract class BasicSettingsWindow extends JFrame {
     private String localeSwitchLabelText = "Change Language (Restart Required):";
     private String openLocaleDirectoryToolTipText = "Open Locale Directory";
     private String openLocaleRepositoryToolTipText = "Open Locale Website";
+    private String openHelpWebsiteToolTipText = "Open Help Website";
     private String generalBorderTitleText = "General";
     private String importText = "Import";
     private String exportText = "Export";
@@ -69,19 +74,21 @@ public abstract class BasicSettingsWindow extends JFrame {
     private final int fontSize;
     private String selectedLocale = "";
     private String localeRepositoryURL;
+    private String helpWebsiteURL;
 
     // End of variables -----------------------------------------------------------------------------------------------|
 
     public BasicSettingsWindow(
             JFrame parent, String fontName, int fontSize, Preferences prefs,
             boolean debug, LocaleManager localeManager, JPanel settingsPanel,
-            String localeRepositoryURL
+            String localeRepositoryURL, String helpWebsiteURL
     ) {
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.prefs = prefs;
         this.debug = debug;
         this.localeRepositoryURL = localeRepositoryURL;
+        this.helpWebsiteURL = helpWebsiteURL;
 
         if (localeManager != null) {
             BasicSettingsWindow.localeManager = localeManager;
@@ -114,6 +121,7 @@ public abstract class BasicSettingsWindow extends JFrame {
         map.put("localeSwitchLabelText", localeSwitchLabelText);
         map.put("openLocaleDirectoryButtonText", openLocaleDirectoryToolTipText);
         map.put("openLocaleRepositoryTooltipText", openLocaleRepositoryToolTipText);
+        map.put("openHelpWebsiteTooltipText", openHelpWebsiteToolTipText);
         map.put("generalBorderTitleText", generalBorderTitleText);
 
         if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")) {
@@ -131,6 +139,7 @@ public abstract class BasicSettingsWindow extends JFrame {
         localeSwitchLabelText = varMap.getOrDefault("localeSwitchLabelText", localeSwitchLabelText);
         openLocaleDirectoryToolTipText = varMap.getOrDefault("openLocaleDirectoryButtonText", openLocaleDirectoryToolTipText);
         openLocaleRepositoryToolTipText = varMap.getOrDefault("openLocaleRepositoryButtonText", openLocaleRepositoryToolTipText);
+        openHelpWebsiteToolTipText = varMap.getOrDefault("openHelpWebsiteTooltipText", openHelpWebsiteToolTipText);
         generalBorderTitleText = varMap.getOrDefault("generalBorderTitleText", generalBorderTitleText);
         importText = varMap.getOrDefault("importText", importText);
         exportText = varMap.getOrDefault("exportText", exportText);
@@ -280,11 +289,34 @@ public abstract class BasicSettingsWindow extends JFrame {
             southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 20));
             mainPanel.add(southPanel, BorderLayout.SOUTH);
             {
-                southPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                upperSouthPanel = new JPanel(new GridBagLayout());
+                upperSouthPanel.setBorder(BorderFactory.createEmptyBorder(0,BORDER_PADDING_WIDTH,0,BORDER_PADDING_WIDTH));
+                upperSouthPanel.setPreferredSize(
+                        new Dimension(
+                                WINDOW_WIDTH - (BORDER_PADDING_WIDTH * 2),
+                                upperSouthPanel.getPreferredSize().height
+                        ));
+                GridBagConstraints gbcSeparator = new GridBagConstraints();
+                gbcSeparator.gridx = 0;
+                gbcSeparator.gridy = 0;
+                gbcSeparator.weightx = 0;
+                gbcSeparator.fill = GridBagConstraints.HORIZONTAL;
+                {
+                    gbcSeparator.weightx = 1;
+                    gbcSeparator.weighty = 0;
+                    southPanelSeparator = new FlexWidthSeparator();
+                    upperSouthPanel.add(southPanelSeparator, gbcSeparator);
 
-                southPanelSeparator =
-                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 1);
-                southPanel.add(southPanelSeparator);
+                    gbcSeparator.gridx++;
+                    gbcSeparator.weightx = 0;
+                    gbcSeparator.weighty = 1;
+                    hyperlinkButton = new HyperLinkButton(
+                            helpWebsiteURL, openHelpWebsiteToolTipText,
+                            SwingConstants.LEFT, fontName, (fontSize - 5)
+                    );
+                    upperSouthPanel.add(hyperlinkButton, gbcSeparator);
+                }
+                southPanel.add(upperSouthPanel);
 
                 lowerSouthPanel = new JPanel();
                 lowerSouthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
