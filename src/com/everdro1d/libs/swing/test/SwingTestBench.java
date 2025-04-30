@@ -26,7 +26,7 @@ public class SwingTestBench {
             SwingGUI.uiSetup("Tahoma", 18);
             System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
 
-            LocaleManager localeManager = new LocaleManager();
+            LocaleManager localeManager = new LocaleManager(SwingTestBench.class);
             localeManager.loadLocaleFromFile(p.get("currentLocale","eng"));
 
             JPanel panel = new JPanel();

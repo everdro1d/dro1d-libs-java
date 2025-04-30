@@ -70,8 +70,8 @@ public final class ApplicationCore {
         return null;
     }
 
-    public static String getApplicationName() {
-        String jarPath = getJarPath(ApplicationCore.class);
+    public static String getApplicationName(Class<?> clazz) {
+        String jarPath = getJarPath(clazz);
         if (jarPath != null) {
             String jarFileName = new File(jarPath).getName();
             String[] parts = jarFileName.split("\\.");
@@ -99,7 +99,7 @@ public final class ApplicationCore {
         return "UnknownApplication";
     }
 
-    public static String getApplicationConfigDirectory() {
-        return getUserConfigDirectory() + File.separator + "dro1dDev" + File.separator + getApplicationName();
+    public static String getApplicationConfigDirectory(Class<?> clazz) {
+        return getUserConfigDirectory() + File.separator + "dro1dDev" + File.separator + getApplicationName(clazz);
     }
 }

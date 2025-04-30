@@ -88,7 +88,7 @@ public class SettingsWindowCommon {
 
         prefs.put("settingsFilePath", settingsFilePath);
 
-        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + getApplicationName() + "_exported_settings.xml";
+        if (export) settingsFilePath = settingsFilePath + FileSystems.getDefault().getSeparator() + getApplicationName(settingsFrame.getClass()) + "_exported_settings.xml";
 
         if (debug) System.out.println("Settings file at: " + settingsFilePath);
 
@@ -108,7 +108,7 @@ public class SettingsWindowCommon {
                 (export ? "Save To" : "Read From"),
                 !export, true, true,
                 "xml", true,
-                (export ? (getApplicationName() + "_exported_settings.xml") : "*.xml"),
+                (export ? (getApplicationName(settingsFrame.getClass()) + "_exported_settings.xml") : "*.xml"),
                 localeManager
         );
         UIManager.put("FileChooser.readOnly", old);
