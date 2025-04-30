@@ -41,11 +41,11 @@ public abstract class BasicSettingsWindow extends JFrame {
                     private HyperLinkButton hyperlinkButton;
                 private JPanel lowerSouthPanel;
                     private JPanel leftLowerSouthPanel;
-                        private JButton importSettings;
-                        private JButton exportSettings;
+                        private JButton importSettingsButton;
+                        private JButton exportSettingsButton;
                 private JPanel rightLowerSouthPanel;
-                    private JButton applySettings;
-                    private JButton cancelSettings;
+                    private JButton applySettingsButton;
+                    private JButton cancelSettingsButton;
             private JPanel eastPanel;
             private JPanel westPanel;
 
@@ -107,7 +107,7 @@ public abstract class BasicSettingsWindow extends JFrame {
 
         SwingGUI.setHandCursorToClickableComponents(settingsFrame);
 
-        applySettings.requestFocusInWindow();
+        applySettingsButton.requestFocusInWindow();
     }
 
     private void addComponentToClassInLocale() {
@@ -328,20 +328,20 @@ public abstract class BasicSettingsWindow extends JFrame {
                     leftLowerSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
                     lowerSouthPanel.add(leftLowerSouthPanel);
                     {
-                        importSettings = new JButton(importText);
-                        importSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        leftLowerSouthPanel.add(importSettings);
-                        importSettings.addActionListener(e -> {
+                        importSettingsButton = new JButton(importText);
+                        importSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        leftLowerSouthPanel.add(importSettingsButton);
+                        importSettingsButton.addActionListener(e -> {
                             String filePath = getFilePathUser(
                                     false, debug, settingsFrame, localeManager, prefs
                             );
                             importSettings(filePath, debug, settingsFrame);
                         });
 
-                        exportSettings = new JButton(exportText);
-                        exportSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        leftLowerSouthPanel.add(exportSettings);
-                        exportSettings.addActionListener(e -> {
+                        exportSettingsButton = new JButton(exportText);
+                        exportSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        leftLowerSouthPanel.add(exportSettingsButton);
+                        exportSettingsButton.addActionListener(e -> {
                             String filePath = getFilePathUser(
                                     true, debug, settingsFrame, localeManager, prefs
                             );
@@ -354,10 +354,10 @@ public abstract class BasicSettingsWindow extends JFrame {
                     rightLowerSouthPanel.setPreferredSize(new Dimension(halfSizePanelWidth, BORDER_PADDING_HEIGHT));
                     lowerSouthPanel.add(rightLowerSouthPanel);
                     {
-                        applySettings = new JButton(acceptText);
-                        applySettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        rightLowerSouthPanel.add(applySettings);
-                        applySettings.addActionListener(e -> {
+                        applySettingsButton = new JButton(acceptText);
+                        applySettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        rightLowerSouthPanel.add(applySettingsButton);
+                        applySettingsButton.addActionListener(e -> {
                             // save settings and close
                             if (!selectedLocale.isBlank()) {
                                 prefs.put("currentLocale", selectedLocale);
@@ -367,10 +367,10 @@ public abstract class BasicSettingsWindow extends JFrame {
                             this.dispose();
                         });
 
-                        cancelSettings = new JButton(cancelText);
-                        cancelSettings.setFont(new Font(fontName, Font.PLAIN, fontSize));
-                        rightLowerSouthPanel.add(cancelSettings);
-                        cancelSettings.addActionListener(e -> {
+                        cancelSettingsButton = new JButton(cancelText);
+                        cancelSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
+                        rightLowerSouthPanel.add(cancelSettingsButton);
+                        cancelSettingsButton.addActionListener(e -> {
                             // cancel changes and close
                             // TODO: if settingsChanged then add confirm dialog beforehand
                             this.dispose();
@@ -388,8 +388,8 @@ public abstract class BasicSettingsWindow extends JFrame {
             mainPanel.add(westPanel, BorderLayout.WEST);
         }
 
-        JRootPane rootPane = SwingUtilities.getRootPane(applySettings);
-        rootPane.setDefaultButton(applySettings);
+        JRootPane rootPane = SwingUtilities.getRootPane(applySettingsButton);
+        rootPane.setDefaultButton(applySettingsButton);
     }
 
     private void populateLocaleComboBox(JComboBox<String> localeComboBox, LocaleManager localeManager) {
