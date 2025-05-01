@@ -488,7 +488,7 @@ public abstract class BasicSettingsWindow extends JFrame {
     private boolean settingsChanged() {
         for (String key : originalSettingsMap.keySet()) {
             String currentValue = prefs.get(key, "");
-            String originalValue = originalSettingsMap.get(key);
+            String originalValue = String.valueOf(originalSettingsMap.get(key));
             if (currentValue != null && !currentValue.equals(originalValue)) {
                 return true;
             }
