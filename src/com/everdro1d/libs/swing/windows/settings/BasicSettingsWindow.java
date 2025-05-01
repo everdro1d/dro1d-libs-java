@@ -109,7 +109,10 @@ public abstract class BasicSettingsWindow extends JFrame {
 
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")
-                    || !localeManager.getComponentsInClassMap("BasicSettingsWindow").contains("Defaults")) {
+                    || !localeManager.getComponentsInClassMap("BasicSettingsWindow").contains("Defaults")
+                    || !localeManager.getComponentsInClassMap("Dialogs").contains("BasicSettingsWindow")
+                    || !localeManager.getComponentsInClassMap("Dialogs").contains("BasicSettingsWindow")
+            ) {
                 addComponentToClassInLocale();
             }
             useLocale();
