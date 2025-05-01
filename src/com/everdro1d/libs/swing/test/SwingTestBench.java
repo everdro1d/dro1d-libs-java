@@ -11,12 +11,14 @@ import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.core.ApplicationCore.getLatestVersion;
 
 public class SwingTestBench {
-    private static boolean darkMode = false;
+    private static boolean darkMode = true;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
     private static JFrame[] frameArr = new JFrame[2];
 
@@ -41,9 +43,16 @@ public class SwingTestBench {
                     "https://everdro1d.github.io/dro1d-libs-java/"
             ) {
                 public void applySettings() {
-                    localeManager.reloadLocaleInProgram(p.get("currentLocale", "eng"));
-                    SwingGUI.switchLightOrDarkMode(!darkMode, frameArr);
-                    darkMode = !darkMode;
+                    System.out.println("beep boop");
+                }
+
+                public Map<String, String> setOriginalSettingsMap() {
+                    return new HashMap<>();
+                }
+
+                @Override
+                public Map<String, Boolean> setRestartRequiredSettingsMap() {
+                    return new HashMap<>();
                 }
             };
 
