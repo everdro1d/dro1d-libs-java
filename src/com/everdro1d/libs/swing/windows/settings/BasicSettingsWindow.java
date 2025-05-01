@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
@@ -63,10 +64,13 @@ public abstract class BasicSettingsWindow extends JFrame {
     private String exportButtonToolTipText = "Export Settings";
     private String acceptText = "OK";
     private String cancelText = "Cancel";
+    private String confirmCancelDialogMessageText = "You have unsaved changes. Are you sure you want to cancel?";
+    private String confirmCancelDialogTitleText = "Unsaved Changes!";
 
     // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
     private Preferences prefs;
+    private Map<String,String> originalSettingsMap = new HashMap<>();
     private boolean debug;
     private final int WINDOW_WIDTH = 500;
     private final int WINDOW_HEIGHT = 400;
@@ -74,7 +78,6 @@ public abstract class BasicSettingsWindow extends JFrame {
     private final int BORDER_PADDING_HEIGHT = 35;
     private final String fontName;
     private final int fontSize;
-    private String selectedLocale = "";
     private String localeRepositoryURL;
     private String helpWebsiteURL;
 
@@ -92,8 +95,13 @@ public abstract class BasicSettingsWindow extends JFrame {
         this.localeRepositoryURL = localeRepositoryURL;
         this.helpWebsiteURL = helpWebsiteURL;
 
+        originalSettingsMap.clear();
+
         if (localeManager != null) {
             BasicSettingsWindow.localeManager = localeManager;
+
+            originalSettingsMap.put("currentLocale", localeManager.getCurrentLocale());
+
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")
                     || !localeManager.getComponentsInClassMap("BasicSettingsWindow").contains("Defaults")) {
@@ -112,6 +120,8 @@ public abstract class BasicSettingsWindow extends JFrame {
         SwingGUI.setHandCursorToClickableComponents(settingsFrame);
 
         applySettingsButton.requestFocusInWindow();
+
+        originalSettingsMap.putAll(setOriginalSettingsMap());
     }
 
     private void addComponentToClassInLocale() {
@@ -135,6 +145,19 @@ public abstract class BasicSettingsWindow extends JFrame {
         }
 
         localeManager.addComponentSpecificMap("BasicSettingsWindow", "Defaults", map);
+
+        // ---
+
+        Map<String,String> dialogMap = new TreeMap<>();
+
+        dialogMap.put("confirmCancelDialogMessageText", confirmCancelDialogMessageText);
+        dialogMap.put("confirmCancelDialogTitleText", confirmCancelDialogTitleText);
+
+        if (!localeManager.getClassesInLocaleMap().contains("Dialogs")) {
+            localeManager.addClassSpecificMap("Dialogs", new TreeMap<>());
+        }
+
+        localeManager.addComponentSpecificMap("Dialogs", "BasicSettingsWindow", dialogMap);
     }
 
     private void useLocale() {
@@ -153,6 +176,12 @@ public abstract class BasicSettingsWindow extends JFrame {
         exportButtonToolTipText = varMap.getOrDefault("exportButtonToolTipText", exportButtonToolTipText);
         acceptText = varMap.getOrDefault("acceptText", acceptText);
         cancelText = varMap.getOrDefault("cancelText", cancelText);
+
+        Map<String, String> dialogMap = localeManager.getComponentSpecificMap("Dialogs", "BasicSettingsWindow");
+
+        confirmCancelDialogMessageText = dialogMap.getOrDefault("confirmCancelDialogMessageText", confirmCancelDialogMessageText);
+        confirmCancelDialogTitleText = dialogMap.getOrDefault("confirmCancelDialogTitleText", confirmCancelDialogTitleText);
+
     }
 
     private void initializeWindowProperties(JFrame parent) {
@@ -247,8 +276,8 @@ public abstract class BasicSettingsWindow extends JFrame {
                                     localeSwitchComboBox.getSelectedItem().toString(),
                                     localeManager.getAvailableLocales()
                             );
-                            if (selectedLocale != null) {
-                                this.selectedLocale = selectedLocale;
+                            if (selectedLocale != null && !selectedLocale.isBlank()) {
+                                prefs.put("currentLocale", selectedLocale);
                             }
                         });
 
@@ -368,12 +397,21 @@ public abstract class BasicSettingsWindow extends JFrame {
                         applySettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         rightLowerSouthPanel.add(applySettingsButton);
                         applySettingsButton.addActionListener(e -> {
-                            // save settings and close
-                            if (!selectedLocale.isBlank()) {
-                                prefs.put("currentLocale", selectedLocale);
+                            if (!settingsChanged()) {
+                                this.dispose();
+                                return;
                             }
+
                             applySettings();
                             // TODO: if locale changed prompt restart
+
+                            if (localeManager != null) {
+                                boolean hasLocaleChanged = !prefs.get("currentLocale", "").equals(originalSettingsMap.get("currentLocale"));
+                                if (hasLocaleChanged) {
+                                    localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
+                                }
+                            }
+
                             this.dispose();
                         });
 
@@ -381,8 +419,21 @@ public abstract class BasicSettingsWindow extends JFrame {
                         cancelSettingsButton.setFont(new Font(fontName, Font.PLAIN, fontSize));
                         rightLowerSouthPanel.add(cancelSettingsButton);
                         cancelSettingsButton.addActionListener(e -> {
-                            // cancel changes and close
-                            // TODO: if settingsChanged then add confirm dialog beforehand
+                            if (settingsChanged()) {
+                                int confirm = JOptionPane.showConfirmDialog(
+                                    settingsFrame,
+                                    confirmCancelDialogMessageText,
+                                    confirmCancelDialogTitleText,
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+                                );
+                                if (confirm != JOptionPane.YES_OPTION) {
+                                    return;
+                                }
+
+                                // reset settings in prefs
+                                resetSettings();
+                            }
+
                             this.dispose();
                         });
                     }
@@ -420,8 +471,46 @@ public abstract class BasicSettingsWindow extends JFrame {
         openLocaleDirectoryButton.setIcon(folderIcon);
         openLocaleRepositoryButton.setIcon(repoIcon);
     }
+
+    private boolean settingsChanged() {
+        for (String key : originalSettingsMap.keySet()) {
+            String currentValue = prefs.get(key, "");
+            String originalValue = originalSettingsMap.get(key);
+            if (currentValue != null && !currentValue.equals(originalValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetSettings() {
+        for (String key : originalSettingsMap.keySet()) {
+            String originalValue = originalSettingsMap.get(key);
+            if (originalValue != null) {
+                prefs.put(key, originalValue);
+            }
+        }
+    }
+
     /**
      * Implement your actual save mechanism here.
      */
     public abstract void applySettings();
+
+    /**
+     * Add current settings for GeneralSettingsPanel here ex:<p>
+     *     <h2>NOTE! Name these keys the same as your prefs keys!</h2><p>
+     * <blockquote><pre>
+     *     Map<String,String> originalSettings = new HashMap<>();
+     *         originalSettings.put("currentLocale",
+     *             localeManager.getCurrentLocale())
+     *         );
+     *     return originalSettings;
+     * </pre></blockquote>
+     */
+    public abstract Map<String,String> setOriginalSettingsMap();
+
+    public Map<String,String> getOriginalSettingsMap() {
+        return originalSettingsMap;
+    }
 }
