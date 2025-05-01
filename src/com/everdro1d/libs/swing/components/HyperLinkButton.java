@@ -17,7 +17,7 @@ public class HyperLinkButton extends JButton {
     public HyperLinkButton(String url, String toolTipText, int horizontalPadding, String fontName, int fontSize) {
         setText("<html><u>" + url + "</u></html>");
         setToolTipText(toolTipText);
-        setForeground(Color.BLUE);
+        setForeground(UIManager.getColor("Component.accentColor"));
         setBorder(BorderFactory.createEmptyBorder(
                 0,
                 (horizontalPadding == SwingConstants.LEFT) ? 4 : 0,
