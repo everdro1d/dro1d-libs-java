@@ -66,11 +66,14 @@ public abstract class BasicSettingsWindow extends JFrame {
     private String cancelText = "Cancel";
     private String confirmCancelDialogMessageText = "You have unsaved changes. Are you sure you want to cancel?";
     private String confirmCancelDialogTitleText = "Unsaved Changes!";
+    private String restartRequiredDialogMessageText = "Some changes require a restart to take effect. Would you like to exit now?";
+    private String restartRequiredDialogTitleText = "Restart Required!";
 
     // End of Swing components -----------------------------------------------|
     private static LocaleManager localeManager;
     private Preferences prefs;
     private Map<String,String> originalSettingsMap = new HashMap<>();
+    private Map<String,Boolean> restartRequiredSettingsMap = new HashMap<>();
     private boolean debug;
     private final int WINDOW_WIDTH = 500;
     private final int WINDOW_HEIGHT = 400;
@@ -96,11 +99,13 @@ public abstract class BasicSettingsWindow extends JFrame {
         this.helpWebsiteURL = helpWebsiteURL;
 
         originalSettingsMap.clear();
+        restartRequiredSettingsMap.clear();
 
         if (localeManager != null) {
             BasicSettingsWindow.localeManager = localeManager;
 
             originalSettingsMap.put("currentLocale", localeManager.getCurrentLocale());
+            restartRequiredSettingsMap.put("currentLocale", true);
 
             // if the locale does not contain the class, add it and it's components
             if (!localeManager.getClassesInLocaleMap().contains("BasicSettingsWindow")
@@ -122,6 +127,7 @@ public abstract class BasicSettingsWindow extends JFrame {
         applySettingsButton.requestFocusInWindow();
 
         originalSettingsMap.putAll(setOriginalSettingsMap());
+        restartRequiredSettingsMap.putAll(setRestartRequiredSettingsMap());
     }
 
     private void addComponentToClassInLocale() {
@@ -152,6 +158,8 @@ public abstract class BasicSettingsWindow extends JFrame {
 
         dialogMap.put("confirmCancelDialogMessageText", confirmCancelDialogMessageText);
         dialogMap.put("confirmCancelDialogTitleText", confirmCancelDialogTitleText);
+        dialogMap.put("restartRequiredDialogMessageText", restartRequiredDialogMessageText);
+        dialogMap.put("restartRequiredDialogTitleText", restartRequiredDialogTitleText);
 
         if (!localeManager.getClassesInLocaleMap().contains("Dialogs")) {
             localeManager.addClassSpecificMap("Dialogs", new TreeMap<>());
@@ -181,6 +189,8 @@ public abstract class BasicSettingsWindow extends JFrame {
 
         confirmCancelDialogMessageText = dialogMap.getOrDefault("confirmCancelDialogMessageText", confirmCancelDialogMessageText);
         confirmCancelDialogTitleText = dialogMap.getOrDefault("confirmCancelDialogTitleText", confirmCancelDialogTitleText);
+        restartRequiredDialogMessageText = dialogMap.getOrDefault("restartRequiredDialogMessageText", restartRequiredDialogMessageText);
+        restartRequiredDialogTitleText = dialogMap.getOrDefault("restartRequiredDialogTitleText", restartRequiredDialogTitleText);
 
     }
 
@@ -403,13 +413,16 @@ public abstract class BasicSettingsWindow extends JFrame {
                             }
 
                             applySettings();
-                            // TODO: if locale changed prompt restart
 
                             if (localeManager != null) {
                                 boolean hasLocaleChanged = !prefs.get("currentLocale", "").equals(originalSettingsMap.get("currentLocale"));
                                 if (hasLocaleChanged) {
                                     localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
                                 }
+                            }
+
+                            if (isRestartRequired()) {
+                                promptRestart();
                             }
 
                             this.dispose();
@@ -492,6 +505,32 @@ public abstract class BasicSettingsWindow extends JFrame {
         }
     }
 
+    private boolean isRestartRequired() {
+        for (String key : restartRequiredSettingsMap.keySet()) {
+            boolean requiresRestart = restartRequiredSettingsMap.get(key);
+            boolean settingChanged = !prefs.get(key, "").equals(originalSettingsMap.get(key));
+            if (requiresRestart && settingChanged) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void promptRestart() {
+        int restart = JOptionPane.showConfirmDialog(
+            this,
+                restartRequiredDialogMessageText,
+                restartRequiredDialogTitleText,
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (restart == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
     /**
      * Implement your actual save mechanism here.
      */
@@ -510,7 +549,22 @@ public abstract class BasicSettingsWindow extends JFrame {
      */
     public abstract Map<String,String> setOriginalSettingsMap();
 
+    /**
+     * Add current settings for GeneralSettingsPanel here ex:<p>
+     *     <h2>NOTE! Name these keys the same as your prefs keys!</h2><p>
+     * <blockquote><pre>
+     *     Map<String,String> restartRequiredSettings = new HashMap<>();
+     *         restartRequiredSettings.put("currentLocale", true));
+     *     return restartRequiredSettings;
+     * </pre></blockquote>
+     */
+    public abstract Map<String,Boolean> setRestartRequiredSettingsMap();
+
     public Map<String,String> getOriginalSettingsMap() {
         return originalSettingsMap;
+    }
+
+    public Map<String,Boolean> getRestartRequiredSettingsMap() {
+        return restartRequiredSettingsMap;
     }
 }
