@@ -105,6 +105,8 @@ public abstract class BasicSettingsWindow extends JFrame {
         initializeWindowProperties(parent);
         initializeGUIComponents(settingsPanel);
 
+        themeChanged();
+
         settingsFrame.setVisible(true);
 
         SwingGUI.setHandCursorToClickableComponents(settingsFrame);
@@ -406,6 +408,18 @@ public abstract class BasicSettingsWindow extends JFrame {
         }
     }
 
+    private void themeChanged() {
+        Icon folderIcon = SwingGUI.changeIconColor(
+                openLocaleDirectoryButton.getIcon(),
+                UIManager.getColor("RootPane.foreground")
+        );
+        Icon repoIcon = SwingGUI.changeIconColor(
+                openLocaleRepositoryButton.getIcon(),
+                UIManager.getColor("RootPane.foreground")
+        );
+        openLocaleDirectoryButton.setIcon(folderIcon);
+        openLocaleRepositoryButton.setIcon(repoIcon);
+    }
     /**
      * Implement your actual save mechanism here.
      */
