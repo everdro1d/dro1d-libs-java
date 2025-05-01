@@ -412,14 +412,14 @@ public abstract class BasicSettingsWindow extends JFrame {
                                 return;
                             }
 
-                            applySettings();
-
                             if (localeManager != null) {
                                 boolean hasLocaleChanged = !prefs.get("currentLocale", "").equals(originalSettingsMap.get("currentLocale"));
                                 if (hasLocaleChanged) {
                                     localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
                                 }
                             }
+
+                            applySettings();
 
                             if (isRestartRequired()) {
                                 promptRestart();
