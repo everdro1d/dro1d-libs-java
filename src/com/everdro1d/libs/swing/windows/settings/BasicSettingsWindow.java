@@ -34,7 +34,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                     private JLabel localeSwitchLabel;
                     private JComboBox<String> localeSwitchComboBox;
                     private JButton openLocaleDirectoryButton;
-                    private JButton openLocaleRepository;
+                    private JButton openLocaleRepositoryButton;
             private JPanel southPanel;
                 private JPanel upperSouthPanel;
                     private FlexWidthSeparator southPanelSeparator;
@@ -270,12 +270,12 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.gridx = 4;
                         gbcAuto.fill = GridBagConstraints.NONE;
                         gbcAuto.weightx = 0;
-                        openLocaleRepository = new JButton();
-                        openLocaleRepository.setPreferredSize(new Dimension(25, 25));
-                        openLocaleRepository.setIcon(SwingGUI.getApplicationIcon("images/icons/open-external.png", this.getClass()));
-                        openLocaleRepository.setToolTipText(openLocaleRepositoryToolTipText);
-                        localeSettingsPanel.add(openLocaleRepository, gbcAuto);
-                        openLocaleRepository.addActionListener(e -> {
+                        openLocaleRepositoryButton = new JButton();
+                        openLocaleRepositoryButton.setPreferredSize(new Dimension(25, 25));
+                        openLocaleRepositoryButton.setIcon(SwingGUI.getApplicationIcon("images/icons/open-external.png", this.getClass()));
+                        openLocaleRepositoryButton.setToolTipText(openLocaleRepositoryToolTipText);
+                        localeSettingsPanel.add(openLocaleRepositoryButton, gbcAuto);
+                        openLocaleRepositoryButton.addActionListener(e -> {
                             Utils.openLink(localeRepositoryURL);
                         });
                     }
