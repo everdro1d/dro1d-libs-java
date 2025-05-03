@@ -13,6 +13,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
+/**
+ * A collapsable titled border for JPanels and JTabbedPanes.<p>
+ * If using a JTabbedPane and you want to get the expanded status, implement a method like below.
+ * <blockquote><pre>
+ *     private boolean isOSTabbedPaneExpanded() {
+ *         return !(osTabbedPane.getTabComponentAt(0) instanceof JLabel);
+ *     }
+ * </pre></blockquote>
+ */
 public class CollapsableTitledBorder extends TitledBorder {
 
     private static boolean showTabbedPaneSeparators;
@@ -72,7 +81,7 @@ public class CollapsableTitledBorder extends TitledBorder {
             return;
         }
 
-        this.showTabbedPaneSeparators = showTabbedPaneSeparators;
+        CollapsableTitledBorder.showTabbedPaneSeparators = showTabbedPaneSeparators;
 
         CollapsableTitledBorderMouseAdapter adapter = new CollapsableTitledBorderMouseAdapter(
                 panel, titleText, expandedDefault, panelExpandedHeight, panelCollapsedHeight,
