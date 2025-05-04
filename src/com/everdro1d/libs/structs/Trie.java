@@ -98,22 +98,7 @@ public class Trie {
      * @return true if all the nodes of the key exist in the tree and the last node is EOW.
      */
     public boolean contains(String key) {
-        if (root == null) {
-            return false;
-        }
-
-        TrieNode currentNode = root;
-
-        for (char character : key.toCharArray()) {
-
-            if (!currentNode.child.containsKey(character)) {
-                return false;
-            }
-
-            currentNode = currentNode.child.get(character);
-        }
-
-        return currentNode.isEndOfWord;
+        return search(key, true);
     }
 
     /**
@@ -122,23 +107,24 @@ public class Trie {
      * @return true if any key starts with or matches the prefix
      */
     public boolean startsWith(String prefix) {
-        if (root == null) {
-            return false;
-        }
+        return search(prefix, false);
+    }
 
+    // ---
+    private boolean search(String key, boolean exact) {
         TrieNode currentNode = root;
 
-        for (char character : prefix.toCharArray()) {
+        for (char character : key.toCharArray()) {
+            currentNode = currentNode.child.get(character);
 
-            if (!currentNode.child.containsKey(character)) {
+            if (currentNode == null) {
                 return false;
             }
-
-            currentNode = currentNode.child.get(character);
         }
 
-        return true;
+        return !exact || currentNode.isEndOfWord;
     }
+    // ---
 
     /**
      * Checks if the Trie is empty.
