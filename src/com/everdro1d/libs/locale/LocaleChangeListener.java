@@ -1,4 +1,4 @@
-package com.everdro1d.libs.core;
+package com.everdro1d.libs.locale;
 
 public interface LocaleChangeListener {
     void onLocaleChange();

@@ -4,7 +4,7 @@
 
 package com.everdro1d.libs.swing.windows;
 
-import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 
 import javax.swing.*;

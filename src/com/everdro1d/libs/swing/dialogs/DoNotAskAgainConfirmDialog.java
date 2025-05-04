@@ -4,7 +4,7 @@
 
 package com.everdro1d.libs.swing.dialogs;
 
-import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.locale.LocaleManager;
 
 import javax.swing.*;
 import java.awt.*;

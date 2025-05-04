@@ -4,9 +4,8 @@
 
 package com.everdro1d.libs.swing.test;
 
-import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
-import com.everdro1d.libs.swing.dialogs.SimpleWorkingDialog;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
@@ -14,8 +13,6 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
-
-import static com.everdro1d.libs.core.ApplicationCore.getLatestVersion;
 
 public class SwingTestBench {
     private static boolean darkMode = true;

@@ -5,7 +5,7 @@
 package com.everdro1d.libs.swing.windows;
 
 import com.everdro1d.libs.core.ApplicationCore;
-import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.io.TiedOutputStream;

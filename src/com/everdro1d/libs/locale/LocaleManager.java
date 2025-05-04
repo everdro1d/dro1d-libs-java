@@ -2,8 +2,9 @@
  * dro1dDev 2025.                                                                                 *
  **************************************************************************************************/
 
-package com.everdro1d.libs.core;
+package com.everdro1d.libs.locale;
 
+import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.io.Files;
 import org.json.JSONObject;
 import org.json.JSONWriter;

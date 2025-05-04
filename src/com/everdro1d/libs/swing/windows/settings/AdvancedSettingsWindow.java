@@ -5,7 +5,7 @@
 package com.everdro1d.libs.swing.windows.settings;
 
 import com.everdro1d.libs.core.ApplicationCore;
-import com.everdro1d.libs.core.LocaleManager;
+import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.ResizeWindowButton;
 import com.everdro1d.libs.swing.components.WindowDependentSeparator;
