@@ -8,6 +8,40 @@ package com.everdro1d.libs.structs;
 
 import java.util.HashMap;
 
+/**
+ * <h2>Definition</h2>
+ * Trie data structure is defined as a Tree based data structure that is used for storing some collection of strings and performing efficient search operations on them.
+ * <p>The word Trie is derived from reTRIEval, which means finding something or obtaining it.
+ * <h2>Properties of Trie:
+ * <ul>
+ *     <li>Prefix-based: Tries are prefix-based data structures that can efficiently handle prefix matching, prefix searching, and prefix deletion.</li>
+ *     <li>Tree-based: Trie is a tree-structured data structure making it easily representable.</li>
+ *     <li>Fast-Search: Trie has search time complexity O(m), where m is the length of the key.</li>
+ *     <li>Memory requirement: Trie has more space requirements, but it can be optimized,</li>
+ *     <li>Easy to implement: Its iterative approach makes it easier to implement.</li>
+ * </ul>
+ * <h2>Applications of Trie:</h2>
+ * Trie is involved wherever string manipulation or processing is involved. Here are a few usages of trie:
+ * <ul>
+ *     <li>Autocomplete: Tries are commonly used in auto-complete applications, such as when typing in a search bar.</li>
+ *     <li>Spell checking: By storing a large dictionary of words in a trie, it can be used to quickly check if a given word is spelled correctly.</li>
+ *     <li>IP routing: Tries are also used in IP routing, where the prefix of an IP address is used to determine the network address to forward packets.</li>
+ *     <li>Text compression: Tries can also be used in text compression algorithms such as Huffman coding.</li>
+ * </ul>
+ * <h2>Advantages of Trie:</h2>
+ * <ul>
+ *     <li>Tries can be optimized to use less memory by compressing common prefixes into a single node, reducing the overall size of the data structure.</li>
+ *     <li>Tries can easily handle partial matches, prefix searches, and autocomplete operations.</li>
+ *     <li>Tries offer fast and efficient search operations for large collections of strings or words. For example, to search a single name in a student database of universities.</li>
+ *     <li>Tries can store additional data associated with each key in the leaf nodes, making it easy to access additional information about the keys.</li>
+ * </ul>
+ * <h2>Disadvantages of Trie:</h2>
+ * <ul>
+ *     <li>Tries can be memory-intensive, especially for large collections of long strings, as each node requires additional memory to store its character value and pointer references.</li>
+ *     <li>Tries may require extra time and space to build or update the data structure when keys are added or deleted.</li>
+ *     <li>Tries may be slower than hash tables or binary search trees for exact match operations.</li>
+ * </ul>
+ */
 public class Trie {
 
     private static class TrieNode {
