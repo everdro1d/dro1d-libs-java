@@ -1,3 +1,5 @@
+// dro1dDev - created: 2025-04-28
+
 package com.everdro1d.libs.locale;
 
 public interface LocaleChangeListener {

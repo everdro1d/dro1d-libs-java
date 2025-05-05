@@ -1,3 +1,5 @@
+// dro1dDev - created: 2025-05-04
+
 package com.everdro1d.libs.structs;
 
 import org.junit.jupiter.api.Test;

@@ -1,3 +1,5 @@
+// dro1dDev - created: 2025-04-29
+
 package com.everdro1d.libs.swing.components;
 
 import javax.swing.*;

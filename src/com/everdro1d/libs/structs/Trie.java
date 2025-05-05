@@ -1,6 +1,5 @@
-/**************************************************************************************************
- * dro1dDev 2025.                                                                                 *
- **************************************************************************************************/
+// dro1dDev - created: 2025-05-03
+
 /* Reference materials:
  * https://leetcode.com/problems/implement-trie-prefix-tree/
  * https://www.geeksforgeeks.org/trie-insert-and-search/
