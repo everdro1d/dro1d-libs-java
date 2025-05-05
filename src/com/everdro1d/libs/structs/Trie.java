@@ -72,10 +72,10 @@ public class Trie {
 
         /**
          * Checks whether the node has any children.
-         * @return true if node has any children, false if not
+         * @return false if node has any children, true otherwise
          */
-        private boolean hasChildren() {
-            return !child.isEmpty();
+        private boolean isEmpty() {
+            return child.isEmpty();
         }
     }
 
@@ -142,7 +142,7 @@ public class Trie {
      * @return true if the root node has no children, else false.
      */
     public boolean isEmpty() {
-        return root.child.isEmpty();
+        return root.isEmpty();
     }
 
     /**
@@ -172,7 +172,7 @@ public class Trie {
                 return new RemovalResult(false, false); // key not exist
             }
             currentNode.isEndOfWord = false;
-            return new RemovalResult(true, !currentNode.hasChildren()); // key removed, del if empty
+            return new RemovalResult(true, currentNode.isEmpty()); // key removed, del if empty
         }
 
         char character = key.charAt(index);
@@ -187,7 +187,7 @@ public class Trie {
             currentNode.child.remove(character);
         }
 
-        boolean shouldDeleteCurrentNode = !currentNode.hasChildren() && !currentNode.isEndOfWord;
+        boolean shouldDeleteCurrentNode = currentNode.isEmpty() && !currentNode.isEndOfWord;
         return new RemovalResult(childResult.keyRemoved, shouldDeleteCurrentNode);
     }
 }
