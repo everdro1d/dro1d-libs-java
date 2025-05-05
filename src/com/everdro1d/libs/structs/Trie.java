@@ -105,9 +105,7 @@ public class Trie {
      */
     public Trie(List<String> list) {
         root = new TrieNode();
-        for (String key : list) {
-            insert(key);
-        }
+        insert(list);
     }
 
     /**
@@ -123,6 +121,16 @@ public class Trie {
             );
         }
         currentNode.isEndOfWord = true;
+    }
+
+    /**
+     * Inserts the list of keys into the Trie, creating nodes where necessary.
+     * @param list the list of keys to insert
+     */
+    public void insert(List<String> list) {
+        for (String key : list) {
+            insert(key);
+        }
     }
 
     /**
