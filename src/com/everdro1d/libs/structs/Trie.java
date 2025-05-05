@@ -156,6 +156,7 @@ public class Trie {
         return removeHelper(root, key, 0).keyRemoved;
     }
 
+    // ---
     private static class RemovalResult {
         boolean keyRemoved;
         boolean deleteCurrentNode;
@@ -190,4 +191,5 @@ public class Trie {
         boolean shouldDeleteCurrentNode = currentNode.isEmpty() && !currentNode.isEndOfWord;
         return new RemovalResult(childResult.keyRemoved, shouldDeleteCurrentNode);
     }
+    // ---
 }
