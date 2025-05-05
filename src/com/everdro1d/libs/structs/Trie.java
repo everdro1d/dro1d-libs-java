@@ -6,6 +6,7 @@
  */
 package com.everdro1d.libs.structs;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -76,6 +77,10 @@ public class Trie {
          */
         private boolean isEmpty() {
             return child.isEmpty();
+        }
+
+        private Collection<TrieNode> getChildren() {
+            return child.values();
         }
     }
 
