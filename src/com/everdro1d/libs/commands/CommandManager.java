@@ -3,7 +3,6 @@
 package com.everdro1d.libs.commands;
 
 import com.everdro1d.libs.commands.defaultcommands.HelpCommand;
-import com.everdro1d.libs.core.ApplicationCore;
 
 import java.util.HashMap;
 import java.util.Map;
