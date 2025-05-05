@@ -3,6 +3,7 @@ package com.everdro1d.libs.structs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +23,35 @@ class TrieTest {
         trie.insert("apple");
         assertTrue(trie.contains("apple"));
         assertFalse(trie.contains("app")); // "app" not inserted yet
+    }
+
+    @Test
+    void constructor_WithListOfStrings() {
+        List<String> words = Arrays.asList("apple", "app", "application");
+        Trie trieWithList = new Trie(words);
+
+        assertTrue(trieWithList.contains("apple"));
+        assertTrue(trieWithList.contains("app"));
+        assertTrue(trieWithList.contains("application"));
+        assertFalse(trieWithList.contains("banana")); // Not in the list
+    }
+
+    @Test
+    void insert_SingleWord() {
+        trie.insert("test");
+        assertTrue(trie.contains("test"));
+        assertFalse(trie.contains("tes")); // Partial word not inserted
+    }
+
+    @Test
+    void insert_MultipleWords() {
+        List<String> words = Arrays.asList("cat", "car", "cart");
+        trie.insert(words);
+
+        assertTrue(trie.contains("cat"));
+        assertTrue(trie.contains("car"));
+        assertTrue(trie.contains("cart"));
+        assertFalse(trie.contains("carbon")); // Not in the list
     }
 
     @Test
@@ -97,6 +127,47 @@ class TrieTest {
         assertTrue(trie.remove("solo"));
         assertFalse(trie.contains("solo"));
         assertTrue(trie.isEmpty());
+    }
+
+    @Test
+    void removeAll_AllKeysPresent() {
+        trie.insert("apple");
+        trie.insert("app");
+        trie.insert("application");
+
+        List<String> keys = Arrays.asList("apple", "app", "application");
+        assertTrue(trie.removeAll(keys));
+        assertTrue(trie.isEmpty());
+    }
+
+    @Test
+    void removeAll_SomeKeysMissing() {
+        trie.insert("apple");
+        trie.insert("app");
+
+        List<String> keys = Arrays.asList("apple", "app", "application");
+        assertFalse(trie.removeAll(keys));
+        assertFalse(trie.contains("apple"));
+        assertFalse(trie.contains("app"));
+        assertFalse(trie.contains("application"));
+    }
+
+    @Test
+    void removeAll_EmptyList() {
+        List<String> keys = List.of();
+        assertTrue(trie.removeAll(keys)); // Removing nothing should succeed
+        assertTrue(trie.isEmpty());
+    }
+
+    @Test
+    void removeAll_NoKeysPresent() {
+        trie.insert("apple");
+        trie.insert("app");
+
+        List<String> keys = Arrays.asList("banana", "application", "car");
+        assertFalse(trie.removeAll(keys));
+        assertTrue(trie.contains("apple"));
+        assertTrue(trie.contains("app"));
     }
 
     @Test
@@ -205,5 +276,54 @@ class TrieTest {
         assertTrue(result.contains("internet"));
         assertTrue(result.contains("internal"));
         assertTrue(result.contains("interval"));
+    }
+
+    @Test
+    void containsAll_AllKeysPresent() {
+        trie.insert("apple");
+        trie.insert("app");
+        trie.insert("application");
+
+        List<String> keys = Arrays.asList("apple", "app", "application");
+        assertTrue(trie.containsAll(keys));
+    }
+
+    @Test
+    void containsAll_SomeKeysMissing() {
+        trie.insert("apple");
+        trie.insert("app");
+
+        List<String> keys = Arrays.asList("apple", "app", "application");
+        assertFalse(trie.containsAll(keys));
+    }
+
+    @Test
+    void containsAll_EmptyList() {
+        List<String> keys = List.of();
+        assertTrue(trie.containsAll(keys)); // Empty list should always return true
+    }
+
+    @Test
+    void containsAny_AnyKeyPresent() {
+        trie.insert("apple");
+        trie.insert("app");
+
+        List<String> keys = Arrays.asList("banana", "app", "application");
+        assertTrue(trie.containsAny(keys));
+    }
+
+    @Test
+    void containsAny_NoKeysPresent() {
+        trie.insert("apple");
+        trie.insert("app");
+
+        List<String> keys = Arrays.asList("banana", "application", "car");
+        assertFalse(trie.containsAny(keys));
+    }
+
+    @Test
+    void containsAny_EmptyList() {
+        List<String> keys = List.of();
+        assertFalse(trie.containsAny(keys)); // Empty list should always return false
     }
 }
