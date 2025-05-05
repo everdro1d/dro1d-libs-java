@@ -1,4 +1,7 @@
-/**
+/**************************************************************************************************
+ * dro1dDev 2025.                                                                                 *
+ **************************************************************************************************/
+/* Reference materials:
  * https://www.geeksforgeeks.org/trie-insert-and-search/
  * https://www.geeksforgeeks.org/trie-memory-optimization-using-hash-map/
  * https://www.geeksforgeeks.org/trie-delete/
@@ -6,6 +9,7 @@
  * https://www.geeksforgeeks.org/auto-complete-feature-using-trie/
  * https://www.geeksforgeeks.org/implement-a-dictionary-using-trie/
  */
+
 package com.everdro1d.libs.structs;
 
 import java.util.*;
@@ -43,6 +47,7 @@ import java.util.*;
  *     <li>Tries may require extra time and space to build or update the data structure when keys are added or deleted.</li>
  *     <li>Tries may be slower than hash tables or binary search trees for exact match operations.</li>
  * </ul>
+ * <a href="https://www.geeksforgeeks.org/trie-meaning-in-dsa/">description src.</a>
  */
 public class Trie<T> {
 
