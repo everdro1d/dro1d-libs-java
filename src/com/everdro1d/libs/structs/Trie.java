@@ -224,6 +224,24 @@ public class Trie {
         return removeHelper(root, key, 0).keyRemoved;
     }
 
+    /**
+     * Removes all keys in a given list from the Trie
+     * @param list list of keys to remove
+     * @return true if all keys were removed, false otherwise (including key does not exist)
+     */
+    public boolean removeAll(List<String> list) {
+        int removed = 0;
+        int shouldRemove = list.size();
+
+        for (String key : list) {
+            if (remove(key)) {
+                removed++;
+            }
+        }
+
+        return removed == shouldRemove;
+    }
+
     // ---
     private static class RemovalResult {
         boolean keyRemoved;
