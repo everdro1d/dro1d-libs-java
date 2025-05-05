@@ -3,6 +3,7 @@
 package com.everdro1d.libs.commands;
 
 import com.everdro1d.libs.commands.defaultcommands.HelpCommand;
+import com.everdro1d.libs.core.ApplicationCore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Set;
 /**
  * CommandManager is a tool for managing CLI arguments and their associated commands.
  * <p>
+ * This class allows you to register commands, retrieve them, and execute them based on CLI input.
  * <h2>Setup</h2>
  * <ol>
  *     <li>
@@ -27,7 +29,7 @@ import java.util.Set;
  *     </li>
  *     <li>
  *         Use the CommandManager to handle CLI arguments. You can process
- *         arguments using the {@code checkCLIArgs()} method (see also: #1),
+ *         arguments using the {@code ApplicationCore.checkCLIArgs()} method (see also: #1),
  *         or manually, as shown below:
  *         <blockquote><pre>
  *             for(String arg : args) {
@@ -80,7 +82,7 @@ public class CommandManager {
     /**
      * Retrieves the matching command from the map.
      * @param commandString the key of the CommandInterface to retrieve
-     * @return the CommandInterface related to the key
+     * @return the CommandInterface related to the key, or {@code null} if no matching command is found
      */
     public CommandInterface getCommand(String commandString) {
         return COMMANDS_MAP.get(commandString);
@@ -102,8 +104,9 @@ public class CommandManager {
     }
 
     /**
-     * Add a command to the map.
-     * Ex:<blockquote><pre>
+     * Add a command to the map. If the key already exists, the command will be replaced.
+     * <p>Example:</p>
+     * <blockquote><pre>
      *     appendCommand("-help", new HelpCommand());
      * </pre></blockquote>
      * @param commandString trigger key for the command
@@ -117,7 +120,8 @@ public class CommandManager {
 
     /**
      * Add a map of custom commands to the command map.
-     * Ex:<blockquote><pre>
+     * <p>Example:</p>
+     * <blockquote><pre>
      *     yourCommandMap.put("-help", new HelpCommand());
      * </pre></blockquote>
      * @param commandMap map of key-value pairs where the key is the CLI arg to listen for and the value is a new Command.
@@ -128,7 +132,7 @@ public class CommandManager {
     }
 
     /**
-     * Execute a command from the map.
+     * Execute a command from the map. If the command is not found, an error message is printed to {@code System.err}.
      * @param commandString the key of the CommandInterface to execute
      * @see #appendCommand(String, CommandInterface)
      * @see HelpCommand#execute(CommandManager)
