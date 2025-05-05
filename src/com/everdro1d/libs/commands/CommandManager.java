@@ -9,15 +9,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * CommandManager is a CLI arg management tool.
+ * CommandManager is a tool for managing CLI arguments and their associated commands.
  * <p>
  * <h2>Setup</h2>
  * <ol>
  *     <li>
- *         Create a new CommandManager on application startup.
- *         <p>Note: it is recommended to create a Map for the
- *         commands and then pass the map into the CommandManager
- *         constructor. Ex:
+ *         Create a new CommandManager instance during application startup.
+ *         <p>
+ *         It is recommended to define a {@code Map} of commands and
+ *         pass it to the CommandManager constructor. For example:
  *         <blockquote><pre>
  *            private static final Map<String, CommandInterface> CUSTOM_COMMANDS_MAP = Map.of(
  *                "-debug", new DebugCommand()
@@ -26,9 +26,9 @@ import java.util.Set;
  *        </pre></blockquote>
  *     </li>
  *     <li>
- *         You can then put the CommandManager to use, handling
- *         the args using checkCLIArgs() method (see also: #1),
- *         or manually, using something like below:
+ *         Use the CommandManager to handle CLI arguments. You can process
+ *         arguments using the {@code checkCLIArgs()} method (see also: #1),
+ *         or manually, as shown below:
  *         <blockquote><pre>
  *             for(String arg : args) {
  *                 commandManager.executeCommand(arg);
@@ -36,10 +36,10 @@ import java.util.Set;
  *         </pre></blockquote>
  *     </li>
  *     <li>
- *         Now create a new command class, and add it to the 
- *         CommandManager. In our example above, we've already
- *         added the DebugCommand to the CommandManager, so now
- *         we will create that command class.
+ *         Create new command classes for each command and add them to the
+ *         CommandManager. For example, in the code above, we added
+ *         the {@code DebugCommand}. Below is
+ *         an example implementation of the {@code DebugCommand} class:
  *         <blockquote><pre>
  *             public class DebugCommand implements CommandInterface {
  *                 &#64;Override
