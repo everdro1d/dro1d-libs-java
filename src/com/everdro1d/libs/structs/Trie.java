@@ -49,13 +49,24 @@ public class Trie {
          * Denotes whether this node is the end of a key in the Trie.
          */
         boolean isEndOfWord;
+
+        /**
+         * The character that this node represents.
+         */
+        char character;
+
         /**
          * char map of this node's child nodes.
          */
         HashMap<Character, TrieNode> child;
 
-        TrieNode() {
+        TrieNode(char character) {
             isEndOfWord = false;
+            child = new HashMap<>();
+            this.character = character;
+        }
+
+        TrieNode() {
             child = new HashMap<>();
         }
 
@@ -86,7 +97,7 @@ public class Trie {
 
         for (char character : key.toCharArray()) {
             currentNode = currentNode.child.computeIfAbsent(
-                    character, k -> new TrieNode()
+                    character, k -> new TrieNode(character)
             );
         }
         currentNode.isEndOfWord = true;
