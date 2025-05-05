@@ -113,7 +113,7 @@ public class Trie {
     /**
      * Checks if the given key exists in the tree.
      * @param key key to check for
-     * @return true if all the nodes of the key exist in the tree and the last node is EOW.
+     * @return true if all the nodes of the key exist in the Trie and the last node is EOW.
      */
     public boolean contains(String key) {
         return search(key, true);
