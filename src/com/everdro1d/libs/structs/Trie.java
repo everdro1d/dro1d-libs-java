@@ -92,6 +92,9 @@ public class Trie {
      */
     TrieNode root;
 
+    /**
+     * Creates a new Trie without any values.
+     */
     public Trie() {
         root = new TrieNode();
     }
@@ -160,6 +163,11 @@ public class Trie {
         root.child.clear();
     }
 
+    /**
+     * Removes the given key from the Trie.
+     * @param key key to remove
+     * @return true if the key was removed, false otherwise (including key does not exist)
+     */
     public boolean remove(String key) {
         return removeHelper(root, key, 0).keyRemoved;
     }
