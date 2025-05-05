@@ -2,10 +2,9 @@
  * dro1dDev 2025.                                                                                 *
  **************************************************************************************************/
 
-package com.everdro1d.libs.swing.test;
+package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.locale.LocaleManager;
-import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
