@@ -34,10 +34,18 @@ public class CommandManager {
     }
 
     /**
-     * @return the command map
+     * Retrieves the command map.
+     * @return Map containing all existing arg keys and their command objects.
      */
-    public Map<String, CommandInterface> getCommandsMap() {
+    public Map<String, CommandInterface> getCommandMap() {
         return COMMANDS_MAP;
+    }
+
+    /**
+     * @return A list of valid CLI args for use.
+     */
+    public Set<String> getValidCommands() {
+        return COMMANDS_MAP.keySet();
     }
 
     /**
