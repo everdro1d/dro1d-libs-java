@@ -143,6 +143,39 @@ public class Trie {
     }
 
     /**
+     * Checks if any of the given keys exist in the tree.
+     * @param list the list of keys to check for
+     * @return true if any key in the list exists in the Trie and the last node of the key is EOW.
+     */
+    public boolean containsAny(List<String> list) {
+        for (String key : list) {
+            if (contains(key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if all the given keys exist in the tree.
+     * @param list the list of keys to check for
+     * @return true if all keys in the list exists in the Trie and the last node of each key is EOW.
+     */
+    public boolean containsAll(List<String> list) {
+        int contains = 0;
+        int shouldContain = list.size();
+
+        for (String key : list) {
+            if (contains(key)) {
+                contains++;
+            }
+        }
+
+        return contains == shouldContain;
+    }
+
+    /**
      * Checks if any keys in the tree start with the given prefix.
      * @param prefix prefix to check for
      * @return true if any key starts with or matches the prefix
