@@ -2,7 +2,7 @@
 
 package com.everdro1d.libs.commands;
 
-import com.everdro1d.libs.commands.defaultcommands.HelpCommand;
+import com.everdro1d.libs.commands.included.HelpCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +20,10 @@ import java.util.Set;
  *         It is recommended to define a {@code Map} of commands and
  *         pass it to the CommandManager constructor. For example:
  *         <blockquote><pre>
- *            private static final Map<String, CommandInterface> CUSTOM_COMMANDS_MAP = Map.of(
- *                "-debug", new DebugCommand()
- *            );
- *            public static CommandManager commandManager = new CommandManager(CUSTOM_COMMANDS_MAP);
+ * private static final Map&lt;String, CommandInterface&gt; CUSTOM_COMMANDS_MAP = Map.of(
+ *     "-debug", new DebugCommand()
+ * );
+ * public static CommandManager commandManager = new CommandManager(CUSTOM_COMMANDS_MAP);
  *        </pre></blockquote>
  *     </li>
  *     <li>
@@ -31,9 +31,9 @@ import java.util.Set;
  *         arguments using the {@code ApplicationCore.checkCLIArgs()} method (see also: #1),
  *         or manually, as shown below:
  *         <blockquote><pre>
- *             for(String arg : args) {
- *                 commandManager.executeCommand(arg);
- *             }
+ * for(String arg : args) {
+ *     commandManager.executeCommand(arg);
+ * }
  *         </pre></blockquote>
  *     </li>
  *     <li>
@@ -42,13 +42,13 @@ import java.util.Set;
  *         the {@code DebugCommand}. Below is
  *         an example implementation of the {@code DebugCommand} class:
  *         <blockquote><pre>
- *             public class DebugCommand implements CommandInterface {
- *                 &#64;Override
- *                 public void execute(CommandManager commandManager) {
- *                     MainWorker.debug = true;
- *                     System.out.println("Debug mode enabled.");
- *                 }
- *             }
+ * public class DebugCommand implements CommandInterface {
+ *     &#64;Override
+ *     public void execute(CommandManager commandManager) {
+ *         MainWorker.debug = true;
+ *         System.out.println("Debug mode enabled.");
+ *     }
+ * }
  *         </pre></blockquote>
  *     </li>
  * </ol>
@@ -96,6 +96,7 @@ public class CommandManager {
     }
 
     /**
+     * Gets a list of existing keys in the Command Map. Useful to know what commands are available.
      * @return A list of valid CLI args for use.
      */
     public Set<String> getValidCommands() {
@@ -106,7 +107,7 @@ public class CommandManager {
      * Add a command to the map. If the key already exists, the command will be replaced.
      * <p>Example:</p>
      * <blockquote><pre>
-     *     appendCommand("-help", new HelpCommand());
+     * appendCommand("-help", new HelpCommand());
      * </pre></blockquote>
      * @param commandString trigger key for the command
      * @param commandToExecute CommandInterface class
@@ -121,7 +122,7 @@ public class CommandManager {
      * Add a map of custom commands to the command map.
      * <p>Example:</p>
      * <blockquote><pre>
-     *     yourCommandMap.put("-help", new HelpCommand());
+     * yourCommandMap.put("-help", new HelpCommand());
      * </pre></blockquote>
      * @param commandMap map of key-value pairs where the key is the CLI arg to listen for and the value is a new Command.
      * @see #appendCommand(String, CommandInterface)
