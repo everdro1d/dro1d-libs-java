@@ -3,14 +3,12 @@
  * https://www.geeksforgeeks.org/trie-memory-optimization-using-hash-map/
  * https://www.geeksforgeeks.org/trie-delete/
  * https://www.geeksforgeeks.org/trie-meaning-in-dsa/
- *
+ * https://www.geeksforgeeks.org/auto-complete-feature-using-trie/
+ * https://www.geeksforgeeks.org/implement-a-dictionary-using-trie/
  */
 package com.everdro1d.libs.structs;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * <h2>Definition</h2>
@@ -46,9 +44,9 @@ import java.util.List;
  *     <li>Tries may be slower than hash tables or binary search trees for exact match operations.</li>
  * </ul>
  */
-public class Trie {
+public class Trie<T> {
 
-    private static class TrieNode {
+    private static class TrieNode<T> {
         /**
          * Denotes whether this node is the end of a key in the Trie.
          */
@@ -62,12 +60,15 @@ public class Trie {
         /**
          * char map of this node's child nodes.
          */
-        HashMap<Character, TrieNode> child;
+        HashMap<Character, TrieNode<T>> child;
+
+        T value;
 
         TrieNode(char character) {
             isEndOfWord = false;
             child = new HashMap<>();
             this.character = character;
+            this.value = null;
         }
 
         TrieNode() {
@@ -82,7 +83,7 @@ public class Trie {
             return child.isEmpty();
         }
 
-        private Collection<TrieNode> getChildren() {
+        private Collection<TrieNode<T>> getChildren() {
             return child.values();
         }
     }
@@ -90,13 +91,13 @@ public class Trie {
     /**
      * Root node of the Trie.
      */
-    TrieNode root;
+    TrieNode<T> root;
 
     /**
      * Creates a new Trie without any values.
      */
     public Trie() {
-        root = new TrieNode();
+        root = new TrieNode<>();
     }
 
     /**
@@ -104,8 +105,17 @@ public class Trie {
      * @param list list of key the tree should be init with
      */
     public Trie(List<String> list) {
-        root = new TrieNode();
+        root = new TrieNode<>();
         insert(list);
+    }
+
+    /**
+     * Creates a new Trie containing the key-value pairs given in the map.
+     * @param map map of key-value pairs the tree should be init with
+     */
+    public Trie(Map<String, T> map) {
+        root = new TrieNode<>();
+        insert(map);
     }
 
     /**
@@ -113,14 +123,23 @@ public class Trie {
      * @param key key to insert
      */
     public void insert(String key) {
-        TrieNode currentNode = root;
+        insert(key, null);
+    }
+
+    /**
+     * Inserts the given key-value pair into the Trie, creating nodes where necessary.
+     * @param key key to insert
+     */
+    public void insert(String key, T value) {
+        TrieNode<T> currentNode = root;
 
         for (char character : key.toCharArray()) {
             currentNode = currentNode.child.computeIfAbsent(
-                    character, k -> new TrieNode(character)
+                    character, k -> new TrieNode<>(character)
             );
         }
         currentNode.isEndOfWord = true;
+        currentNode.value = value;
     }
 
     /**
@@ -129,7 +148,17 @@ public class Trie {
      */
     public void insert(List<String> list) {
         for (String key : list) {
-            insert(key);
+            insert(key, null);
+        }
+    }
+
+    /**
+     * Inserts a map of key-value pairs into the Trie, creating nodes where necessary.
+     * @param map the map of key-value pairs to insert
+     */
+    public void insert(Map<String, T> map) {
+        for (Map.Entry<String, T> entry : map.entrySet()) {
+            insert(entry.getKey(), entry.getValue());
         }
     }
 
@@ -186,7 +215,7 @@ public class Trie {
 
     // ---
     private boolean search(String key, boolean exact) {
-        TrieNode currentNode = root;
+        TrieNode<T> currentNode = root;
 
         for (char character : key.toCharArray()) {
             currentNode = currentNode.child.get(character);
@@ -253,7 +282,7 @@ public class Trie {
         }
     }
 
-    private RemovalResult removeHelper(TrieNode currentNode, String key, int index) {
+    private RemovalResult removeHelper(TrieNode<T> currentNode, String key, int index) {
         if (index == key.length()) {
             if (!currentNode.isEndOfWord) {
                 return new RemovalResult(false, false); // key not exist
@@ -263,7 +292,7 @@ public class Trie {
         }
 
         char character = key.charAt(index);
-        TrieNode childNode = currentNode.child.get(character);
+        TrieNode<T> childNode = currentNode.child.get(character);
         if (childNode == null) {
             return new RemovalResult(false, false); // key not found
         }
@@ -295,7 +324,7 @@ public class Trie {
     public List<String> listKeysMatching(String prefix) { // TODO: implement limit of hits to return?
         List<String> list = new ArrayList<>();
         StringBuffer stringAssembler = new StringBuffer();
-        TrieNode currentNode = root;
+        TrieNode<T> currentNode = root;
 
         for (char character : prefix.toCharArray()) {
             currentNode = currentNode.child.get(character);
@@ -312,7 +341,7 @@ public class Trie {
     }
 
     // ---
-    private void listKeysHelper(TrieNode currentNode, List<String> list, StringBuffer stringAssembler) {
+    private void listKeysHelper(TrieNode<T> currentNode, List<String> list, StringBuffer stringAssembler) {
         if (currentNode.isEndOfWord) {
             list.add(stringAssembler.toString());
         }
@@ -321,7 +350,7 @@ public class Trie {
             return;
         }
 
-        for (TrieNode childNode : currentNode.getChildren()) {
+        for (TrieNode<T> childNode : currentNode.getChildren()) {
             // branch into child nodes and append
             listKeysHelper(childNode, list, stringAssembler.append(childNode.character));
             // reset to childless state before probing next child
@@ -329,4 +358,43 @@ public class Trie {
         }
     }
     // ---
+
+    /**
+     * Get the value of a key in the Trie.
+     * @param key the key to search for
+     * @return the value associated with the key
+     */
+    public T get(String key) {
+        TrieNode<T> currentNode = root;
+        for (char character : key.toCharArray()) {
+            currentNode = currentNode.child.get(character);
+            if (currentNode == null) return null;
+        }
+        return currentNode.isEndOfWord ? currentNode.value : null;
+    }
+
+    /**
+     * Set the value for an existing key in the Trie.
+     * @param key key to search for
+     * @param value value to set as
+     * @return true if value was set, false otherwise (including vale does not exist)
+     */
+    public boolean set(String key, T value) {
+        TrieNode<T> currentNode = root;
+
+        for (char character : key.toCharArray()) {
+            currentNode = currentNode.child.get(character);
+
+            if (currentNode == null) {
+                return false;
+            }
+        }
+
+        if (currentNode.isEndOfWord) {
+            currentNode.value = value;
+        }
+
+        return currentNode.isEndOfWord;
+    }
+
 }
