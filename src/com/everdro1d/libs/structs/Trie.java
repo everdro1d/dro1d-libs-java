@@ -6,8 +6,10 @@
  */
 package com.everdro1d.libs.structs;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <h2>Definition</h2>
@@ -195,6 +197,57 @@ public class Trie {
 
         boolean shouldDeleteCurrentNode = currentNode.isEmpty() && !currentNode.isEndOfWord;
         return new RemovalResult(childResult.keyRemoved, shouldDeleteCurrentNode);
+    }
+    // ---
+
+    /**
+     * List the keys in a Trie.
+     * @return A list of all the keys in the Trie
+     */
+    public List<String> listKeys() {
+        return listKeysMatching("");
+    }
+
+    /**
+     * List the keys in a Trie that match the prefix.
+     * @param prefix prefix to match
+     * @return List of all matching keys in the Trie
+     */
+    public List<String> listKeysMatching(String prefix) {
+        List<String> list = new ArrayList<>();
+        StringBuffer stringAssembler = new StringBuffer();
+        TrieNode currentNode = root;
+
+        for (char character : prefix.toCharArray()) {
+            currentNode = currentNode.child.get(character);
+
+            if (currentNode == null) {
+                return list;
+            }
+
+            stringAssembler.append(character);
+        }
+
+        listKeysHelper(currentNode, list, stringAssembler);
+        return list;
+    }
+
+    // ---
+    private void listKeysHelper(TrieNode currentNode, List<String> list, StringBuffer stringAssembler) {
+        if (currentNode.isEndOfWord) {
+            list.add(stringAssembler.toString());
+        }
+
+        if (currentNode.isEmpty()) {
+            return;
+        }
+
+        for (TrieNode childNode : currentNode.getChildren()) {
+            // branch into child nodes and append
+            listKeysHelper(childNode, list, stringAssembler.append(childNode.character));
+            // reset to childless state before probing next child
+            stringAssembler.setLength(stringAssembler.length() - 1);
+        }
     }
     // ---
 }
