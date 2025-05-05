@@ -1,0 +1,39 @@
+// dro1dDev - created: 2024-03-06
+
+package com.everdro1d.libs.commands.included;
+
+import com.everdro1d.libs.commands.*;
+
+/**
+ * A {@code -help} command that prints all valid CLI argument commands when executed.
+ * <p>
+ * This command is designed to provide users with a list of all available commands
+ * managed by the {@link CommandManager}. It is particularly useful for providing
+ * guidance to users of a CLI application.
+ * </p>
+ * <h2>Usage</h2>
+ * <p>
+ * To use this command, include {@code -help} as an argument when running the application.
+ * The command will output a list of valid commands to the console.
+ * </p>
+ * <h2>Example:</h2>
+ * <blockquote><pre>
+ * CommandManager commandManager = new CommandManager();
+ * commandManager.executeCommand("-help");
+ * </pre></blockquote>
+ * @see CommandManager
+ */
+public class HelpCommand implements CommandInterface {
+
+    /**
+     * Constructs a new {@code HelpCommand} instance.
+     * This command, when executed, prints all valid CLI arguments
+     * managed by the {@link CommandManager}.
+     */
+    public HelpCommand() {};
+
+    @Override
+    public void execute(CommandManager commandManager) {
+        System.out.println("List of valid commands: " + commandManager.getValidCommands());
+    }
+}
