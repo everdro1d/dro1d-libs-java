@@ -292,7 +292,7 @@ public class Trie {
      * @param prefix prefix to match
      * @return List of all matching keys in the Trie
      */
-    public List<String> listKeysMatching(String prefix) {
+    public List<String> listKeysMatching(String prefix) { // TODO: implement limit of hits to return?
         List<String> list = new ArrayList<>();
         StringBuffer stringAssembler = new StringBuffer();
         TrieNode currentNode = root;
