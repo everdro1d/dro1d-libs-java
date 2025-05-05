@@ -100,6 +100,17 @@ public class Trie {
     }
 
     /**
+     * Creates a new Trie containing the keys given in the list.
+     * @param list list of key the tree should be init with
+     */
+    public Trie(List<String> list) {
+        root = new TrieNode();
+        for (String key : list) {
+            insert(key);
+        }
+    }
+
+    /**
      * Inserts the given key into the Trie, creating nodes where necessary.
      * @param key key to insert
      */
