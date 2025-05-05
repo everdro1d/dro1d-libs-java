@@ -3,6 +3,8 @@ package com.everdro1d.libs.structs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrieTest {
@@ -95,5 +97,113 @@ class TrieTest {
         assertTrue(trie.remove("solo"));
         assertFalse(trie.contains("solo"));
         assertTrue(trie.isEmpty());
+    }
+
+    @Test
+    void listKeys_AllKeys() {
+        trie.insert("apple");
+        trie.insert("app");
+        trie.insert("application");
+
+        List<String> result = trie.listKeys();
+        assertEquals(3, result.size());
+        assertTrue(result.contains("apple"));
+        assertTrue(result.contains("app"));
+        assertTrue(result.contains("application"));
+    }
+
+    @Test
+    void listKeys_EmptyTrie() {
+        List<String> result = trie.listKeys();
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void listKeys_SingleKey() {
+        trie.insert("solo");
+
+        List<String> result = trie.listKeys();
+        assertEquals(1, result.size());
+        assertTrue(result.contains("solo"));
+    }
+
+    @Test
+    void listKeys_MultipleKeys() {
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("cart");
+        trie.insert("carbon");
+
+        List<String> result = trie.listKeys();
+        assertEquals(4, result.size());
+        assertTrue(result.contains("cat"));
+        assertTrue(result.contains("car"));
+        assertTrue(result.contains("cart"));
+        assertTrue(result.contains("carbon"));
+    }
+
+    @Test
+    void listKeysMatching_ExactMatch() {
+        trie.insert("apple");
+        trie.insert("app");
+        trie.insert("application");
+
+        List<String> result = trie.listKeysMatching("app");
+        assertEquals(3, result.size());
+        assertTrue(result.contains("app"));
+        assertTrue(result.contains("apple"));
+        assertTrue(result.contains("application"));
+    }
+
+    @Test
+    void listKeysMatching_PrefixMatch() {
+        trie.insert("car");
+        trie.insert("cart");
+        trie.insert("carbon");
+        trie.insert("cat");
+
+        List<String> result = trie.listKeysMatching("car");
+        assertEquals(3, result.size());
+        assertTrue(result.contains("car"));
+        assertTrue(result.contains("cart"));
+        assertTrue(result.contains("carbon"));
+    }
+
+    @Test
+    void listKeysMatching_NoMatch() {
+        trie.insert("dog");
+        trie.insert("cat");
+        trie.insert("fish");
+
+        List<String> result = trie.listKeysMatching("elephant");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void listKeysMatching_EmptyPrefix() {
+        trie.insert("hello");
+        trie.insert("world");
+        trie.insert("java");
+
+        List<String> result = trie.listKeysMatching("");
+        assertEquals(3, result.size());
+        assertTrue(result.contains("hello"));
+        assertTrue(result.contains("world"));
+        assertTrue(result.contains("java"));
+    }
+
+    @Test
+    void listKeysMatching_PartialMatch() {
+        trie.insert("inter");
+        trie.insert("internet");
+        trie.insert("internal");
+        trie.insert("interval");
+
+        List<String> result = trie.listKeysMatching("inte");
+        assertEquals(4, result.size());
+        assertTrue(result.contains("inter"));
+        assertTrue(result.contains("internet"));
+        assertTrue(result.contains("internal"));
+        assertTrue(result.contains("interval"));
     }
 }
