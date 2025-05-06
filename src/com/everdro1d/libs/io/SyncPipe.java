@@ -42,6 +42,8 @@ import java.util.List;
  * </ul>
  */
 public class SyncPipe implements Runnable {
+    private final OutputStream oStream;
+    private final InputStream iStream;
 
     /**
      * Constructs a SyncPipe instance with the specified InputStream and OutputStream.
@@ -49,8 +51,8 @@ public class SyncPipe implements Runnable {
      * @param oStream the OutputStream to write data to
      */
     public SyncPipe(InputStream iStream, OutputStream oStream) {
-        iStream_ = iStream;
-        oStream_ = oStream;
+        this.iStream = iStream;
+        this.oStream = oStream;
     }
 
     /**
@@ -60,20 +62,14 @@ public class SyncPipe implements Runnable {
      * <p>Any exceptions encountered during the process are logged to {@code System.err}.</p>
      */
     public void run() {
-        try
-        {
+        try {
             final byte[] buffer = new byte[1024];
-            for (int length; (length = iStream_.read(buffer)) != -1; )
-            {
-                oStream_.write(buffer, 0, length);
+            for (int length; (length = iStream.read(buffer)) != -1; ) {
+                oStream.write(buffer, 0, length);
             }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
             System.err.println("Error in SyncPipe: " + e.getMessage());
         }
     }
-    private final OutputStream oStream_;
-    private final InputStream iStream_;
 }
