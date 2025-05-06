@@ -28,7 +28,7 @@ public class LocaleManager {
     /** The map of the locale, with the outermost key being the Class Name of the UI component, and the second key being the
      * name of the component, and the third key being the descriptive variable and the value being the text to display.
      * <p><strong>Example:</strong></p>
-     * <pre>
+     * <blockquote><pre>
      * {
      *   "MainWindow": {
      *     "titleLabel": {
@@ -51,7 +51,7 @@ public class LocaleManager {
      *     }
      *   }
      * }
-     * </pre>
+     * </pre></blockquote>
      */
     Map<String, Map<String, Map<String, String>>> LocaleMap = new TreeMap<>();
 

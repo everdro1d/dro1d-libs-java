@@ -17,29 +17,29 @@ import java.util.*;
  *         <p>
  *         It is recommended to define a {@code Map} of commands and
  *         pass it to the CommandManager constructor. For example:
- *         <blockquote><pre>
+ * <blockquote><pre>
  * private static final Map&lt;String, CommandInterface&gt; CUSTOM_COMMANDS_MAP = Map.of(
  *     "-debug", new DebugCommand()
  * );
  * public static CommandManager commandManager = new CommandManager(CUSTOM_COMMANDS_MAP);
- *        </pre></blockquote>
+ * </pre></blockquote>
  *     </li>
  *     <li>
  *         Use the CommandManager to handle CLI arguments. You can process
  *         arguments using the {@code ApplicationCore.checkCLIArgs()} method (see also: #1),
  *         or manually, as shown below:
- *         <blockquote><pre>
+ * <blockquote><pre>
  * for(String arg : args) {
  *     commandManager.executeCommand(arg);
  * }
- *         </pre></blockquote>
+ * </pre></blockquote>
  *     </li>
  *     <li>
  *         Create new command classes for each command and add them to the
  *         CommandManager. For example, in the code above, we added
  *         the {@code DebugCommand}. Below is
  *         an example implementation of the {@code DebugCommand} class:
- *         <blockquote><pre>
+ * <blockquote><pre>
  * public class DebugCommand implements CommandInterface {
  *     &#64;Override
  *     public void execute(CommandManager commandManager) {
@@ -47,7 +47,7 @@ import java.util.*;
  *         System.out.println("Debug mode enabled.");
  *     }
  * }
- *         </pre></blockquote>
+ * </pre></blockquote>
  *     </li>
  * </ol>
  *
@@ -94,7 +94,7 @@ public class CommandManager {
     }
 
     /**
-     * Gets a list of existing keys in the Command Map. Useful to know what commands are available.
+     * Retrieves a list of existing keys in the Command Map. Useful to know what commands are available.
      * @return A list of valid CLI args for use.
      */
     public Set<String> getValidCommands() {

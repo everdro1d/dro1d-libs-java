@@ -11,7 +11,7 @@ import java.io.PrintStream;
  * to the console and to another output stream at the same time.
  *
  * <p><strong>Usage example:</strong></p>
- * <pre>
+ * <blockquote><pre>
  * PrintStream debugPrintStream = new PrintStream(new OutputStream() {
  *     *@Override
  *     public void write(int b) {
@@ -28,7 +28,7 @@ import java.io.PrintStream;
  *             TiedOutputStream.resetOutputStreams(tiedOutputStream);
  *         }
  * });
- * </pre>
+ * </pre></blockquote>
  */
 public class TiedOutputStream extends PrintStream {
     private final PrintStream sout;
