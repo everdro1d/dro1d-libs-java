@@ -10,6 +10,7 @@ import java.io.File;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -219,7 +220,7 @@ public final class Utils {
      * @param cmd          the command to execute as a list of strings
      * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
-    public static void runCommand(ArrayList<String> cmd, boolean pipeToSysOut) {
+    public static void runCommand(List<String> cmd, boolean pipeToSysOut) {
         runCommand(cmd, null, false, pipeToSysOut);
     }
 
@@ -230,7 +231,7 @@ public final class Utils {
      * @param pwd          the working directory to execute the command in
      * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
-    public static void runCommand(ArrayList<String> cmd, String pwd, boolean pipeToSysOut) {
+    public static void runCommand(List<String> cmd, String pwd, boolean pipeToSysOut) {
         runCommand(cmd, pwd, false, pipeToSysOut);
     }
 
@@ -241,7 +242,7 @@ public final class Utils {
      * @param debug        whether to print debug information to {@code System.out}
      * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
-    public static void runCommand(ArrayList<String> cmd, String pwd, boolean debug, boolean pipeToSysOut) {
+    public static void runCommand(List<String> cmd, String pwd, boolean debug, boolean pipeToSysOut) {
         ProcessBuilder pb = new ProcessBuilder(cmd);
         if (pwd != null && new File(pwd).exists()) {
             pb.directory(new File(pwd));
