@@ -20,13 +20,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Files {
-    private Files() {}
+public final class Files {
+
+    // Private constructor to prevent instantiation.
+    private Files() {
+        throw new UnsupportedOperationException("Files class cannot be instantiated");
+    }
 
     /**
-     * Get the abs. path of the jar file.
-     * @param clazz the class to trace the jar path from
-     * @return the path of the jar file as a string
+     * Retrieves the absolute path of the JAR file containing the specified class.
+     *
+     * @param clazz the class whose JAR file path is to be determined
+     * @return the absolute path of the JAR file as a string, or {@code null} if the path cannot be determined
      */
     public static String getJarPath(Class<?> clazz) {
         String jarPath = null;
@@ -39,9 +44,10 @@ public class Files {
     }
 
     /**
-     * Get the directory of the jar file.
-     * @param clazz the class to trace the jar path from
-     * @return the directory of the jar file as a string
+     * Retrieves the directory containing the JAR file of the specified class.
+     *
+     * @param clazz the class whose JAR file directory is to be determined
+     * @return the directory path of the JAR file as a string, or {@code null} if the path cannot be determined
      */
     public static String getJarDirectory(Class<?> clazz) {
         String jarPath = getJarPath(clazz);
@@ -52,9 +58,10 @@ public class Files {
     }
 
     /**
-     * Check if a file is in use.
+     * Checks if a file is currently in use by attempting to acquire a write lock on it.
+     *
      * @param filePath the path of the file to check
-     * @return boolean
+     * @return {@code true} if the file is in use or an error occurs, {@code false} otherwise
      */
     public static boolean isFileInUse(Path filePath) {
         try (FileChannel channel = FileChannel.open(filePath, StandardOpenOption.WRITE);
@@ -68,9 +75,10 @@ public class Files {
     }
 
     /**
-     * Delete a file.
-     * @param path the path of the file to delete
-     * @param debug whether to print debug information
+     * Deletes a file at the specified path.
+     *
+     * @param path  the path of the file to delete
+     * @param debug if {@code true}, prints debug information to System.out about the deletion process
      */
     public static void deleteFile(String path, boolean debug) {
         java.io.File fileToDelete = new java.io.File(path);
@@ -85,10 +93,11 @@ public class Files {
     }
 
     /**
-     * Get a set of files in a directory.
-     * @param inputDirectory the directory to get the files from
-     * @param contains the string to match in the file names
-     * @return set of matching file names, null if no matches are found
+     * Retrieves a set of file names in a directory that contain a specific substring.
+     *
+     * @param inputDirectory the directory to search for files
+     * @param contains       the substring to match in file names
+     * @return a set of matching file names, or {@code null} if no matches are found
      */
     public static Set<String> getMatchingFiles(String inputDirectory, String contains) {
         Set<String> allFiles = getAllFilesInDirectory(inputDirectory);
@@ -108,9 +117,10 @@ public class Files {
     }
 
     /**
-     * Get a set of all files in a directory.
-     * @param inputDirectory the directory to get the files from
-     * @return set of file names
+     * Retrieves a set of all file names in a specified directory.
+     *
+     * @param inputDirectory the directory to retrieve file names from
+     * @return a set of file names in the directory
      */
     public static Set<String> getAllFilesInDirectory(String inputDirectory) {
         return Stream.of(Objects.requireNonNull(new java.io.File(inputDirectory).listFiles()))
@@ -120,8 +130,9 @@ public class Files {
     }
 
     /**
-     * Open a directory in the file manager and select the file.
-     * @param path the path to the file
+     * Opens a directory in the default file manager and selects the specified file.
+     *
+     * @param path the path to the file or directory to open
      */
     public static void openInFileManager(String path) {
         if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
@@ -168,9 +179,10 @@ public class Files {
     }
 
     /**
-     * Check if a file path is valid.
-     * @param path the path to check
-     * @return true if the path is valid, false otherwise.
+     * Validates whether a given file path is valid and exists.
+     *
+     * @param path the file path to validate
+     * @return {@code true} if the path is valid and exists, {@code false} otherwise
      */
     private static boolean validateFilePath(String path) {
         if (path == null || path.isEmpty()) return false;
@@ -187,6 +199,25 @@ public class Files {
         return new File(path).exists() || new File(path).isDirectory();
     }
 
+    /**
+     * Loads a map from a file where each line represents a key-value pair in the format `key=value`.
+     * <p>
+     * If the file does not exist or is empty, an error message is printed to {@code System.err}, and {@code null} is returned.
+     * </p>
+     *
+     * @param fileName the name of the file to load the map from
+     * @return a {@code Map<String, String>} containing the key-value pairs from the file, or {@code null} if the file does not exist or is empty
+     * @throws RuntimeException if an error occurs while reading the file
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * // File content:
+     * // key1=value1
+     * // key2=value2
+     *
+     * Map<String, String> map = Files.loadMapFromFile("example.txt");
+     * System.out.println(map); // {key1=value1, key2=value2}
+     * </pre></blockquote>
+     */
     public static Map<String,String> loadMapFromFile(String fileName) {
         Path filePath = Path.of(fileName);
         if (!java.nio.file.Files.exists(filePath)) {
@@ -219,6 +250,30 @@ public class Files {
         }
     }
 
+    /**
+     * Saves a map to a file in the format `key=value` with each entry on a new line.
+     * <p>
+     * If the file already exists and overwrite is disabled, the method stops and prints an error message to {@code System.err}.
+     * If overwrite is enabled, the existing file is deleted and replaced with the new content.
+     * </p>
+     *
+     * @param path      the directory path where the file will be saved
+     * @param fileName  the name of the file (without extension) to save the map to
+     * @param map       the {@code Map<String, String>} to save
+     * @param overwrite whether to overwrite the file if it already exists
+     * @throws RuntimeException if an error occurs while writing to the file
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * Map<String, String> map = new HashMap<>();
+     * map.put("key1", "value1");
+     * map.put("key2", "value2");
+     *
+     * Files.saveMapToFile("/path/to/directory", "example", map, true);
+     * // File content:
+     * // key1=value1
+     * // key2=value2
+     * </pre></blockquote>
+     */
     public static void saveMapToFile(String path, String fileName, Map<String, String> map, boolean overwrite) {
         Path filePath = Path.of(path + File.separator + fileName + ".txt");
         if (java.nio.file.Files.exists(filePath)) {
