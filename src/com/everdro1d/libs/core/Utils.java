@@ -12,12 +12,33 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class Utils {
-    private Utils() {}
+/**
+ * A utility class providing various helper methods for common operations.
+ * <p>This class includes methods for string manipulation, date and time formatting,
+ * clipboard operations, map processing, command execution, and more.</p>
+ * <p>All methods are static and can be accessed directly without instantiating the class.</p>
+ * <p><strong>Note:</strong> This class is not meant to be instantiated.</p>
+ *
+ * <h2>Key Features:</h2>
+ * <ul>
+ *     <li>String operations like replacing characters and checking substrings.</li>
+ *     <li>Date and time formatting with file-system-safe options.</li>
+ *     <li>Clipboard operations for copying text.</li>
+ *     <li>Map utilities for extracting values, printing, and reversing key-value pairs.</li>
+ *     <li>Command execution in the system shell.</li>
+ *     <li>Operating system detection and configuration directory retrieval.</li>
+ * </ul>
+ */
+public final class Utils {
+
+    // Private constructor to prevent instantiation.
+    private Utils() {
+        throw new UnsupportedOperationException("Utils class cannot be instantiated");
+    }
 
     /**
-     * Open a link in the default browser.
-     * @param url the link to open
+     * Opens the specified URL in the default web browser.
+     * @param url the URL to open
      */
     public static void openLink(String url) {
         try {
@@ -27,6 +48,10 @@ public class Utils {
         }
     }
 
+    /**
+     * Copies the specified string to the system clipboard.
+     * @param copyString the string to copy to the clipboard
+     */
     public static void copyToClipboard(String copyString) {
         try {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(copyString), null);
@@ -36,11 +61,11 @@ public class Utils {
     }
 
     /**
-     * Get the current time as a string.
-     * @param includeDate whether to include the date - yyyy-MM-dd
-     * @param includeTime whether to include the time - HH:mm:ss
-     * @param includeMillis whether to include milliseconds - .SSS
-     * @return the current time as a string
+     * Returns the current date and/or time as a formatted string.
+     * @param includeDate whether to include the date in the format {@code yyyy-MM-dd}
+     * @param includeTime whether to include the time in the format {@code HH:mm:ss}
+     * @param includeMillis whether to include milliseconds in the format {@code .SSS}
+     * @return the current date and/or time as a string
      */
     public static String getCurrentTime(boolean includeDate, boolean includeTime, boolean includeMillis) {
         String now = LocalDateTime.now().toString();
@@ -57,9 +82,13 @@ public class Utils {
     }
 
     /**
-     *
+     * Returns a file-system-safe version of the current date and/or time.
+     * <p>Replaces invalid file system characters with underscores.</p>
+     * @param includeDate whether to include the date in the format {@code yyyy-MM-dd}
+     * @param includeTime whether to include the time in the format {@code HH:mm:ss}
+     * @param includeMillis whether to include milliseconds in the format {@code .SSS}
      * @see #getCurrentTime(boolean, boolean, boolean)
-     * @return file system safe output of related method
+     * @return a sanitized string representation of the current date and/or time
      */
     public static String getSanitizedCurrentTime(boolean includeDate, boolean includeTime, boolean includeMillis) {
         return getCurrentTime(includeDate, includeTime, includeMillis)
@@ -67,12 +96,12 @@ public class Utils {
     }
 
     /**
-     * Test if the string contains any of the strings in the array.
-     * @param matchingArray the array of strings to match
+     * Checks if the specified string contains any of the substrings in the given array.
+     * @param matchingArray the array of substrings to check for
      * @param testString the string to test
-     * @return boolean
-     * <p>Example: containsAny(new String[]{"a", "b", "c"}, "abc") -> true
-     * <p>Example: containsAny(new String[]{"a", "b", "c"}, "def") -> false
+     * @return {@code true} if the test string contains any of the substrings, {@code false} otherwise
+     * <p>Example: {@code containsAny(new String[]{"a", "b", "ab", "c"}, "abc")} -> {@code true}</p>
+     * <p>Example: {@code containsAny(new String[]{"a", "b", "c"}, "def")} -> {@code false}</p>
      */
     public static boolean containsAny(String[] matchingArray, String testString) {
         for (String s : matchingArray) {
@@ -83,20 +112,42 @@ public class Utils {
         return false;
     }
 
+    /**
+     * Replaces the character at the specified index in the given string with the provided replacement string.
+     * @param string the original string
+     * @param i the index of the character to replace
+     * @param s the replacement string
+     * @return a new string with the character at the specified index replaced
+     */
     public static String replaceCharAt(String string, int i, String s) {
         return string.substring(0, i) + s + string.substring(i + s.length());
     }
 
     /**
-     * Get a set of unique values from the Inner Map under conditions
-     * @param property the set of values to get
-     * @param filter the conditions to get the values
-     * @return a set of values
-     * <p>Example: An inner map with video extensions and audio codecs,
-     * I want to get all the video extensions where the audio codec is "video only"
-     * <p>Set<String> values = extractUniqueValuesByPredicate("EXT", option -> option.get("ACODEC").equals("video only"));
-     * <p>System.out.println(values);
-     * <p>Output: [mp4, webm, mkv]
+     * Extracts a set of unique values from a nested map based on a specified property and filter condition.
+     * @param property the key whose values are to be extracted
+     * @param filter the condition to filter the values (can be {@code null} for no filtering)
+     * @param map the nested map to process
+     * @return a set of unique values matching the specified property and filter
+     * <p>Example:</p>
+     * <blockquote><pre>
+     * // Input nested map:
+     * Map&lt;String, Map&lt;String, String&gt;&gt; map = Map.of(
+     *     "18", Map.of("EXT", "mp4", "ACODEC", "mp4a.40.2"),
+     *     "22", Map.of("EXT", "webm", "ACODEC", "video only"),
+     *     "37", Map.of("EXT", "mkv", "ACODEC", "video only")
+     * );
+     *
+     * // Extract unique extensions where ACODEC equals "video only":
+     * Set&lt;String&gt; values = extractUniqueValuesByPredicate(
+     *     "EXT",
+     *     option -> "video only".equals(option.get("ACODEC")),
+     *     map
+     * );
+     *
+     * // Output:
+     * System.out.println(values); // [webm, mkv]
+     * </pre></blockquote>
      */
     public static Set<String> extractUniqueValuesByPredicate(
             String property, Predicate<Map<String, String>> filter, Map<String, Map<String, String>> map)
@@ -111,36 +162,30 @@ public class Utils {
     }
 
     /**
-     * Prints a json formatted nested map (allows for infinite nesting). See example below.
-     *
+     * Recursively prints a nested map in a JSON-like formatted structure. Allows for infinite nesting.
+     * @param map the nested map to print
      * <p>Example:</p>
-     * <p></p>
-     * <pre>
+     * <blockquote><pre>
      * {
      *   "Key1": {
-     *     "SubKey1-1": {
+     *     "Value1": {
+     *       "SubKey1-1": "SubValue1-1",
      *       "SubKey1-2": "SubValue1-2",
-     *       "SubKey2-2": "SubValue2-2",
-     *       "SubKey3-2": "SubValue3-2"
+     *       "SubKey1-3": "SubValue1-3"
      *      }
      *   },
-     *   "Key2": {
-     *     "SubKey1-1": {
-     *       "SubKey1-2": "SubValue1-2",
-     *       "SubKey2-2": "SubValue2-2",
-     *       "SubKey3-2": "SubValue3-2"
-     *     }
-     *   },
-     *   "Key3": {
-     *     "SubKey1": "SubValue1",
-     *     "SubKey2": "SubValue2",
-     *     "SubKey3": "SubValue3",
-     *     "SubKey4": "SubValue4"
-     *   }
+     *   ...
      * }
-     * </pre>
+     * </pre></blockquote>
      */
-    public static void printNestedMapFormatted(Object map, int indentLeaveAsZero) {
+    public static void printNestedMapFormatted(Object map) {
+        printNestedMapFormatted(map, 0);
+    }
+
+    /**
+     * Recursive helper for {@link #printNestedMapFormatted(Object)}
+     */
+    private static void printNestedMapFormatted(Object map, int indentLeaveAsZero) {
         String indentString = new String(new char[indentLeaveAsZero]).replace("\0", "  ");
 
         // Use a separate indentation for nested content
@@ -170,9 +215,9 @@ public class Utils {
 
 
     /**
-     * Run a command in the system shell.
-     * @param cmd          the command to run
-     * @param pipeToSysOut whether to pipe the output to System.out
+     * Executes a command in the system shell.
+     * @param cmd          the command to execute as a list of strings
+     * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
     public static void runCommand(ArrayList<String> cmd, boolean pipeToSysOut) {
         runCommand(cmd, null, false, pipeToSysOut);
@@ -180,21 +225,21 @@ public class Utils {
 
 
     /**
-     * Run a command in the system shell.
-     * @param cmd          the command to run
-     * @param pwd          the working directory
-     * @param pipeToSysOut whether to pipe the output to System.out
+     * Executes a command in the system shell.
+     * @param cmd          the command to execute as a list of strings
+     * @param pwd          the working directory to execute the command in
+     * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
     public static void runCommand(ArrayList<String> cmd, String pwd, boolean pipeToSysOut) {
         runCommand(cmd, pwd, false, pipeToSysOut);
     }
 
     /**
-     * Run a command in the system shell.
+     * Executes a command in the system shell.
      * @param cmd          the command to run
-     * @param pwd          the working directory
-     * @param debug        whether to print debug information
-     * @param pipeToSysOut whether to pipe the output to System.out
+     * @param pwd          the working directory to execute the command in
+     * @param debug        whether to print debug information to {@code System.out}
+     * @param pipeToSysOut whether to pipe the command's output to {@code System.out}
      */
     public static void runCommand(ArrayList<String> cmd, String pwd, boolean debug, boolean pipeToSysOut) {
         ProcessBuilder pb = new ProcessBuilder(cmd);
@@ -220,6 +265,12 @@ public class Utils {
         }
     }
 
+    /**
+     * Reverses the key associated with the given value in the provided map.
+     * @param value the value to search for in the map
+     * @param map the map to search
+     * @return the key associated with the given value, or {@code null} if not found
+     */
     public static String reverseKeyFromValueInMap(String value, Map<String, String> map) {
         if (!map.containsValue(value)) {
             System.err.println("Given Map does not contain such a value. Please check again.");
@@ -235,6 +286,10 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Retrieves the user's configuration directory based on the operating system.
+     * @return the path to the user's configuration directory
+     */
     public static String getUserConfigDirectory() {
         String userHome = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();
