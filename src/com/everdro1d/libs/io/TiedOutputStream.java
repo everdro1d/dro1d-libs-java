@@ -10,7 +10,7 @@ import java.io.PrintStream;
  * single output stream. This is useful for when you need the output to be printed
  * to the console and to another output stream at the same time.
  *
- * <p>Usage example:</p>
+ * <p><strong>Usage example:</strong></p>
  * <pre>
  * PrintStream debugPrintStream = new PrintStream(new OutputStream() {
  *     *@Override

@@ -101,8 +101,9 @@ public final class Utils {
      * @param matchingArray the array of substrings to check for
      * @param testString the string to test
      * @return {@code true} if the test string contains any of the substrings, {@code false} otherwise
-     * <p>Example: {@code containsAny(new String[]{"a", "b", "ab", "c"}, "abc")} -> {@code true}</p>
-     * <p>Example: {@code containsAny(new String[]{"a", "b", "c"}, "def")} -> {@code false}</p>
+     * <p><strong>Example:</strong></p>
+     * <p>{@code containsAny(new String[]{"a", "b", "ab", "c"}, "abc")} -> {@code true}</p>
+     * <p>{@code containsAny(new String[]{"a", "b", "c"}, "def")} -> {@code false}</p>
      */
     public static boolean containsAny(String[] matchingArray, String testString) {
         for (String s : matchingArray) {
@@ -130,7 +131,7 @@ public final class Utils {
      * @param filter the condition to filter the values (can be {@code null} for no filtering)
      * @param map the nested map to process
      * @return a set of unique values matching the specified property and filter
-     * <p>Example:</p>
+     * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * // Input nested map:
      * Map&lt;String, Map&lt;String, String&gt;&gt; map = Map.of(
@@ -165,7 +166,7 @@ public final class Utils {
     /**
      * Recursively prints a nested map in a JSON-like formatted structure. Allows for infinite nesting.
      * @param map the nested map to print
-     * <p>Example:</p>
+     * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * {
      *   "Key1": {

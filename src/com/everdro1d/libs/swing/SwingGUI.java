@@ -383,7 +383,8 @@ public class SwingGUI {
      * Sets the progress bar in percentage format "1-100%", while ensuring non-jumpy values (only increases not decreases).
      * @param i current progress percentage
      * @param progressBar progressBar to change
-     * Use case example: download ~X mb out of 100 mb where the estimated progress varies.
+     * <p><strong>Example Use Case:</strong></p>
+     * Download ~X mb out of 100 mb where the estimated progress fluctuates.
      */
     public static void setProgressPercent(int i, JProgressBar progressBar) {
         if (i < 0 || i > 100) {

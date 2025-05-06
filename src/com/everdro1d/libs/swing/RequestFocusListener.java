@@ -30,8 +30,8 @@ public class RequestFocusListener implements AncestorListener
     /**
      *  Convenience constructor. The listener is only used once, then it is
      *  removed from the component.
-     *  <p>
-     *  Example: button1.addAncestorListener(new RequestFocusListener());
+     *  <p><strong>Example:</strong></p>
+     *  {@code button1.addAncestorListener(new RequestFocusListener());}
      */
     public RequestFocusListener()
     {

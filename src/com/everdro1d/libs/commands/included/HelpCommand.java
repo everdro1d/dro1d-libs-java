@@ -16,7 +16,7 @@ import com.everdro1d.libs.commands.*;
  * To use this command, include {@code -help} as an argument when running the application.
  * The command will output a list of valid commands to the console.
  * </p>
- * <h2>Example:</h2>
+ * <p><strong>Example:</strong></p>
  * <blockquote><pre>
  * CommandManager commandManager = new CommandManager();
  * commandManager.executeCommand("-help");

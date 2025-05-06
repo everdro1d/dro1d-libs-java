@@ -105,7 +105,7 @@ public class CommandManager {
 
     /**
      * Add a command to the map. If the key already exists, the command will be replaced.
-     * <p>Example:</p>
+     * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * appendCommand("-help", new HelpCommand());
      * </pre></blockquote>
@@ -120,7 +120,7 @@ public class CommandManager {
 
     /**
      * Add a map of custom commands to the command map.
-     * <p>Example:</p>
+     * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * yourCommandMap.put("-help", new HelpCommand());
      * </pre></blockquote>
