@@ -215,6 +215,29 @@ public final class Utils {
         }
     }
 
+    /**
+     * Prints each element of the provided list to the console in a newline.
+     * <p>
+     * This method iterates through the list and prints each element on a
+     * new line for better readability.
+     * </p>
+     *
+     * @param list the list of elements to print
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * List<String> items = List.of("Item1", "Item2", "Item3");
+     * Utils.printlnList(items);
+     * // Output:
+     * // Item1
+     * // Item2
+     * // Item3
+     * </pre></blockquote>
+     */
+    public static void printlnList(List<?> list) {
+        for (Object o : list) {
+            System.out.println(o);
+        }
+    }
 
     /**
      * Executes a command in the system shell.
