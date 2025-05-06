@@ -37,6 +37,11 @@ import static com.everdro1d.libs.io.Files.getJarPath;
  */
 public final class ApplicationCore {
 
+    // Private constructor to prevent instantiation.
+    private ApplicationCore() {
+        throw new UnsupportedOperationException("ApplicationCore class cannot be instantiated");
+    }
+
     /**
      * Processes and executes CLI arguments using the provided {@link CommandManager}.
      * @param args the array of CLI arguments to process
