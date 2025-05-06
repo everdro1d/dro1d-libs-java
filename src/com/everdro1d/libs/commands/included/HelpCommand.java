@@ -3,6 +3,7 @@
 package com.everdro1d.libs.commands.included;
 
 import com.everdro1d.libs.commands.*;
+import com.everdro1d.libs.core.Utils;
 
 /**
  * A {@code -help} command that prints all valid CLI argument commands when executed.
@@ -25,15 +26,40 @@ import com.everdro1d.libs.commands.*;
  */
 public class HelpCommand implements CommandInterface {
 
+    private String description;
+
+    /**
+     * Constructs a new {@code HelpCommand} instance without a description.
+     * This command, when executed, prints all valid CLI arguments and their descriptions.
+     * managed by the {@link CommandManager}.
+     * @see #setDescription(String) 
+     */
+    public HelpCommand() {}
+
     /**
      * Constructs a new {@code HelpCommand} instance.
-     * This command, when executed, prints all valid CLI arguments
+     * This command, when executed, prints all valid CLI arguments and their descriptions.
      * managed by the {@link CommandManager}.
      */
-    public HelpCommand() {};
+    public HelpCommand(String description) {
+        this.description = description;
+    }
 
     @Override
     public void execute(CommandManager commandManager) {
-        System.out.println("List of valid commands: " + commandManager.getValidCommands());
+        System.out.println("List of valid commands: ");
+        Utils.printlnList(
+                commandManager.getValidCommandsWithDescription()
+        );
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

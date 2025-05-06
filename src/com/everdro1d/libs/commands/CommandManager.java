@@ -4,9 +4,7 @@ package com.everdro1d.libs.commands;
 
 import com.everdro1d.libs.commands.included.HelpCommand;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * CommandManager is a tool for managing CLI arguments and their associated commands.
@@ -59,7 +57,7 @@ public class CommandManager {
     private static final Map<String, CommandInterface> COMMANDS_MAP = new HashMap<>();
 
     static { // Default commands
-        COMMANDS_MAP.put("-help", new HelpCommand());
+        COMMANDS_MAP.put("-help", new HelpCommand("displays a list of valid commands"));
     }
 
     /**
@@ -101,6 +99,40 @@ public class CommandManager {
      */
     public Set<String> getValidCommands() {
         return COMMANDS_MAP.keySet();
+    }
+
+    /**
+     * Retrieves a list of valid commands along with their descriptions.
+     * <p>
+     * Each entry in the returned list is formatted as:
+     * {@code commandKey: commandDescription}.
+     * </p>
+     * <p>
+     * This method is useful for displaying all available commands and their purposes
+     * in a user-friendly format, such as in a help menu or CLI output.
+     * </p>
+     *
+     * @return a {@code List<String>} where each element represents a command and its description
+     *         in the format {@code commandKey: commandDescription}.
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * // Assuming the CommandManager has the following commands:
+     * // -help: displays a list of valid commands
+     * // -debug: enables debug mode
+     *
+     * List<String> commandsWithDescriptions = commandManager.getValidCommandsWithDescription();
+     * System.out.println(commandsWithDescriptions);
+     * // Output:
+     * // [-help: displays a list of valid commands, -debug: enables debug mode]
+     * </pre></blockquote>
+     */
+    public List<String> getValidCommandsWithDescription() {
+        List<String> s = new ArrayList<>();
+        getCommandMap().forEach((key, command) ->
+                s.add(key + ": " + command.getDescription())
+        );
+
+        return s;
     }
 
     /**
