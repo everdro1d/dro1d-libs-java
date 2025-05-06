@@ -62,9 +62,9 @@ public class LocaleManager {
     private String currentLocale = "eng";
     private boolean localeMapUpdated = false;
 
-    public LocaleManager(Class<?> clazz) {
+    public LocaleManager(Class<?> clazz, String developerName) {
         localeDirPath = Path.of(
-                ApplicationCore.getApplicationConfigDirectory(clazz) + File.separator + "locale"
+                ApplicationCore.getApplicationConfigDirectory(clazz, developerName) + File.separator + "locale"
         );
         initValidLocalesMap();
     }
