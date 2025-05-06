@@ -205,7 +205,7 @@ public class DebugConsoleWindow extends JFrame {
                     leftNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel(titleText);
-                    int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
+                    int mac = ApplicationCore.detectOS().equals("mac") ? 30 : 0;
                     titleLabel.setPreferredSize(
                             new Dimension((int) titleLabel.getPreferredSize().getWidth() * 2 - mac, BORDER_PADDING_HEIGHT - 10)
                     );

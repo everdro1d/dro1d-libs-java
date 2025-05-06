@@ -166,12 +166,12 @@ public final class Files {
 
             // Open the directory and select the file
             String os = ApplicationCore.detectOS();
-            if (os.equals("Windows")) {
+            if (os.equals("windows")) {
                 new ProcessBuilder("explorer.exe", "/select,", path).start();
-            } else if (os.equals("macOS")) {
+            } else if (os.equals("mac")) {
                 new ProcessBuilder("open", "-R", path).start();
             } else {
-                System.err.println("Unsupported OS: " + ApplicationCore.detectOS() + ". Cannot select in file manager.");
+                System.err.println("Unsupported OS: " + System.getProperty("os.name")+ ". Cannot select in file manager.");
             }
         } catch (IOException e) {
             e.printStackTrace(System.err);
@@ -184,13 +184,13 @@ public final class Files {
      * @param path the file path to validate
      * @return {@code true} if the path is valid and exists, {@code false} otherwise
      */
-    private static boolean validateFilePath(String path) {
+    public static boolean validateFilePath(String path) {
         if (path == null || path.isEmpty()) return false;
 
         String os = ApplicationCore.detectOS();
-        if (os.equals("Windows")) {
+        if (os.equals("windows")) {
             if (!(path.contains(":") && path.contains("\\"))) return false;
-        } else if (os.equals("macOS") || os.equals("Unix")) {
+        } else if (os.equals("mac") || os.equals("unix")) {
             if (!path.contains("/") || path.contains(":")) return false;
         } else {
             System.err.println("Unsupported OS: " + os + ". Cannot check file path. Assuming true.");

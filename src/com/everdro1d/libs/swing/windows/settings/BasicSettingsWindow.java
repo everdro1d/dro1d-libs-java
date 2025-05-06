@@ -228,7 +228,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                     upperNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel(titleText);
-                    int mac = ApplicationCore.detectOS().equals("macOS") ? 30 : 0;
+                    int mac = ApplicationCore.detectOS().equals("mac") ? 30 : 0;
                     titleLabel.setPreferredSize(
                             new Dimension((int) upperNorthPanel.getPreferredSize().getWidth() - mac, BORDER_PADDING_HEIGHT - 10)
                     );
