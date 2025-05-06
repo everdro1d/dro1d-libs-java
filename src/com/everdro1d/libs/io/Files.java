@@ -145,7 +145,7 @@ public class Files {
 
         try {
             if (!new File(path).exists()) {
-                System.err.println("File or Directory does not exist. Cannot select in file manager.");
+                System.err.println("File or Directory does not exist. Cannot open in file manager.");
                 return;
             } else if (directory.equals(path)) {
                 Desktop.getDesktop().open(new java.io.File(directory)); // Open the directory
