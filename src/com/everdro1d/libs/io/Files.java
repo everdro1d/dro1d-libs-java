@@ -20,6 +20,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The <strong>Files</strong> class provides utility methods for file and directory operations.
+ *
+ * <p>This class includes methods for retrieving JAR file paths, checking file usage,
+ * deleting files, retrieving file names, opening files in the file manager,
+ * validating file paths, and loading or saving key-value maps to files.</p>
+ *
+ * <p><strong>Key Features:</strong></p>
+ * <ul>
+ *   <li>Retrieve the absolute path or directory of a JAR file.</li>
+ *   <li>Check if a file is currently in use by attempting a write lock.</li>
+ *   <li>Delete files with optional debug output.</li>
+ *   <li>Retrieve all file names or matching file names in a directory.</li>
+ *   <li>Open files or directories in the system's default file manager.</li>
+ *   <li>Validate file paths for different operating systems.</li>
+ *   <li>Load and save key-value pairs from/to files in `key=value` format.</li>
+ * </ul>
+ * 
+ * <p><strong>Note:</strong> This class cannot be instantiated as it is designed to be a utility class.</p>
+ */
 public final class Files {
 
     // Private constructor to prevent instantiation.
