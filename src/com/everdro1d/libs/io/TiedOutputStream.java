@@ -7,13 +7,14 @@ import java.io.PrintStream;
 
 /**
  * TiedOutputStream is a class that ties the standard output and error stream to a
- * single output stream. This is useful for when you need the output to be printed
- * to the console and to another output stream at the same time.
+ * single output stream and writes to both this stream and the original standard output.
+ * This is useful for when you need the output to be printed to the console and to
+ * another output stream at the same time.
  *
  * <p><strong>Usage example:</strong></p>
  * <blockquote><pre>
  * PrintStream debugPrintStream = new PrintStream(new OutputStream() {
- *     *@Override
+ *     {@code @Override}
  *     public void write(int b) {
  *         debugTextArea.append(String.valueOf((char)b));
  *         debugTextArea.setCaretPosition(debugTextArea.getDocument().getLength());
@@ -21,12 +22,12 @@ import java.io.PrintStream;
  * });
  *
  * TiedOutputStream tiedOutputStream = new TiedOutputStream(debugPrintStream);
- * TiedOutputStream.tieOutputStreams(tiedOutputStream);
+ * tiedOutputStream.tieOutputStreams();
  * debugFrame.addWindowListener(new java.awt.event.WindowAdapter() {
- *     *@Override
- *         public void windowClosed(java.awt.event.WindowEvent windowEvent) {
- *             TiedOutputStream.resetOutputStreams(tiedOutputStream);
- *         }
+ *     {@code @Override}
+ *     public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+ *         tiedOutputStream.resetOutputStreams();
+ *     }
  * });
  * </pre></blockquote>
  */
@@ -40,7 +41,7 @@ public class TiedOutputStream extends PrintStream {
      * Creates a new TiedOutputStream.
      * @param outputStream the output stream to tie to
      * <p>Note:</p>
-     *     <p>This needs to call tieOutputStreams and then
+     *     <p>This needs to call tieOutputStreams to start and then
      *        resetOutputStreams when finished. </p>
      * @see #tieOutputStreams()
      * @see #resetOutputStreams()
@@ -52,16 +53,31 @@ public class TiedOutputStream extends PrintStream {
         originalErrorStream = System.err;
     }
 
+    /**
+     * Retrieves the original standard output stream (System.out) before it was tied.
+     *
+     * @return the original PrintStream for standard output
+     */
     public PrintStream getOriginalOutputStream() {
         return originalOutputStream;
     }
 
+    /**
+     * Retrieves the original standard error stream (System.err) before it was tied.
+     *
+     * @return the original PrintStream for standard error
+     */
     public PrintStream getOriginalErrorStream() {
         return originalErrorStream;
     }
 
     /**
-     * Ties the output stream to the standard output and error stream.
+     * Ties the current output stream to both System.out and System.err.
+     *
+     * <p>This method replaces the standard output and error streams with this instance,
+     * allowing all output to be redirected to the tied output stream.</p>
+     *
+     * @see #resetOutputStreams()
      */
     public void tieOutputStreams() {
         try {
@@ -73,7 +89,12 @@ public class TiedOutputStream extends PrintStream {
     }
 
     /**
-     * Resets the System.out and System.err to the standard output and error stream.
+     * Resets System.out and System.err to their original streams.
+     *
+     * <p>This method should be called when the tied output stream is no longer needed,
+     * to restore the original behavior of the standard output and error streams.</p>
+     *
+     * @see #tieOutputStreams()
      */
     public void resetOutputStreams() {
         this.close();
@@ -81,10 +102,23 @@ public class TiedOutputStream extends PrintStream {
         System.setErr(originalErrorStream);
     }
 
+    /**
+     * Enables or disables the tied output stream.
+     *
+     * <p>When disabled, the tied output stream will not output anything,
+     * and the original output stream will handle all output alone.</p>
+     *
+     * @param enabled true to enable the tied output stream, false to disable it
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /**
+     * Checks whether the tied output stream is currently enabled.
+     *
+     * @return true if the tied output stream is enabled, false otherwise
+     */
     public boolean isEnabled() {
         return this.enabled;
     }
