@@ -31,8 +31,10 @@ import java.io.PrintStream;
  * </pre></blockquote>
  */
 public class TiedOutputStream extends PrintStream {
-    private final PrintStream sout;
-    private final PrintStream serr;
+    private boolean enabled = true;
+
+    private final PrintStream originalOutputStream;
+    private final PrintStream originalErrorStream;
 
     /**
      * Creates a new TiedOutputStream.
@@ -40,32 +42,31 @@ public class TiedOutputStream extends PrintStream {
      * <p>Note:</p>
      *     <p>This needs to call tieOutputStreams and then
      *        resetOutputStreams when finished. </p>
-     * @see #tieOutputStreams(TiedOutputStream)
-     * @see #resetOutputStreams(TiedOutputStream)
+     * @see #tieOutputStreams()
+     * @see #resetOutputStreams()
      */
     public TiedOutputStream(OutputStream outputStream) {
         super(outputStream);
         //save standard output
-        sout = System.out;
-        serr = System.err;
+        originalOutputStream = System.out;
+        originalErrorStream = System.err;
     }
 
     public PrintStream getOriginalOutputStream() {
-        return sout;
+        return originalOutputStream;
     }
 
     public PrintStream getOriginalErrorStream() {
-        return serr;
+        return originalErrorStream;
     }
 
     /**
      * Ties the output stream to the standard output and error stream.
-     * @param tiedOutputStream the output stream to tie to
      */
-    public static void tieOutputStreams(TiedOutputStream tiedOutputStream) {
+    public void tieOutputStreams() {
         try {
-            System.setErr(tiedOutputStream);
-            System.setOut(tiedOutputStream);
+            System.setOut(this);
+            System.setErr(this);
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
@@ -73,37 +74,44 @@ public class TiedOutputStream extends PrintStream {
 
     /**
      * Resets the System.out and System.err to the standard output and error stream.
-     * @param tiedOutputStream the output stream to reset
      */
-    public static void resetOutputStreams(TiedOutputStream tiedOutputStream) {
-        tiedOutputStream.close();
-        System.setOut(tiedOutputStream.getOriginalOutputStream());
-        System.setErr(tiedOutputStream.getOriginalErrorStream());
+    public void resetOutputStreams() {
+        this.close();
+        System.setOut(originalOutputStream);
+        System.setErr(originalErrorStream);
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
     }
 
     //Override all the print methods
     @Override
     public void print(Object obj) {
-        super.print(obj);
-        sout.print(obj);
+        if (enabled) super.print(obj);
+        originalOutputStream.print(obj);
     }
 
     @Override
     public void println(String obj) {
-        super.println(obj);
-        sout.println(obj);
+        if (enabled) super.println(obj);
+        originalOutputStream.println(obj);
     }
 
     @Override
     public PrintStream printf(String format, Object... args) {
-        super.printf(format, args);
-        sout.printf(format, args);
+        if (enabled) super.printf(format, args);
+        originalOutputStream.printf(format, args);
         return this;
     }
 
     @Override
     public void println(Object args) {
-        super.println(args);
-        sout.println(args);
+        if (enabled) super.println(args);
+        originalOutputStream.println(args);
     }
 }
