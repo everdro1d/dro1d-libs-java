@@ -14,9 +14,35 @@ import java.nio.file.Path;
 import java.util.*;
 
 /**
- * Manages the locales for the application.
- * <p>
- * Mainly meant for swing gui applications, but can be used for other types that need text on the UI as well.
+ * The {@code LocaleManager} class is responsible for managing application locales, primarily for Swing GUI applications.
+ * It provides functionality to load, save, and manipulate locale data, enabling dynamic text updates for UI components.
+ *
+ * <p><strong>Key Features:</strong></p>
+ * <ul>
+ *   <li>Manages locale files stored in JSON format.</li>
+ *   <li>Supports ISO 639-3 language codes for locale identification.</li>
+ *   <li>Allows dynamic reloading of locales and notifies listeners of locale changes.</li>
+ *   <li>Provides methods to add, remove, and retrieve locale-specific text for UI components.</li>
+ *   <li>Ensures locale data is saved on application shutdown if updated.</li>
+ * </ul>
+ *
+ * <p><strong>Usage Examples:</strong></p>
+ * <blockquote><pre>
+ * // Initialize the LocaleManager
+ * LocaleManager localeManager = new LocaleManager(Main.class, "ImADeveloper");
+ *
+ * // Load a locale file
+ * localeManager.loadLocaleFromFile("locale_eng");
+ *
+ * // Retrieve text for a specific UI component
+ * String buttonText = localeManager.getVariableSpecificMap("MainWindow", "button1", "text");
+ *
+ * // Save updated locale data
+ * localeManager.saveLocaleToFile("locale_eng", localeManager.getLocaleMap(), true);
+ * </pre></blockquote>
+ *
+ * <p><strong>Note:</strong> This class is designed to work with applications that have text based UI components, GUI or CLI.</p>
+ * @see #LocaleMap
  */
 public class LocaleManager {
 
@@ -25,8 +51,10 @@ public class LocaleManager {
     // Uses tree map to sort the locales in alphabetical order by their ISO 639 codes
     Map<String, String> validLocaleMap = new TreeMap<>();
 
-    /** The map of the locale, with the outermost key being the Class Name of the UI component, and the second key being the
-     * name of the component, and the third key being the descriptive variable and the value being the text to display.
+    /**
+     * The map of the locale, with the outermost key being the Class Name of the UI component,
+     * the second key being the name of the component, and the third key being the descriptive
+     * variable and the value being the text to display.
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * {
@@ -61,6 +89,13 @@ public class LocaleManager {
     private String currentLocale = "eng";
     private boolean localeMapUpdated = false;
 
+    /**
+     * Initializes the LocaleManager with the specified class and developer directory name.
+     * Sets up the locale directory path and initializes the valid locales map.
+     *
+     * @param clazz         the class associated with the application
+     * @param developerName the developer's name for directory organization
+     */
     public LocaleManager(Class<?> clazz, String developerName) {
         localeDirPath = Path.of(
                 ApplicationCore.getApplicationConfigDirectory(clazz, developerName) + File.separator + "locale"
@@ -68,6 +103,10 @@ public class LocaleManager {
         initValidLocalesMap();
     }
 
+    /**
+     * Initializes the map of valid locales using ISO 639-3 codes.
+     * Sorts the codes alphabetically and fixes or adds specific locale names.
+     */
     private void initValidLocalesMap() {
         String[] codes = getISOCodes();
         Arrays.sort(codes);
@@ -80,6 +119,9 @@ public class LocaleManager {
         addValidLocales();
     }
 
+    /**
+     * Fixes specific locale names in the valid locale map to ensure proper display.
+     */
     private void fixValidLocaleNames() {
         // Fixes
         validLocaleMap.put("ces", "Czech");
@@ -102,17 +144,19 @@ public class LocaleManager {
         validLocaleMap.put("zho", "Chinese");
     }
 
+    /**
+     * Adds additional valid locales to the valid locale map.
+     */
     private void addValidLocales() {
         // Additions
-        validLocaleMap.put("cmn", "Mandarin");
+        // Ex: validLocaleMap.put("cmn", "Mandarin");
     }
 
     /**
-     * Loads a locale from a file. Defaults to English if the file does not exist.
-     * Expects "locale_[id]". If only "[id]", then prepends "locale_"
+     * Loads a locale from a file. Defaults to English if the file does not exist or is invalid.
+     * The file name should follow the format "locale_[id]" or "[id]" (e.g., "locale_eng" or "eng").
      *
-     * @param localeFileName The name of the file or locale to load the locale from
-     *                       **without the file extension** ex: "locale_eng" or "eng".
+     * @param localeFileName the name of the locale file (without the file extension)
      */
     public void loadLocaleFromFile(String localeFileName) {
         String fileName = localeFileName.startsWith("locale_")
@@ -183,13 +227,11 @@ public class LocaleManager {
     }
 
     /**
-     * Saves a locale file from a localeMap
-     * Expects "locale_[id]". If only "[id]", then prepends "locale_"
+     * Saves the provided locale map to a file. The file name should follow the format "locale_[id]" or "[id]".
      *
-     * @param localeFileName The name of the file or locale to load the locale from
-     *                       **without the file extension** ex: "locale_eng" or "eng".
-     * @param localeMap the locale map
-     * @param overwrite whether to overwrite any existing file with the same name
+     * @param localeFileName the name of the locale file (without the file extension)
+     * @param localeMap      the locale map to save
+     * @param overwrite      whether to overwrite an existing file with the same name
      */
     public void saveLocaleToFile(String localeFileName, Map<String, Map<String, Map<String, String>>> localeMap, boolean overwrite) {
         String fileName = localeFileName.startsWith("locale_")
@@ -252,10 +294,10 @@ public class LocaleManager {
     }
 
     /**
-     * Validates a locale code
+     * Validates whether the provided locale code exists in the valid locale map.
      *
-     * @param locale The locale code to validate
-     * @return True if the locale code is valid, false otherwise
+     * @param locale the locale code to validate
+     * @return true if the locale code is valid, false otherwise
      */
     public boolean isLocaleCodeValid(String locale) {
         boolean valid = false;
@@ -271,10 +313,10 @@ public class LocaleManager {
     }
 
     /**
-     * Checks if the locale file exists, also creates the "/locales/" directory in the jar path if it doesn't exist yet.
+     * Checks if the specified locale file exists. Creates the "/locales/" directory in application config if it does not exist.
      *
-     * @param fileName The file name of the locale ex: locale_eng
-     * @return True if the locale file exists, false otherwise
+     * @param fileName the name of the locale file (ex: locale_eng)
+     * @return true if the locale file exists, false otherwise
      */
     public boolean checkForLocaleFile(String fileName) {
         boolean exists = false;
@@ -299,7 +341,7 @@ public class LocaleManager {
     }
 
     /**
-     * Prints all valid locale codes with names to the console
+     * Prints all valid locale codes and their corresponding language names to the console.
      */
     public void printValidLocales() {
         getValidLocaleMap().forEach((k, v) -> {
@@ -310,9 +352,9 @@ public class LocaleManager {
     }
 
     /**
-     * Returns an array of ISO 639 codes for all available locales
+     * Retrieves an array of ISO 639-3 codes for all available locales.
      *
-     * @return An array of 3-letter ISO codes
+     * @return an array of 3-letter ISO 639 codes
      */
     public String[] getISOCodes() {
         Locale[] locales = Locale.getAvailableLocales();
@@ -323,6 +365,9 @@ public class LocaleManager {
         return codes;
     }
 
+    /**
+     * Ensures that the locale map is saved on application shutdown if it has been updated.
+     */
     private void localeMapUpdated() {
         if (!localeMapUpdated) {
             Runtime.getRuntime().addShutdownHook(
@@ -332,9 +377,12 @@ public class LocaleManager {
     }
 
     /**
-     *
-     * ex: localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
-     * @param newLocale
+     * Reloads the locale in the program by loading the specified locale file and notifying all active {@link LocaleChangeListener}.
+     * <p><strong>Example Usage:</strong></p>
+     * <blockquote><pre>
+     * localeManager.reloadLocaleInProgram(prefs.get("currentLocale", "eng"));
+     * </pre></blockquote>
+     * @param newLocale the new locale code to load
      */
     public void reloadLocaleInProgram(String newLocale) {
         if (!isLocaleCodeValid(newLocale)) {
@@ -348,41 +396,54 @@ public class LocaleManager {
     // Getters and Setters --------------------------------------------------------------------------------------------|
 
     /**
-     * Returns a map of all available locales
+     * Retrieves a map of all valid locales with their ISO 639 codes and language names.
      *
-     * @return A map of ISO 639 codes and their respective language names
+     * @return a map of valid locale ISO 639-3 codes and their respective language names.
      */
     public Map<String, String> getValidLocaleMap() {
         return validLocaleMap;
     }
 
     /**
-     * Gets the map of the locale, with the outermost key being the Class Name of the UI component, and the second key being the
-     * name of the component, and the third key being the descriptive variable and the value being the text to display.
+     * Retrieves the entire locale map, which contains UI component text mappings.
+     * <p>Outermost key being the Class Name of the UI component, and the inner key being the
+     * name of the component, and the third key being the descriptive variable with the value
+     * being the text to display.</p>
      *
-     * @return Map
+     * @return the locale map
      */
     public Map<String, Map<String, Map<String, String>>> getLocaleMap() {
         return LocaleMap;
     }
 
-    // TODO: organize this
-    // Modifies the LocaleMap -----------------------------------------------------------------------------------------|
     /**
-     * Sets the map of the locale, with the outermost key being the Class Name of the UI component, and the second key being the
-     * name of the component, and the third key being the descriptive variable and the value being the text to display.
+     * Sets the locale map and marks it as updated.
+     * <p>Outermost key being the Class Name of the UI component, and the inner key being the
+     * name of the component, and the third key being the descriptive variable with the value
+     * being the text to display.</p>
      *
-     * @param LocaleMap the map of the locale
+     * @param LocaleMap the new locale map to set
      */
     public void setLocaleMap(Map<String, Map<String, Map<String, String>>> LocaleMap) {
         this.LocaleMap = LocaleMap;
         localeMapUpdated();
     }
 
+    /**
+     * Retrieves a list of all class names in the locale map.
+     *
+     * @return a list of class names
+     */
     public List<String> getClassesInLocaleMap() {
         return Arrays.stream(LocaleMap.keySet().toArray(new String[0])).toList();
     }
 
+    /**
+     * Retrieves a list of all component names for a specific class in the locale map.
+     *
+     * @param className the class name to search for
+     * @return a list of component names, or an empty list if the class is not found
+     */
     public List<String> getComponentsInClassMap(String className) {
         if (!LocaleMap.containsKey(className)) {
             System.err.println("Class not found in locale map: " + className);
@@ -392,6 +453,13 @@ public class LocaleManager {
         return Arrays.stream(LocaleMap.get(className).keySet().toArray(new String[0])).toList();
     }
 
+    /**
+     * Retrieves a list of all variable names for a specific component in the locale map.
+     *
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @return a list of variable names, or an empty list if the class or component is not found
+     */
     public List<String> getVariablesInComponentMap(String className, String componentName) {
         if (!LocaleMap.containsKey(className)) {
             System.err.println("Class not found in locale map: " + className);
@@ -406,10 +474,10 @@ public class LocaleManager {
     }
 
     /**
-     * Gets the map of the locale for a specific class
+     * Retrieves the locale map for a specific class.
      *
-     * @param className The class name of the inner map to get
-     * @return Map
+     * @param className the class name to retrieve
+     * @return the locale map for the specified class, or an empty map if the class is not found
      */
     public Map<String, Map<String, String>> getClassSpecificMap(String className) {
         if (!LocaleMap.containsKey(className)) {
@@ -421,10 +489,10 @@ public class LocaleManager {
     }
 
     /**
-     * Gets all variables within a class specific map
+     * Retrieves all variables within a specific class's locale map.
      *
-     * @param className The class name to get
-     * @return Map
+     * @param className the class name to retrieve
+     * @return a map of all variables and their text values, or an empty map if the class is not found
      */
     public Map<String, String> getAllVariablesWithinClassSpecificMap(String className) {
         if (!LocaleMap.containsKey(className)) {
@@ -440,10 +508,10 @@ public class LocaleManager {
     }
 
     /**
-     * Adds a map to the locale for a specific class
+     * Adds a locale map for a specific class.
      *
-     * @param className The class name to set
-     * @param map       the map of the locale
+     * @param className the class name to add
+     * @param map       the locale map to add
      */
     public void addClassSpecificMap(String className, Map<String, Map<String, String>> map) {
         LocaleMap.put(className, map);
@@ -451,9 +519,9 @@ public class LocaleManager {
     }
 
     /**
-     * Removes a map to the locale for a specific class
+     * Removes the locale map for a specific class.
      *
-     * @param className The class name to remove
+     * @param className the class name to remove
      */
     public void removeClassSpecificMap(String className) {
         LocaleMap.remove(className);
@@ -461,11 +529,11 @@ public class LocaleManager {
     }
 
     /**
-     * Gets the map of the locale for a specific component
+     * Retrieves the locale map for a specific component.
      *
-     * @param className     The class name of the component
-     * @param componentName The name of the component
-     * @return Map
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @return the locale map for the specified component, or an empty map if not found
      */
     public Map<String, String> getComponentSpecificMap(String className, String componentName) {
         if (!LocaleMap.containsKey(className)) {
@@ -481,11 +549,11 @@ public class LocaleManager {
     }
 
     /**
-     * Adds a map to the locale for a specific component
+     * Adds a locale map for a specific component.
      *
-     * @param className     The class name of the component
-     * @param componentName The name of the component
-     * @param map           the map of the locale
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @param map           the locale map to add
      */
     public void addComponentSpecificMap(String className, String componentName, Map<String, String> map) {
         if (!LocaleMap.containsKey(className)) {
@@ -498,10 +566,10 @@ public class LocaleManager {
     }
 
     /**
-     * Removes a map to the locale for a specific  component
+     * Removes the locale map for a specific component.
      *
-     * @param className     The class name of the component
-     * @param componentName The name of the component to remove
+     * @param className     the class name of the component
+     * @param componentName the name of the component to remove
      */
     public void removeComponentSpecificMap(String className, String componentName) {
         if (!LocaleMap.containsKey(className)) {
@@ -514,12 +582,12 @@ public class LocaleManager {
     }
 
     /**
-     * Gets the text of the locale for a specific  variable
+     * Retrieves the text for a specific variable in the locale map.
      *
-     * @param className     The class name of the  component
-     * @param componentName The name of the  component
-     * @param variableName  The name of the  variable
-     * @return String
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @param variableName  the name of the variable
+     * @return the text for the specified variable, or null if not found
      */
     public String getVariableSpecificMap(String className, String componentName, String variableName) {
         if (!LocaleMap.containsKey(className)) {
@@ -539,12 +607,12 @@ public class LocaleManager {
     }
 
     /**
-     * Adds a map to the locale for a specific  variable
+     * Adds a text value for a specific variable in the locale map.
      *
-     * @param className     The class name of the  component
-     * @param componentName The name of the  component
-     * @param variableName  The name of the  variable
-     * @param text          the text of the locale
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @param variableName  the name of the variable
+     * @param text          the text value to add
      */
     public void addVariableSpecificMap(String className, String componentName, String variableName, String text) {
         if (!LocaleMap.containsKey(className)) {
@@ -561,11 +629,11 @@ public class LocaleManager {
     }
 
     /**
-     * Removes a map to the locale for a specific  variable
+     * Removes a text value for a specific variable in the locale map.
      *
-     * @param className     The class name of the component
-     * @param componentName The name of the component
-     * @param variableName  The name of the variable to remove
+     * @param className     the class name of the component
+     * @param componentName the name of the component
+     * @param variableName  the name of the variable to remove
      */
     public void removeVariableSpecificMap(String className, String componentName, String variableName) {
         if (!LocaleMap.containsKey(className)) {
@@ -582,31 +650,46 @@ public class LocaleManager {
     }
 
     /**
-     * Gets the path to the locales directory
+     * Retrieves the path to the locale directory.
      *
-     * @return Path
+     * @return the path to the locale directory
      */
     public Path getLocaleDirPath() {
         return localeDirPath;
     }
 
     /**
-     * Sets the path to the locales directory
+     * Sets the path to the locale directory.
      *
-     * @param localeDirPath the path to the locales directory
+     * @param localeDirPath the new path to the locale directory
      */
     public void setLocaleDirPath(Path localeDirPath) {
         this.localeDirPath = localeDirPath;
     }
 
+    /**
+     * Retrieves the current locale code.
+     *
+     * @return the current locale code
+     */
     public String getCurrentLocale() {
         return currentLocale;
     }
 
+    /**
+     * Retrieves the name of the current locale.
+     *
+     * @return the name of the current locale
+     */
     public String getCurrentLocaleName() {
         return validLocaleMap.get(currentLocale);
     }
 
+    /**
+     * Retrieves a map of available locales that have corresponding files in the locale directory.
+     *
+     * @return a map of available locale codes and their respective language names
+     */
     public Map<String,String> getAvailableLocales() {
         Map<String,String> availableLocales = new HashMap<>();
         // match valid locales with locales that exist in the locale directory
@@ -619,32 +702,33 @@ public class LocaleManager {
         return availableLocales;
     }
 
-    // LocaleChangeListener methods -------------------------------------------------------------------------------|
+    // LocaleChangeListener Methods -----------------------------------------------------------------------------------|
 
     /**
-     * Adds a listener to the list of listeners
-     * @param listener The listener to add
+     * Adds a listener to be notified of locale changes.
+     *
+     * @param listener the listener to add
      */
     public void addLocaleChangeListener(LocaleChangeListener listener) {
         localeChangeListeners.add(listener);
     }
 
     /**
-     * Removes a listener from the list of listeners
-     * @param listener The listener to remove
+     * Removes a listener from being notified of locale changes.
+     *
+     * @param listener the listener to remove
      */
     public void removeLocaleChangeListener(LocaleChangeListener listener) {
         localeChangeListeners.remove(listener);
     }
 
     /**
-     * Notifies all listeners of a locale change
+     * Notifies all registered listeners of a locale change.
      */
     public void notifyLocaleChange() {
         for (LocaleChangeListener listener : localeChangeListeners) {
             listener.onLocaleChange();
         }
     }
-
 
 }
