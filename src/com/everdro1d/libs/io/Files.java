@@ -214,7 +214,7 @@ public final class Files {
      * // key1=value1
      * // key2=value2
      *
-     * Map<String, String> map = Files.loadMapFromFile("example.txt");
+     * Map&lt;String, String&gt; map = Files.loadMapFromFile("example.txt");
      * System.out.println(map); // {key1=value1, key2=value2}
      * </pre></blockquote>
      */
@@ -264,7 +264,7 @@ public final class Files {
      * @throws RuntimeException if an error occurs while writing to the file
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
-     * Map<String, String> map = new HashMap<>();
+     * Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
      * map.put("key1", "value1");
      * map.put("key2", "value2");
      *
