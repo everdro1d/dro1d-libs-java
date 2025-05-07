@@ -33,6 +33,8 @@ import java.io.PrintStream;
  */
 public class TiedOutputStream extends PrintStream {
     private boolean enabled = true;
+    private boolean copy = true;
+    private boolean oldCopy = true;
 
     private final PrintStream originalOutputStream;
     private final PrintStream originalErrorStream;
@@ -43,7 +45,7 @@ public class TiedOutputStream extends PrintStream {
      * <p>Note:</p>
      *     <p>This needs to call tieOutputStreams to start and then
      *        resetOutputStreams when finished. </p>
-     * @see #tieOutputStreams()
+     * @see #tieOutputStreams(boolean)
      * @see #resetOutputStreams()
      */
     public TiedOutputStream(OutputStream outputStream) {
@@ -76,10 +78,11 @@ public class TiedOutputStream extends PrintStream {
      *
      * <p>This method replaces the standard output and error streams with this instance,
      * allowing all output to be redirected to the tied output stream.</p>
-     *
+     * @param copy true to copy the output to the original output stream, false to disable copying
      * @see #resetOutputStreams()
      */
-    public void tieOutputStreams() {
+    public void tieOutputStreams(boolean copy) {
+        this.copy = copy;
         try {
             System.setOut(this);
             System.setErr(this);
@@ -94,7 +97,7 @@ public class TiedOutputStream extends PrintStream {
      * <p>This method should be called when the tied output stream is no longer needed,
      * to restore the original behavior of the standard output and error streams.</p>
      *
-     * @see #tieOutputStreams()
+     * @see #tieOutputStreams(boolean)
      */
     public void resetOutputStreams() {
         this.close();
@@ -112,6 +115,12 @@ public class TiedOutputStream extends PrintStream {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if (enabled) {
+            this.copy = oldCopy;
+        } else {
+            oldCopy = this.copy;
+            this.copy = false;
+        }
     }
 
     /**
@@ -126,39 +135,61 @@ public class TiedOutputStream extends PrintStream {
     //Override all the print methods
     @Override
     public void print(Object obj) {
-        if (enabled) super.print(obj);
-        originalOutputStream.print(obj);
-    }
-
-    @Override
-    public void println(String obj) {
-        if (enabled) super.println(obj);
-        originalOutputStream.println(obj);
+        if (enabled) {
+            super.print(obj);
+            if (copy) {
+                originalOutputStream.print(obj);
+            }
+        } else {
+            originalOutputStream.print(obj);
+        }
     }
 
     @Override
     public PrintStream printf(String format, Object... args) {
-        if (enabled) super.printf(format, args);
-        originalOutputStream.printf(format, args);
+        if (enabled) {
+            super.printf(format, args);
+            // no clue why, but if we include copy here, it
+            // will print to the original output stream twice
+        } else {
+            originalOutputStream.printf(format, args);
+        }
         return this;
     }
 
     @Override
     public void println(Object args) {
-        if (enabled) super.println(args);
-        originalOutputStream.println(args);
+        if (enabled) {
+            super.println(args);
+            if (copy) {
+                originalOutputStream.println(args);
+            }
+        } else {
+            originalOutputStream.println(args);
+        }
     }
 
     @Override
     public void write(int b) {
-        if (enabled) super.write(b);
-        originalOutputStream.write(b);
+        if (enabled) {
+            super.write(b);
+            if (copy) {
+                originalOutputStream.write(b);
+            }
+        } else {
+            originalOutputStream.write(b);
+        }
     }
 
     @Override
     public void write(byte[] b, int off, int len) {
-        if (enabled) super.write(b, off, len);
-        originalOutputStream.write(b, off, len);
+        if (enabled) {
+            super.write(b, off, len);
+            if (copy) {
+                originalOutputStream.write(b, off, len);
+            }
+        } else {
+            originalOutputStream.write(b, off, len);
+        }
     }
-
 }
