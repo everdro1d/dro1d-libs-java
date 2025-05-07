@@ -34,7 +34,6 @@ import java.io.PrintStream;
 public class TiedOutputStream extends PrintStream {
     private boolean enabled = true;
     private boolean copy = true;
-    private boolean oldCopy = true;
 
     private final PrintStream originalOutputStream;
     private final PrintStream originalErrorStream;
@@ -115,12 +114,6 @@ public class TiedOutputStream extends PrintStream {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if (enabled) {
-            this.copy = oldCopy;
-        } else {
-            oldCopy = this.copy;
-            this.copy = false;
-        }
     }
 
     /**
