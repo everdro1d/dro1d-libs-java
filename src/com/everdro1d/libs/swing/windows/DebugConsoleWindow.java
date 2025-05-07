@@ -272,11 +272,14 @@ public class DebugConsoleWindow extends JFrame {
                 debugTextArea.setCaretColor(debugTextArea.getBackground());
 
                 TiedOutputStream tiedOutputStream = getTiedOutputStream();
-                TiedOutputStream.tieOutputStreams(tiedOutputStream);
+                tiedOutputStream.tieOutputStreams(true);
 
-                Runtime.getRuntime().addShutdownHook(
-                        new Thread(() -> TiedOutputStream.resetOutputStreams(tiedOutputStream))
-                );
+                this.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        tiedOutputStream.resetOutputStreams();
+                    }
+                });
 
                 debugScrollPane = new JScrollPane(debugTextArea);
                 centerPanel.add(debugScrollPane, BorderLayout.CENTER);
