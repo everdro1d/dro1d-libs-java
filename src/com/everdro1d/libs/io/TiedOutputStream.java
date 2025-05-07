@@ -117,12 +117,30 @@ public class TiedOutputStream extends PrintStream {
     }
 
     /**
+     * Sets whether the tied output stream should copy output to the original output stream.
+     * <p>Note: Tied output stream needs to be enabled to copy</p>
+     * @param copy true to enable copying, false to disable it
+     */
+    public void setCopyEnabled(boolean copy) {
+        this.copy = copy;
+    }
+
+    /**
      * Checks whether the tied output stream is currently enabled.
      *
      * @return true if the tied output stream is enabled, false otherwise
      */
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    /**
+     * Checks whether the tied output stream is set to copy output to the original output stream.
+     *
+     * @return true if copying is enabled, false otherwise
+     */
+    public boolean isCopyEnabled() {
+        return this.copy;
     }
 
     //Override all the print methods
