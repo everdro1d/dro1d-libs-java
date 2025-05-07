@@ -74,10 +74,26 @@ public class TiedOutputStream extends PrintStream {
 
     /**
      * Ties the current output stream to both System.out and System.err.
+     * <p><strong>Overload method that enables copy by default.</strong></p>
+     *
+     * <p>This method replaces the standard output and error streams with this instance,
+     * allowing all output to be redirected to the tied output stream.</p>
+     *
+     * @see #tieOutputStreams(boolean)
+     * @see #resetOutputStreams()
+     */
+    public void tieOutputStreams() {
+        tieOutputStreams(true);
+    }
+
+    /**
+     * Ties the current output stream to both System.out and System.err.
      *
      * <p>This method replaces the standard output and error streams with this instance,
      * allowing all output to be redirected to the tied output stream.</p>
      * @param copy true to copy the output to the original output stream, false to disable copying
+     *
+     * @see #tieOutputStreams()
      * @see #resetOutputStreams()
      */
     public void tieOutputStreams(boolean copy) {
@@ -143,7 +159,7 @@ public class TiedOutputStream extends PrintStream {
         return this.copy;
     }
 
-    //Override all the print methods
+    // Override all the print methods
     @Override
     public void print(Object obj) {
         if (enabled) {
