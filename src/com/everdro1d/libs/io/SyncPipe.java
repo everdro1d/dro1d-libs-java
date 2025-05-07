@@ -13,7 +13,7 @@ import java.util.List;
  *
  * <p><strong>Usage:</strong> Create an instance of the class with the desired InputStream and OutputStream,
  * and run it in a separate thread to handle the data transfer asynchronously.</p>
- * <p><strong>Example from {@link com.everdro1d.libs.core.Utils#runCommand(List, String, boolean, boolean) Utils.runCommand()}:</strong></p>
+ * <p><strong>Example implementation based on {@link com.everdro1d.libs.core.Utils#runCommand(List, String, boolean, boolean) Utils.runCommand()}:</strong></p>
  * <blockquote><pre>
  * ProcessBuilder pb = new ProcessBuilder(List.of("echo", "SyncPipe Example Text"));
  * Process p;
@@ -34,12 +34,6 @@ import java.util.List;
  *     e.printStackTrace(System.err);
  * }
  * </pre></blockquote>
- *
- * <h2>Features:</h2>
- * <ul>
- *     <li>Efficiently transfers data using a buffer.</li>
- *     <li>Handles exceptions and logs errors to {@code System.err}.</li>
- * </ul>
  */
 public class SyncPipe implements Runnable {
     private final OutputStream oStream;
