@@ -148,4 +148,17 @@ public class TiedOutputStream extends PrintStream {
         if (enabled) super.println(args);
         originalOutputStream.println(args);
     }
+
+    @Override
+    public void write(int b) {
+        if (enabled) super.write(b);
+        originalOutputStream.write(b);
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) {
+        if (enabled) super.write(b, off, len);
+        originalOutputStream.write(b, off, len);
+    }
+
 }
