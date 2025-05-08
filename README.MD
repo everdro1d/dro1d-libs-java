@@ -20,7 +20,7 @@ A collection of reusable Java libraries designed to simplify application develop
 
 ### Installation
 
-Add the JAR file as a dependency in your project. If you use LocaleManager, you will also need to add the org.json library, and if you use any of the Swing GUI stuff, you will need to add the flatlaf library.
+Add the JAR file as a dependency in your project. If you use LocaleManager, you will also need to add the org.json library, and if you use the Swing GUI stuff, you should add the flatlaf library (hit & miss regarding what breaks if you don't include it).
 
 I haven't made a release jar yet, but you can clone the repository and build it from source. To build successfully, you will need the pre-requisites mentioned above, and a Java 21+ JDK.
 
