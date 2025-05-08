@@ -40,6 +40,8 @@ public class HelpCommand implements CommandInterface {
      * Constructs a new {@code HelpCommand} instance.
      * This command, when executed, prints all valid CLI arguments and their descriptions.
      * managed by the {@link CommandManager}.
+     *
+     * @param description description of what the command does
      */
     public HelpCommand(String description) {
         this.description = description;

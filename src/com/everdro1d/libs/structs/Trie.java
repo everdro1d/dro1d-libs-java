@@ -47,7 +47,9 @@ import java.util.*;
  *     <li>Tries may require extra time and space to build or update the data structure when keys are added or deleted.</li>
  *     <li>Tries may be slower than hash tables or binary search trees for exact match operations.</li>
  * </ul>
- * <a href="https://www.geeksforgeeks.org/trie-meaning-in-dsa/">description src.</a>
+ * <a href="https://www.geeksforgeeks.org/trie-meaning-in-dsa/">Description source</a>
+ *
+ * @param <T> the type of value stored in the Trie
  */
 public class Trie<T> {
 
@@ -134,6 +136,7 @@ public class Trie<T> {
     /**
      * Inserts the given key-value pair into the Trie, creating nodes where necessary.
      * @param key key to insert
+     * @param value value to associate with the key
      */
     public void insert(String key, T value) {
         TrieNode<T> currentNode = root;
