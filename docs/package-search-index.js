@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.everdro1d.libs.commands"},{"l":"com.everdro1d.libs.commands.included"},{"l":"com.everdro1d.libs.core"},{"l":"com.everdro1d.libs.io"},{"l":"com.everdro1d.libs.locale"},{"l":"com.everdro1d.libs.structs"}];updateSearchResults();
