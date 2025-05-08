@@ -120,7 +120,7 @@ public class CommandManager {
      * // -help: displays a list of valid commands
      * // -debug: enables debug mode
      *
-     * List<String> commandsWithDescriptions = commandManager.getValidCommandsWithDescription();
+     * List&lt;String&gt; commandsWithDescriptions = commandManager.getValidCommandsWithDescription();
      * System.out.println(commandsWithDescriptions);
      * // Output:
      * // [-help: displays a list of valid commands, -debug: enables debug mode]

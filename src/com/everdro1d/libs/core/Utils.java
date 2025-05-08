@@ -225,7 +225,7 @@ public final class Utils {
      * @param list the list of elements to print
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
-     * List<String> items = List.of("Item1", "Item2", "Item3");
+     * List&lt;String&gt; items = List.of("Item1", "Item2", "Item3");
      * Utils.printlnList(items);
      * // Output:
      * // Item1

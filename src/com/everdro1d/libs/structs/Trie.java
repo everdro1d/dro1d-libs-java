@@ -18,7 +18,7 @@ import java.util.*;
  * <h2>Definition</h2>
  * Trie data structure is defined as a Tree based data structure that is used for storing some collection of strings and performing efficient search operations on them.
  * <p>The word Trie is derived from reTRIEval, which means finding something or obtaining it.
- * <h2>Properties of Trie:
+ * <h2>Properties of Trie:</h2>
  * <ul>
  *     <li>Prefix-based: Tries are prefix-based data structures that can efficiently handle prefix matching, prefix searching, and prefix deletion.</li>
  *     <li>Tree-based: Trie is a tree-structured data structure making it easily representable.</li>
