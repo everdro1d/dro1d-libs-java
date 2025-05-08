@@ -589,7 +589,7 @@ public class LocaleManager {
      * @param variableName  the name of the variable
      * @return the text for the specified variable, or null if not found
      */
-    public String getVariableSpecificMap(String className, String componentName, String variableName) {
+    public String getVariableInComponent(String className, String componentName, String variableName) {
         if (!LocaleMap.containsKey(className)) {
             System.err.println("Class not found in locale map: " + className);
             return null;
@@ -614,7 +614,7 @@ public class LocaleManager {
      * @param variableName  the name of the variable
      * @param text          the text value to add
      */
-    public void addVariableSpecificMap(String className, String componentName, String variableName, String text) {
+    public void addVariableToComponent(String className, String componentName, String variableName, String text) {
         if (!LocaleMap.containsKey(className)) {
             System.err.println("Class not found in locale map: " + className);
             return;
@@ -635,7 +635,7 @@ public class LocaleManager {
      * @param componentName the name of the component
      * @param variableName  the name of the variable to remove
      */
-    public void removeVariableSpecificMap(String className, String componentName, String variableName) {
+    public void removeVariableInComponent(String className, String componentName, String variableName) {
         if (!LocaleMap.containsKey(className)) {
             System.err.println("Class not found in locale map: " + className);
             return;
@@ -654,7 +654,7 @@ public class LocaleManager {
      *
      * @return the path to the locale directory
      */
-    public Path getLocaleDirPath() {
+    public Path getLocaleDirectoryPath() {
         return localeDirPath;
     }
 
@@ -663,7 +663,7 @@ public class LocaleManager {
      *
      * @param localeDirPath the new path to the locale directory
      */
-    public void setLocaleDirPath(Path localeDirPath) {
+    public void setLocaleDirectoryPath(Path localeDirPath) {
         this.localeDirPath = localeDirPath;
     }
 

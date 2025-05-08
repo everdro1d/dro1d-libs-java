@@ -305,7 +305,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         openLocaleDirectoryButton.setToolTipText(openLocaleDirectoryToolTipText);
                         localeSettingsPanel.add(openLocaleDirectoryButton, gbcAuto);
                         openLocaleDirectoryButton.addActionListener(e -> {
-                            Path localePath = localeManager.getLocaleDirPath();
+                            Path localePath = localeManager.getLocaleDirectoryPath();
                             if (localePath != null) {
                                 Files.openInFileManager(localePath.toString());
                             } else {
