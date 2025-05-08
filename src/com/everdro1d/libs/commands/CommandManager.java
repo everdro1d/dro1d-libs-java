@@ -16,18 +16,26 @@ import java.util.*;
  *         Create a new CommandManager instance during application startup.
  *         <p>
  *         It is recommended to define a {@code Map} of commands and
- *         pass it to the CommandManager constructor. For example:
+ *         pass it to the CommandManager constructor.
+ *         <p><strong>For example:</strong></p>
  * <blockquote><pre>
  * private static final Map&lt;String, CommandInterface&gt; CUSTOM_COMMANDS_MAP = Map.of(
  *     "-debug", new DebugCommand()
  * );
- * public static CommandManager commandManager = new CommandManager(CUSTOM_COMMANDS_MAP);
+ * private static CommandManager commandManager = new CommandManager(CUSTOM_COMMANDS_MAP);
+ * </pre></blockquote>
+ *         However, you can also create a CommandManager without any commands and add them later.
+ *         <p><strong>For example:</strong></p>
+ * <blockquote><pre>
+ * private static CommandManager commandManager = new CommandManager();
+ * commandManager.registerCommand("-debug", new DebugCommand());
  * </pre></blockquote>
  *     </li>
  *     <li>
  *         Use the CommandManager to handle CLI arguments. You can process
- *         arguments using the {@code ApplicationCore.checkCLIArgs()} method (see also: #1),
- *         or manually, as shown below:
+ *         arguments using the {@link com.everdro1d.libs.core.ApplicationCore#checkCLIArgs(String[], CommandManager) ApplicationCore.checkCLIArgs()}
+ *         method, or manually.
+ *         <p><strong>For example:</strong></p>
  * <blockquote><pre>
  * for(String arg : args) {
  *     commandManager.executeCommand(arg);
@@ -37,8 +45,8 @@ import java.util.*;
  *     <li>
  *         Create new command classes for each command and add them to the
  *         CommandManager. For example, in the code above, we added
- *         the {@code DebugCommand}. Below is
- *         an example implementation of the {@code DebugCommand} class:
+ *         the {@code DebugCommand}.
+ *         <p><strong>Example implementation of the {@code DebugCommand} class:</strong></p>
  * <blockquote><pre>
  * public class DebugCommand implements CommandInterface {
  *     &#64;Override
@@ -50,8 +58,6 @@ import java.util.*;
  * </pre></blockquote>
  *     </li>
  * </ol>
- *
- * @see com.everdro1d.libs.core.ApplicationCore#checkCLIArgs(String[], CommandManager)
  */
 public class CommandManager {
     private static final Map<String, CommandInterface> COMMANDS_MAP = new HashMap<>();
@@ -64,7 +70,7 @@ public class CommandManager {
      * Creates a new CommandManager with only the default {@code -help} command.
      */
     public CommandManager() {
-        appendCommandMap(COMMANDS_MAP);
+        registerCommands(COMMANDS_MAP);
     }
 
     /**
@@ -73,7 +79,7 @@ public class CommandManager {
      * @see #CommandManager()
      */
     public CommandManager(Map<String, CommandInterface> commandMap) {
-        appendCommandMap(commandMap);
+        registerCommands(commandMap);
     }
 
     /**
@@ -139,14 +145,14 @@ public class CommandManager {
      * Add a command to the map. If the key already exists, the command will be replaced.
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
-     * appendCommand("-help", new HelpCommand());
+     * registerCommand("-help", new HelpCommand());
      * </pre></blockquote>
-     * @param commandString trigger key for the command
+     * @param commandString key for the command (what to listen for)
      * @param commandToExecute CommandInterface class
      * @see #executeCommand(String) 
      * @see HelpCommand#execute(CommandManager) 
      */
-    public void appendCommand(String commandString, CommandInterface commandToExecute) {
+    public void registerCommand(String commandString, CommandInterface commandToExecute) {
         COMMANDS_MAP.put(commandString, commandToExecute);
     }
 
@@ -155,18 +161,21 @@ public class CommandManager {
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * yourCommandMap.put("-help", new HelpCommand());
+     * yourCommandMap.put("-debug", new DebugCommand());
+     *
+     * commandManager.registerCommands(yourCommandMap);
      * </pre></blockquote>
      * @param commandMap map of key-value pairs where the key is the CLI arg to listen for and the value is a new Command.
-     * @see #appendCommand(String, CommandInterface)
+     * @see #registerCommand(String, CommandInterface)
      */
-    public void appendCommandMap(Map<String, CommandInterface> commandMap) {
+    public void registerCommands(Map<String, CommandInterface> commandMap) {
         COMMANDS_MAP.putAll(commandMap);
     }
 
     /**
      * Execute a command from the map. If the command is not found, an error message is printed to {@code System.err}.
      * @param commandString the key of the CommandInterface to execute
-     * @see #appendCommand(String, CommandInterface)
+     * @see #registerCommand(String, CommandInterface)
      * @see HelpCommand#execute(CommandManager)
      */
     public void executeCommand(String commandString) {
