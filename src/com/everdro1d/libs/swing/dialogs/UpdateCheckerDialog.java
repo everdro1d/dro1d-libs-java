@@ -41,7 +41,7 @@ public class UpdateCheckerDialog {
      * @param localeManager locale manager obj for translations
      * @see ApplicationCore#getLatestVersion(String)
      * @see DoNotAskAgainConfirmDialog#showConfirmDialog(Component, Object, String, int, int, Preferences, String, LocaleManager)
-     * @see LocaleManager#LocaleManager(Class)
+     * @see LocaleManager#LocaleManager(Class, String)
      */
     public static void showUpdateCheckerDialog(
             String currentVersion, JFrame parentFrame, boolean printDebug,
