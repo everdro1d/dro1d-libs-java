@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="dro1d-libs-java-docs:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/dro1d_libs_java_docs_jar</output-path>
+    <root id="archive" name="dro1d-libs-java-docs_jar.jar">
+      <element id="extracted-dir" path="$PROJECT_DIR$/docs.zip" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
