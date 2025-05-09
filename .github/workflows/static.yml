@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Fetch last 2 commits to check for changes
+          fetch-depth: 2
       - name: Check for changes in /docs
         id: check_docs
         run: |
