@@ -385,7 +385,7 @@ public class Trie<T> {
      * Set the value for an existing key in the Trie.
      * @param key key to search for
      * @param value value to set as
-     * @return true if value was set, false otherwise (including vale does not exist)
+     * @return true if value was set, false otherwise (including value does not exist)
      */
     public boolean set(String key, T value) {
         TrieNode<T> currentNode = root;
