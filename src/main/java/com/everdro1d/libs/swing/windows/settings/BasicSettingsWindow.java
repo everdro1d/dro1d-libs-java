@@ -1,4 +1,4 @@
-// dro1dDev - created: 2025-04-28
+// dro1dDev - created: 2025-05-09
 
 package com.everdro1d.libs.swing.windows.settings;
 
@@ -301,7 +301,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.weightx = 0;
                         openLocaleDirectoryButton = new JButton();
                         openLocaleDirectoryButton.setPreferredSize(new Dimension(25, 25));
-                        openLocaleDirectoryButton.setIcon(SwingGUI.getApplicationIcon("images/icons/folder.png", this.getClass()));
+                        openLocaleDirectoryButton.setIcon(SwingGUI.getApplicationIcon("main/resources/images/icons/folder.png", this.getClass()));
                         openLocaleDirectoryButton.setToolTipText(openLocaleDirectoryToolTipText);
                         localeSettingsPanel.add(openLocaleDirectoryButton, gbcAuto);
                         openLocaleDirectoryButton.addActionListener(e -> {
@@ -318,7 +318,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.weightx = 0;
                         openLocaleRepositoryButton = new JButton();
                         openLocaleRepositoryButton.setPreferredSize(new Dimension(25, 25));
-                        openLocaleRepositoryButton.setIcon(SwingGUI.getApplicationIcon("images/icons/open-external.png", this.getClass()));
+                        openLocaleRepositoryButton.setIcon(SwingGUI.getApplicationIcon("main/resources/images/icons/open-external.png", this.getClass()));
                         openLocaleRepositoryButton.setToolTipText(openLocaleRepositoryToolTipText);
                         localeSettingsPanel.add(openLocaleRepositoryButton, gbcAuto);
                         openLocaleRepositoryButton.addActionListener(e -> {

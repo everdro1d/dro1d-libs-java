@@ -1,4 +1,4 @@
-// dro1dDev - created: 2025-02-20
+// dro1dDev - created: 2025-05-09
 
 package com.everdro1d.libs.swing.components;
 
@@ -38,9 +38,9 @@ public abstract class ResizeWindowButton extends JButton {
         this.setBackground(parentPanel.getBackground());
         this.setMargin(new Insets(2, 2, 2, 2));
 
-        ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/expand.png",
+        ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("main/resources/images/size/expand.png",
                 this.getClass());
-        ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("com/everdro1d/libs/swing/resources/images/size/shrink.png",
+        ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("main/resources/images/size/shrink.png",
                 this.getClass());
         iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));

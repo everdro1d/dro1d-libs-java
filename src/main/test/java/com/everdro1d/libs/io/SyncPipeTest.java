@@ -1,7 +1,8 @@
-// dro1dDev - created: 2025-05-06
+// dro1dDev - created: 2025-05-09
 
 package com.everdro1d.libs.io;
 
+import com.everdro1d.libs.io.SyncPipe;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

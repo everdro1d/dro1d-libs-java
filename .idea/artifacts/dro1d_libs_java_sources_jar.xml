@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="dro1d-libs-java-sources:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/dro1d_libs_java_sources_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/dro1d_libs_java_jar</output-path>
     <root id="archive" name="dro1d-libs-java-sources.jar">
       <element id="module-source" name="dro1d-libs-java" />
     </root>
