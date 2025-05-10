@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Swing Test Bench" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.everdro1d.libs.swing.SwingTestBench" />
+    <module name="dro1d-libs-java" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
