@@ -159,7 +159,10 @@ public class LabeledTextField extends JTextField {
 
     private void setForeground(Color fg, boolean internal) {
         super.setForeground(fg);
-        if (!internal) this.defaultForeground = fg;
+        if (!internal) {
+            this.defaultForeground = fg;
+            updateDefaultText(false);
+        }
     }
 
     private void setText(String text, boolean internal) {
