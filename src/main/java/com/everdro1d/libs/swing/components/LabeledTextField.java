@@ -24,6 +24,7 @@ public class LabeledTextField extends JTextField {
     private String defaultText;
     private Color defaultForeground;
     private boolean isDefaultTyped = false;
+    private float opacity;
 
     /**
      * Constructs a {@link LabeledTextField} with the specified default text.
@@ -31,9 +32,20 @@ public class LabeledTextField extends JTextField {
      * @param defaultText the default text to display when the field is empty and unfocused
      */
     public LabeledTextField(String defaultText) {
+        this(defaultText, 0.65f);
+    }
+
+    /**
+     * Constructs a {@link LabeledTextField} with the specified default text.
+     *
+     * @param defaultText the default text to display when the field is empty and unfocused
+     * @param opacity the opacity of the default text color (0.0f to 1.0f)
+     */
+    public LabeledTextField(String defaultText, float opacity) {
         super();
         this.defaultText = defaultText;
         this.defaultForeground = this.getForeground();
+        this.opacity = opacity;
 
         this.setText(defaultText, true);
         this.setForeground(getDesaturatedForeground(), true);
@@ -79,6 +91,28 @@ public class LabeledTextField extends JTextField {
         return defaultText;
     }
 
+    /**
+     * Sets the current opacity of the default text color.
+     *
+     * @return the current opacity value (0.0f to 1.0f)
+     */
+    public void setOpacity(float opacity) {
+        if (opacity < 0.0f || opacity > 1.0f) {
+            throw new IllegalArgumentException("Opacity must be between 0.0f and 1.0f");
+        }
+        this.opacity = opacity;
+        this.setForeground(getDesaturatedForeground(), true);
+    }
+
+    /**
+     * Retrieves the current opacity of the default text color.
+     *
+     * @return the opacity value (0.0f to 1.0f)
+     */
+    public float getOpacity() {
+        return opacity;
+    }
+
     // update color based on whether we have focus, also
     // set the text to "" if focus gained and defaultText.
     private void updateDefaultText(boolean focusGained) {
@@ -98,13 +132,13 @@ public class LabeledTextField extends JTextField {
         }
     }
 
-    // normal foreground color and change the opacity to 30%
+    // normal foreground color and change the opacity to 65% (default)
     private Color getDesaturatedForeground() {
         Color c = this.defaultForeground;
         c = c == null ? this.getBackground() : c;
 
         float[] cArr = c.getRGBComponents(null);
-        float alpha = cArr[3] * (float) 0.3;
+        float alpha = cArr[3] * opacity;
 
         return new Color(cArr[0], cArr[1], cArr[2], alpha);
     }
