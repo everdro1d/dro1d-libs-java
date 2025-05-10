@@ -116,6 +116,11 @@ public class LabeledTextField extends JTextField {
     // update color based on whether we have focus, also
     // set the text to "" if focus gained and defaultText.
     private void updateDefaultText(boolean focusGained) {
+        if (this.getDocument() == null) {
+            System.err.println("Error: [LabeledTextField]: Document is null in updateDefaultText("+focusGained+") method.");
+            return;
+        }
+
         if (
                 this.getText() == null
                 || this.getText().isBlank()
@@ -161,7 +166,7 @@ public class LabeledTextField extends JTextField {
         super.setForeground(fg);
         if (!internal) {
             this.defaultForeground = fg;
-            updateDefaultText(false);
+            SwingUtilities.invokeLater(() -> updateDefaultText(false));
         }
     }
 
