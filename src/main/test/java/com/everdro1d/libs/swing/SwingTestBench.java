@@ -9,12 +9,13 @@ import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
 public class SwingTestBench {
-    private static boolean darkMode = false;
+    private static boolean darkMode = true;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
     private static JFrame[] frameArr = new JFrame[2];
 
@@ -32,13 +33,14 @@ public class SwingTestBench {
             JLabel label = new JLabel("Beep");
             panel.add(label);
             LabeledTextField textField = new LabeledTextField("Beans");
+            textField.setForeground(Color.PINK);
             panel.add(textField);
 
             BasicSettingsWindow s = new BasicSettingsWindow(
                     null, "Tahoma", 16, p,
                     true, localeManager, panel,
                     "https://github.com/everdro1d/dro1d-libs-java",
-                    "https://everdro1d.github.io/dro1d-libs-java/"
+                    "https://everdro1d.github.io/posts/dro1d-libs-java/"
             ) {
                 public void applySettings() {
                     System.out.println("beep boop");
