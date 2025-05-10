@@ -94,7 +94,7 @@ public class LabeledTextField extends JTextField {
     /**
      * Sets the current opacity of the default text color.
      *
-     * @return the current opacity value (0.0f to 1.0f)
+     * @param opacity the opacity value to set (0.0f to 1.0f)
      */
     public void setOpacity(float opacity) {
         if (opacity < 0.0f || opacity > 1.0f) {
