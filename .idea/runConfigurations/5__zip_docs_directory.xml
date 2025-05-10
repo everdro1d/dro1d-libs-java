@@ -13,7 +13,7 @@
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Remove docs zip" run_configuration_type="ShConfigurationType" />
+      <option name="RunConfigurationTask" enabled="false" run_configuration_name="4: Remove docs zip" run_configuration_type="ShConfigurationType" />
     </method>
   </configuration>
 </component>
