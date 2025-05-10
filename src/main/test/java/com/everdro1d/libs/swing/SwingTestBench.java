@@ -3,6 +3,7 @@
 package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.locale.LocaleManager;
+import com.everdro1d.libs.swing.components.LabeledTextField;
 import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 
 public class SwingTestBench {
-    private static boolean darkMode = true;
+    private static boolean darkMode = false;
     private static Preferences p = Preferences.userNodeForPackage(SwingTestBench.class);
     private static JFrame[] frameArr = new JFrame[2];
 
@@ -30,6 +31,8 @@ public class SwingTestBench {
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             JLabel label = new JLabel("Beep");
             panel.add(label);
+            LabeledTextField textField = new LabeledTextField("Beans");
+            panel.add(textField);
 
             BasicSettingsWindow s = new BasicSettingsWindow(
                     null, "Tahoma", 16, p,
@@ -73,10 +76,10 @@ public class SwingTestBench {
 //                }
 //            };
 
-            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
+            //DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
 
             frameArr[0] = s;
-            frameArr[1] = d;
+            //frameArr[1] = d;
         });
     }
 }
