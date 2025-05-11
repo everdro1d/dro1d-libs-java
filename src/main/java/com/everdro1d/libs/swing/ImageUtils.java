@@ -79,4 +79,32 @@ public class ImageUtils {
 
         return new ImageIcon(newImage);
     }
+
+    public static ImageIcon darkenIcon(Icon icon) {
+        try {
+            BufferedImage originalImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = originalImage.createGraphics();
+            icon.paintIcon(null, g2d, 0, 0);
+            g2d.dispose();
+            BufferedImage darkenedImage = new BufferedImage(
+                    originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2dDark = darkenedImage.createGraphics();
+
+            for (int x = 0; x < originalImage.getWidth(); x++) {
+                for (int y = 0; y < originalImage.getHeight(); y++) {
+                    Color originalColor = new Color(originalImage.getRGB(x, y), true);
+                    Color darkerColor = originalColor.darker();
+                    g2dDark.setColor(darkerColor);
+                    g2dDark.fillRect(x, y, 1, 1);
+                }
+            }
+
+            g2dDark.dispose();
+
+            return new ImageIcon(darkenedImage);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            return null;
+        }
+    }
 }
