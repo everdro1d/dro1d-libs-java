@@ -2,19 +2,18 @@
 
 package com.everdro1d.libs.swing;
 
+import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.swing.themes.EverDarkLaf;
 import com.everdro1d.libs.swing.themes.EverLightLaf;
 import com.formdev.flatlaf.FlatLaf;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.*;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SwingGUI {
 
@@ -406,6 +405,22 @@ public class SwingGUI {
         }
 
         return components;
+    }
+
+    public static String getDefaultFontNameForOS() {
+        // check if font is available
+        String[] availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        if (Arrays.asList(availableFonts).contains("Tahoma")) {
+            return "Tahoma";
+        }
+
+        // Fallback
+        return switch (ApplicationCore.detectOS()) {
+            case "windows" -> "Segoe UI";
+            case "mac" -> "San Francisco";
+            case "unix" -> "Liberation Sans";
+            default -> "Arial";
+        };
     }
 
 }
