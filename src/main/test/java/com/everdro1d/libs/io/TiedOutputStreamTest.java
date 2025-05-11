@@ -2,7 +2,6 @@
 
 package com.everdro1d.libs.io;
 
-import com.everdro1d.libs.io.TiedOutputStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
