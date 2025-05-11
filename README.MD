@@ -5,7 +5,7 @@ A collection of reusable Java libraries designed to simplify application develop
 
 ---
 
-[View Post ->](https://everdro1d.github.io/dro1d-libs-java/)
+[View Post ->](https://everdro1d.github.io/posts/dro1d-libs-java/)
 
 [View Javadocs ->](https://everdro1d.github.io/dro1d-libs-java/)
 
