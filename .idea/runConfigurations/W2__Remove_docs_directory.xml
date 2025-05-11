@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="7: Create Artifacts" type="ShConfigurationType" folderName="Unix Chain">
-    <option name="SCRIPT_TEXT" value="echo &quot;Created Artifacts&quot;" />
+  <configuration default="false" name="W2: Remove docs directory" type="ShConfigurationType" folderName="Windows Chain">
+    <option name="SCRIPT_TEXT" value="if (Test-Path -Path &quot;docs&quot; -PathType Container) { Remove-Item -Path &quot;docs&quot; -Recurse -Force }" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
@@ -13,12 +13,7 @@
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="6: Remove previous artifacts" run_configuration_type="ShConfigurationType" />
-      <option name="BuildArtifacts" enabled="true">
-        <artifact name="dro1d-libs-java-docs:jar" />
-        <artifact name="dro1d-libs-java-sources:jar" />
-        <artifact name="dro1d-libs-java:jar" />
-      </option>
+      <option name="RunConfigurationTask" enabled="false" run_configuration_name="1: Run All Tests" run_configuration_type="JUnit" />
     </method>
   </configuration>
 </component>

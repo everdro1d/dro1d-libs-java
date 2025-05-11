@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="3: Generate Javadocs" type="ShConfigurationType">
+  <configuration default="false" name="3: Generate Javadocs" type="ShConfigurationType" folderName="Unix Chain">
     <option name="SCRIPT_TEXT" value="javadoc -d docs -sourcepath src/main/java -subpackages com.everdro1d.libs.commands:com.everdro1d.libs.core:com.everdro1d.libs.io:com.everdro1d.libs.locale:com.everdro1d.libs.structs -classpath ~/.m2/repository/org/json/json/20240303/json-20240303.jar" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />

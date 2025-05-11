@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="4: Remove docs zip" type="ShConfigurationType">
+  <configuration default="false" name="4: Remove docs zip" type="ShConfigurationType" folderName="Unix Chain">
     <option name="SCRIPT_TEXT" value="(test -f docs.zip &amp;&amp; rm docs.zip) || exit 0" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />

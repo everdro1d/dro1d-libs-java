@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="7: Create Artifacts" type="ShConfigurationType" folderName="Unix Chain">
-    <option name="SCRIPT_TEXT" value="echo &quot;Created Artifacts&quot;" />
+  <configuration default="false" name="W5: zip docs directory" type="ShConfigurationType" folderName="Windows Chain">
+    <option name="SCRIPT_TEXT" value="Compress-Archive -Path &quot;docs&quot; -DestinationPath &quot;docs.zip&quot;" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
@@ -13,12 +13,7 @@
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="6: Remove previous artifacts" run_configuration_type="ShConfigurationType" />
-      <option name="BuildArtifacts" enabled="true">
-        <artifact name="dro1d-libs-java-docs:jar" />
-        <artifact name="dro1d-libs-java-sources:jar" />
-        <artifact name="dro1d-libs-java:jar" />
-      </option>
+      <option name="RunConfigurationTask" enabled="false" run_configuration_name="W4: Remove docs zip" run_configuration_type="ShConfigurationType" />
     </method>
   </configuration>
 </component>

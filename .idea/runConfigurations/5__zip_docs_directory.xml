@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="5: zip docs directory" type="ShConfigurationType">
+  <configuration default="false" name="5: zip docs directory" type="ShConfigurationType" folderName="Unix Chain">
     <option name="SCRIPT_TEXT" value="zip -r docs.zip docs" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
