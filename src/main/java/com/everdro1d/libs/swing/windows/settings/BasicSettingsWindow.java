@@ -56,7 +56,7 @@ public abstract class BasicSettingsWindow extends JFrame {
     // UI Text
     private String titleText = "Settings";
     private String localeBorderTitleText = "Locale";
-    private String localeSwitchLabelText = "Change Language (Restart Required):";
+    private String localeSwitchLabelText = "Change Language:";
     private String openLocaleDirectoryToolTipText = "Open Locale Directory";
     private String openLocaleRepositoryToolTipText = "Open Locale Website";
     private String openHelpWebsiteToolTipText = "Open Help Website";
@@ -225,13 +225,15 @@ public abstract class BasicSettingsWindow extends JFrame {
                 upperNorthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
                 upperNorthPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
                 northPanel.add(upperNorthPanel);
+                String os = ApplicationCore.detectOS();
                 {
+
                     upperNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel(titleText);
-                    int mac = ApplicationCore.detectOS().equals("mac") ? 30 : 45;
+                    int win = (os.equals("windows") ? 45 : 30);
                     titleLabel.setPreferredSize(
-                            new Dimension((int) upperNorthPanel.getPreferredSize().getWidth() - mac, BORDER_PADDING_HEIGHT - 10)
+                            new Dimension((int) upperNorthPanel.getPreferredSize().getWidth() - win, BORDER_PADDING_HEIGHT - 10)
                     );
                     titleLabel.setFont(new Font(fontName, Font.BOLD, fontSize + 4));
                     titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -239,8 +241,12 @@ public abstract class BasicSettingsWindow extends JFrame {
                     upperNorthPanel.add(titleLabel);
                 }
 
+                int i;
+                if (os.equals("windows")) i = (WINDOW_WIDTH - (BORDER_PADDING_WIDTH * 2)) - 5;
+                else i = BORDER_PADDING_WIDTH;
+
                 northPanelSeparator =
-                        new WindowDependentSeparator(settingsFrame, ApplicationCore.detectOS().equals("mac") ? BORDER_PADDING_WIDTH : (BORDER_PADDING_WIDTH*2) - 5, 1);
+                        new WindowDependentSeparator(settingsFrame, i, 1);
                 northPanel.add(northPanelSeparator);
 
                 northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -301,7 +307,9 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.fill = GridBagConstraints.NONE;
                         gbcAuto.weightx = 0;
                         openLocaleDirectoryButton = new JButton();
+                        openLocaleDirectoryButton.setMinimumSize(new Dimension(25, 25));
                         openLocaleDirectoryButton.setPreferredSize(new Dimension(25, 25));
+                        openLocaleDirectoryButton.setMaximumSize(new Dimension(25, 25));
                         openLocaleDirectoryButton.setIcon(ImageUtils.getApplicationIcon("main/resources/images/icons/folder.png", this.getClass()));
                         openLocaleDirectoryButton.setToolTipText(openLocaleDirectoryToolTipText);
                         localeSettingsPanel.add(openLocaleDirectoryButton, gbcAuto);
@@ -318,7 +326,9 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.fill = GridBagConstraints.NONE;
                         gbcAuto.weightx = 0;
                         openLocaleRepositoryButton = new JButton();
+                        openLocaleRepositoryButton.setMinimumSize(new Dimension(25, 25));
                         openLocaleRepositoryButton.setPreferredSize(new Dimension(25, 25));
+                        openLocaleRepositoryButton.setMaximumSize(new Dimension(25, 25));
                         openLocaleRepositoryButton.setIcon(ImageUtils.getApplicationIcon("main/resources/images/icons/open-external.png", this.getClass()));
                         openLocaleRepositoryButton.setToolTipText(openLocaleRepositoryToolTipText);
                         localeSettingsPanel.add(openLocaleRepositoryButton, gbcAuto);
@@ -339,7 +349,7 @@ public abstract class BasicSettingsWindow extends JFrame {
 
             southPanel = new JPanel();
             southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
-            southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 20));
+            southPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + (ApplicationCore.detectOS().equals("unix") ? 30 : 20)));
             mainPanel.add(southPanel, BorderLayout.SOUTH);
             {
                 upperSouthPanel = new JPanel(new GridBagLayout());
@@ -352,7 +362,6 @@ public abstract class BasicSettingsWindow extends JFrame {
                 GridBagConstraints gbcSeparator = new GridBagConstraints();
                 gbcSeparator.gridx = 0;
                 gbcSeparator.gridy = 0;
-                gbcSeparator.weightx = 0;
                 gbcSeparator.fill = GridBagConstraints.HORIZONTAL;
                 {
                     gbcSeparator.weightx = 1;
@@ -373,7 +382,7 @@ public abstract class BasicSettingsWindow extends JFrame {
 
                 lowerSouthPanel = new JPanel();
                 lowerSouthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                lowerSouthPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + 5));
+                lowerSouthPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, BORDER_PADDING_HEIGHT + (ApplicationCore.detectOS().equals("unix") ? 15 : 5)));
                 southPanel.add(lowerSouthPanel);
                 {
                     leftLowerSouthPanel = new JPanel();
