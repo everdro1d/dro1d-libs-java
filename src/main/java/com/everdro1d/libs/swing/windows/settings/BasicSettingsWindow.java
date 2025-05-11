@@ -229,7 +229,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                     upperNorthPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
                     titleLabel = new JLabel(titleText);
-                    int mac = ApplicationCore.detectOS().equals("mac") ? 30 : 0;
+                    int mac = ApplicationCore.detectOS().equals("mac") ? 30 : 45;
                     titleLabel.setPreferredSize(
                             new Dimension((int) upperNorthPanel.getPreferredSize().getWidth() - mac, BORDER_PADDING_HEIGHT - 10)
                     );
@@ -240,7 +240,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                 }
 
                 northPanelSeparator =
-                        new WindowDependentSeparator(settingsFrame, BORDER_PADDING_WIDTH, 1);
+                        new WindowDependentSeparator(settingsFrame, ApplicationCore.detectOS().equals("mac") ? BORDER_PADDING_WIDTH : (BORDER_PADDING_WIDTH*2) - 5, 1);
                 northPanel.add(northPanelSeparator);
 
                 northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
