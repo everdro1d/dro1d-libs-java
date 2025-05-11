@@ -6,6 +6,7 @@ import com.everdro1d.libs.core.ApplicationCore;
 import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
+import com.everdro1d.libs.swing.ImageUtils;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.FlexWidthSeparator;
 import com.everdro1d.libs.swing.components.HyperLinkButton;
@@ -301,7 +302,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.weightx = 0;
                         openLocaleDirectoryButton = new JButton();
                         openLocaleDirectoryButton.setPreferredSize(new Dimension(25, 25));
-                        openLocaleDirectoryButton.setIcon(SwingGUI.getApplicationIcon("main/resources/images/icons/folder.png", this.getClass()));
+                        openLocaleDirectoryButton.setIcon(ImageUtils.getApplicationIcon("main/resources/images/icons/folder.png", this.getClass()));
                         openLocaleDirectoryButton.setToolTipText(openLocaleDirectoryToolTipText);
                         localeSettingsPanel.add(openLocaleDirectoryButton, gbcAuto);
                         openLocaleDirectoryButton.addActionListener(e -> {
@@ -318,7 +319,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                         gbcAuto.weightx = 0;
                         openLocaleRepositoryButton = new JButton();
                         openLocaleRepositoryButton.setPreferredSize(new Dimension(25, 25));
-                        openLocaleRepositoryButton.setIcon(SwingGUI.getApplicationIcon("main/resources/images/icons/open-external.png", this.getClass()));
+                        openLocaleRepositoryButton.setIcon(ImageUtils.getApplicationIcon("main/resources/images/icons/open-external.png", this.getClass()));
                         openLocaleRepositoryButton.setToolTipText(openLocaleRepositoryToolTipText);
                         localeSettingsPanel.add(openLocaleRepositoryButton, gbcAuto);
                         openLocaleRepositoryButton.addActionListener(e -> {
@@ -478,11 +479,11 @@ public abstract class BasicSettingsWindow extends JFrame {
     }
 
     private void themeChanged() {
-        Icon folderIcon = SwingGUI.changeIconColor(
+        Icon folderIcon = ImageUtils.changeIconColor(
                 openLocaleDirectoryButton.getIcon(),
                 UIManager.getColor("RootPane.foreground")
         );
-        Icon repoIcon = SwingGUI.changeIconColor(
+        Icon repoIcon = ImageUtils.changeIconColor(
                 openLocaleRepositoryButton.getIcon(),
                 UIManager.getColor("RootPane.foreground")
         );

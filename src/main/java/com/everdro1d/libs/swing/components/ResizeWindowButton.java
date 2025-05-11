@@ -2,6 +2,7 @@
 
 package com.everdro1d.libs.swing.components;
 
+import com.everdro1d.libs.swing.ImageUtils;
 import com.everdro1d.libs.swing.SwingGUI;
 
 import javax.swing.*;
@@ -38,9 +39,9 @@ public abstract class ResizeWindowButton extends JButton {
         this.setBackground(parentPanel.getBackground());
         this.setMargin(new Insets(2, 2, 2, 2));
 
-        ImageIcon iconE = (ImageIcon) SwingGUI.getApplicationIcon("main/resources/images/size/expand.png",
+        ImageIcon iconE = (ImageIcon) ImageUtils.getApplicationIcon("main/resources/images/size/expand.png",
                 this.getClass());
-        ImageIcon iconS = (ImageIcon) SwingGUI.getApplicationIcon("main/resources/images/size/shrink.png",
+        ImageIcon iconS = (ImageIcon) ImageUtils.getApplicationIcon("main/resources/images/size/shrink.png",
                 this.getClass());
         iconShrink = new ImageIcon(iconS.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         iconExpand = new ImageIcon(iconE.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
@@ -102,8 +103,8 @@ public abstract class ResizeWindowButton extends JButton {
             return;
         }
         Icon tmp = this.getIcon();
-        // set the icon to the colour
-        Icon icon = SwingGUI.changeIconColor(tmp, color);
+        // set the icon to the color
+        Icon icon = ImageUtils.changeIconColor(tmp, color);
         this.setIcon(icon);
     }
 
