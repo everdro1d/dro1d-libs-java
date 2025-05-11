@@ -22,7 +22,7 @@ public class SwingTestBench {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             SwingGUI.setupLookAndFeel(true, darkMode);
-            SwingGUI.uiSetup("Tahoma", 18);
+            SwingGUI.uiSetup(SwingGUI.getDefaultFontNameForOS(), 18);
             System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
 
             LocaleManager localeManager = new LocaleManager(SwingTestBench.class, "dro1dDev");
@@ -37,7 +37,7 @@ public class SwingTestBench {
             panel.add(textField);
 
             BasicSettingsWindow s = new BasicSettingsWindow(
-                    null, "Tahoma", 16, p,
+                    null, SwingGUI.getDefaultFontNameForOS(), 16, p,
                     true, localeManager, panel,
                     "https://github.com/everdro1d/dro1d-libs-java",
                     "https://everdro1d.github.io/posts/dro1d-libs-java/"
