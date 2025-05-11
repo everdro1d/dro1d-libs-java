@@ -44,6 +44,17 @@ public class ImageUtils {
         return icon;
     }
 
+    /**
+     * Changes the color of a given icon to the specified color.
+     *
+     * <p>This method creates a new image from the provided icon and applies a color filter
+     * to replace the RGB values of non-transparent pixels with the specified color while
+     * preserving the alpha (transparency) values.</p>
+     *
+     * @param icon the icon to change the color of
+     * @param color the new color to apply to the icon
+     * @return a new {@link ImageIcon} with the applied color, or {@code null} if an error occurs
+     */
     public static ImageIcon changeIconColor(Icon icon, Color color) {
         // Create a new image that can be edited
         BufferedImage bufferedImage = new BufferedImage(
@@ -80,6 +91,15 @@ public class ImageUtils {
         return new ImageIcon(newImage);
     }
 
+    /**
+     * Darkens the given icon by reducing the brightness of its colors.
+     *
+     * <p>This method creates a new image from the provided icon and applies a darker color
+     * transformation to each pixel while preserving the alpha (transparency) values.</p>
+     *
+     * @param icon the icon to darken
+     * @return a new {@link ImageIcon} with the darkened colors, or {@code null} if an error occurs
+     */
     public static ImageIcon darkenIcon(Icon icon) {
         try {
             BufferedImage originalImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
