@@ -17,7 +17,10 @@ import java.util.Arrays;
 
 public class SwingGUI {
 
-    private SwingGUI() {}
+    // Private constructor to prevent instantiation.
+    private SwingGUI() {
+        throw new UnsupportedOperationException("SwingGUI class cannot be instantiated");
+    }
 
     /**
      * Set the look and feel of the application.

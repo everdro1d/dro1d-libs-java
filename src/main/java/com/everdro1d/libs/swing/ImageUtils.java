@@ -10,6 +10,11 @@ import java.io.InputStream;
 
 public class ImageUtils {
 
+    // Private constructor to prevent instantiation.
+    private ImageUtils() {
+        throw new UnsupportedOperationException("ImageUtils class cannot be instantiated");
+    }
+
     /**
      * Set the icon of the frame.
      * @param frame the frame to set the icon of
