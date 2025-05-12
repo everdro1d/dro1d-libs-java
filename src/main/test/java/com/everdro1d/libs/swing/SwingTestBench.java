@@ -4,13 +4,16 @@ package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.components.LabeledTextField;
+import com.everdro1d.libs.swing.components.TextFieldFileChooser;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.prefs.Preferences;
 
 public class SwingTestBench {
@@ -31,8 +34,14 @@ public class SwingTestBench {
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             JLabel label = new JLabel("Beep");
             panel.add(label);
-            LabeledTextField textField = new LabeledTextField("Beans");
-            textField.setForeground(Color.PINK);
+            TextFieldFileChooser textField = new TextFieldFileChooser(localeManager) {
+                @Override
+                public void customActionOnApprove(File file) {
+                    System.out.println("File selected: " + file.getAbsolutePath());
+                    setText(file.getParent());
+                    System.out.println("TextField text: " + getText());
+                }
+            };
             panel.add(textField);
 
             JButton button = new JButton("Click me");
