@@ -291,11 +291,19 @@ public class FileChooser extends JFileChooser {
     }
 
     private void setFileChooserFont(Component[] comp) {
+        if (comp == null) {
+            return;
+        }
         for (Component component : comp) {
-            if (component instanceof Container) setFileChooserFont(((Container) component).getComponents());
-            try {
-                component.setFont(font);
-            } catch (Exception ignored) {}
+            if (!component.isVisible()) {
+                continue;
+            }
+
+            if (component instanceof Container) {
+                setFileChooserFont(((Container) component).getComponents());
+            }
+
+            component.setFont(font);
         }
     }
 }
