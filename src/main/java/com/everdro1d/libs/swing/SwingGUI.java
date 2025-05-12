@@ -77,9 +77,7 @@ public class SwingGUI {
      * @see #switchLightOrDarkMode(boolean, JFrame[])
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled) {
-        SwingUtilities.invokeLater(() -> {
-            switchLightOrDarkMode(isDarkModeEnabled, getAllFrames());
-        });
+        switchLightOrDarkMode(isDarkModeEnabled, getAllFrames());
     }
 
     /**
