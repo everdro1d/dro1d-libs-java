@@ -509,7 +509,7 @@ public abstract class BasicSettingsWindow extends JFrame {
 
         // Update the title bar colors for the settings frame
         if (!UIManager.getBoolean("Application.useContrastTitleBar")) {
-            System.out.println("Title bar colors are not supported for this application.");
+            System.out.println("BasicSettingsWindow: Title bar colors are not supported for this application.");
             return;
         }
         SwingUtilities.invokeLater(() -> {
