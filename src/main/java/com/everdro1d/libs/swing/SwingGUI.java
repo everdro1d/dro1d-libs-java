@@ -105,9 +105,7 @@ public class SwingGUI {
      * @see #switchLightOrDarkMode(boolean, JFrame[], boolean)
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled, boolean contrastTitleBars) {
-        SwingUtilities.invokeLater(() -> {
-            switchLightOrDarkMode(isDarkModeEnabled, getAllFrames(), contrastTitleBars);
-        });
+        switchLightOrDarkMode(isDarkModeEnabled, null, contrastTitleBars);
     }
 
     /**
