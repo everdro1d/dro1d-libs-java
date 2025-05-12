@@ -116,6 +116,18 @@ public class FileChooser extends JFileChooser {
         super();
         // Set file chooser gui properties
         setDialogTitle(dialogTitle);
+        if (UIManager.getBoolean("Application.useContrastTitleBar")) {
+            SwingUtilities.invokeLater(() -> {
+                    getRootPane().putClientProperty(
+                            "JRootPane.titleBarBackground",
+                            UIManager.getColor("TitlePane.background")
+                    );
+                    getRootPane().putClientProperty(
+                            "JRootPane.titleBarForeground",
+                            UIManager.getColor("TitlePane.foreground")
+                    );
+            });
+        }
 
         if (localeManager != null) {
             this.localeManager = localeManager;
