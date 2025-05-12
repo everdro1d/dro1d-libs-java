@@ -99,7 +99,7 @@ public class SwingGUI {
      * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
-     * @param contrastTitleBars whether to use contrasting titleBar colors
+     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
      * @see #switchLightOrDarkMode(boolean)
      * @see #switchLightOrDarkMode(boolean, JFrame[])
      */
