@@ -5,6 +5,7 @@ package com.everdro1d.libs.swing;
 import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.components.LabeledTextField;
 import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
+import com.everdro1d.libs.swing.windows.FileChooser;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
@@ -21,7 +22,7 @@ public class SwingTestBench {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            SwingGUI.setupLookAndFeel(true, darkMode);
+            SwingGUI.setupLookAndFeel(true, true, false);
             SwingGUI.uiSetup("Tahoma", 18);
             System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
 
@@ -35,6 +36,17 @@ public class SwingTestBench {
             LabeledTextField textField = new LabeledTextField("Beans");
             textField.setForeground(Color.PINK);
             panel.add(textField);
+
+            JButton button = new JButton("Click me");
+            button.addActionListener(e -> {
+                System.out.println("Button clicked!");
+                System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
+                darkMode = !darkMode;
+                SwingUtilities.invokeLater(() -> {
+                    SwingGUI.switchLightOrDarkMode(darkMode, getFrameArr(), false);
+                });
+            });
+            panel.add(button);
 
             BasicSettingsWindow s = new BasicSettingsWindow(
                     null, "Tahoma", 16, p,
@@ -82,6 +94,12 @@ public class SwingTestBench {
 
             frameArr[0] = s;
             //frameArr[1] = d;
+
+            SwingGUI.switchLightOrDarkMode(darkMode, frameArr, false);
         });
+    }
+
+    private static JFrame[] getFrameArr() {
+        return frameArr;
     }
 }
