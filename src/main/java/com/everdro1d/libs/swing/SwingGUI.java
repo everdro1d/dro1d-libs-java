@@ -97,6 +97,23 @@ public class SwingGUI {
      * Used to enable dark mode for the running application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
+     *
+     * @param isDarkModeEnabled whether to enable dark mode
+     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
+     * @see #switchLightOrDarkMode(boolean)
+     * @see #switchLightOrDarkMode(boolean, JFrame[])
+     * @see #switchLightOrDarkMode(boolean, JFrame[], boolean)
+     */
+    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, boolean contrastTitleBars) {
+        SwingUtilities.invokeLater(() -> {
+            switchLightOrDarkMode(isDarkModeEnabled, getAllFrames(), contrastTitleBars);
+        });
+    }
+
+    /**
+     * Used to enable dark mode for the running application.
+     * <p>
+     * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
      * @param contrastTitleBars whether to use contrasting titleBar colors for the application
