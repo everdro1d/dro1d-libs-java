@@ -22,14 +22,17 @@ public class SwingGUI {
      * Set the look and feel of the application.
      * @param useFlatLaf whether to use FlatLaf (defaults to system look and feel)
      * @param allowDarkMode whether to enable dark mode (FlatLaf only)
+     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
      */
-    public static void setupLookAndFeel(boolean useFlatLaf, boolean allowDarkMode) {
+    public static void setupLookAndFeel(boolean useFlatLaf, boolean allowDarkMode, boolean contrastTitleBars) {
         if (useFlatLaf) {
             FlatLaf.registerCustomDefaultsSource("com.everdro1d.libs.swing.themes");
-            EverLightLaf.setup();
+            EverLightLaf.installLafInfo();
             if (allowDarkMode) {
-                EverDarkLaf.setup();
+                EverDarkLaf.installLafInfo();
             }
+
+            switchLightOrDarkMode(false, contrastTitleBars);
 
             return;
         }
@@ -120,28 +123,38 @@ public class SwingGUI {
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames, boolean contrastTitleBars) {
         try {
-            if (!UIManager.getLookAndFeel().getName().toLowerCase().contains("ever")) {
-                throw new Exception("Not using a supported LaF, cannot proceed.");
+            if (EverDarkLaf.isLafInstalled() || EverLightLaf.isLafInstalled()) {
+                if (isDarkModeEnabled && EverDarkLaf.isLafInstalled()) {
+                    EverDarkLaf.setup();
+                } else if (isDarkModeEnabled && !EverDarkLaf.isLafInstalled()) {
+                    throw new Exception("EverDarkLaf is not installed.");
+                } else {
+                    EverLightLaf.setup();
+                }
             }
 
-            LookAndFeel laf = isDarkModeEnabled ? new EverDarkLaf() : new EverLightLaf();
-            UIManager.setLookAndFeel( laf );
+            if (!contrastTitleBars) {
+                return;
+            }
 
-            if (contrastTitleBars) {
-                for (JFrame frame : frames) {
+            SwingUtilities.invokeLater(() -> {
+                for (JFrame frame : (frames != null ? frames : getAllFrames())) {
                     if (frame != null) { // because for some reason the title bar color doesn't change with the L&F
                         frame.getRootPane().putClientProperty("JRootPane.titleBarBackground", UIManager.getColor("TitlePane.background"));
                         frame.getRootPane().putClientProperty("JRootPane.titleBarForeground", UIManager.getColor("TitlePane.foreground"));
                     }
                 }
-            }
+            });
 
         } catch (Exception ex) {
             System.err.println("Could not set EverDarkLaf as application look and feel. Using Fallback.");
-            JOptionPane.showMessageDialog(frames[0], "Dark mode does not exist. The appearance of this dialog represents an error.\n" +
-                    "Contact the dev and ask them to check where \"switchLightOrDarkMode\" is called.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(frames[0], "The appearance of this dialog represents an error.\n" +
+                    "Contact the dev and ask them to check where \"switchLightOrDarkMode\" is called.", "ERROR IN LIBRARY", JOptionPane.ERROR_MESSAGE);
         } finally {
-            for (JFrame frame : frames) if (frame != null) SwingUtilities.updateComponentTreeUI(frame);
+            for (JFrame frame : (frames != null ? frames : getAllFrames())) {
+                if (frame != null) SwingUtilities.updateComponentTreeUI(frame);
+            }
         }
     }
 
