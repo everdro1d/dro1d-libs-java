@@ -22,7 +22,6 @@ public abstract class ResizeWindowButton extends JButton {
 
     public ResizeWindowButton(
             JFrame frame,
-            JPanel parentPanel,
             int baseWidth,
             int baseHeight,
             float xMult,
@@ -36,7 +35,6 @@ public abstract class ResizeWindowButton extends JButton {
         this.yMult = yMult;
         this.debug = debug;
 
-        this.setBackground(parentPanel.getBackground());
         this.setMargin(new Insets(2, 2, 2, 2));
 
         ImageIcon iconE = (ImageIcon) ImageUtils.getApplicationIcon("main/resources/images/size/expand.png",
