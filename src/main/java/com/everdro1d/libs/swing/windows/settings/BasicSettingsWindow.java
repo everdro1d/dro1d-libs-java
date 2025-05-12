@@ -508,7 +508,7 @@ public abstract class BasicSettingsWindow extends JFrame {
         openLocaleRepositoryButton.setIcon(repoIcon);
 
         // Update the title bar colors for the settings frame
-        if (!UIManager.getBoolean("Application.useContrastTitleBars")) {
+        if (!UIManager.getBoolean("Application.useContrastTitleBar")) {
             System.out.println("Title bar colors are not supported for this application.");
             return;
         }
