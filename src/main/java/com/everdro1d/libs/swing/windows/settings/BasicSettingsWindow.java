@@ -26,7 +26,7 @@ public abstract class BasicSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
-    public static JFrame settingsFrame;
+    private static JFrame settingsFrame;
         private JPanel mainPanel;
             private JPanel northPanel;
                 private JPanel upperNorthPanel;

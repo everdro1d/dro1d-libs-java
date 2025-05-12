@@ -23,7 +23,7 @@ public class DebugConsoleWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
-    public static JFrame debugFrame;
+    private static JFrame debugFrame;
         private JPanel mainPanel;
             private JPanel northPanel;
                 private JPanel leftNorthPanel;
@@ -33,7 +33,7 @@ public class DebugConsoleWindow extends JFrame {
                 private JPanel rightNorthPanel;
                     private JLabel numberOfLinesLabel;
                         private String numberOfLinesText = "Number of Lines:";
-                    public static JButton resizeWindowButton;
+                    private static JButton resizeWindowButton;
             private JPanel centerPanel;
                 private JScrollPane debugScrollPane;
                     private JTextArea debugTextArea;
@@ -230,7 +230,6 @@ public class DebugConsoleWindow extends JFrame {
 
                     resizeWindowButton = new ResizeWindowButton(
                             debugFrame,
-                            rightNorthPanel,
                             WINDOW_WIDTH,
                             WINDOW_HEIGHT,
                             2f,

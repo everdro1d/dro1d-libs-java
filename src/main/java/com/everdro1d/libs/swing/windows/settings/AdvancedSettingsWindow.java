@@ -19,7 +19,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
-    public static JFrame settingsFrame;
+    private static JFrame settingsFrame;
         private JPanel mainPanel;
             private JPanel northPanel;
                 private JPanel upperNorthPanel;
@@ -27,7 +27,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
                         private JLabel titleLabel;
                         private String titleText = "Settings";
                     private JPanel rightUpperNorthPanel;
-                        public static JButton resizeWindowButton;
+                        private static JButton resizeWindowButton;
                     private WindowDependentSeparator northPanelSeparator;
             private JPanel centerPanel;
                 private JTabbedPane menuItemsTabbedPane;
@@ -197,7 +197,6 @@ public abstract class AdvancedSettingsWindow extends JFrame {
                     {
                         resizeWindowButton = new ResizeWindowButton(
                                 settingsFrame,
-                                rightUpperNorthPanel,
                                 WINDOW_WIDTH,
                                 WINDOW_HEIGHT,
                                 1.4f,
