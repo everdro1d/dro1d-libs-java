@@ -9,15 +9,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class ResizeWindowButton extends JButton {
-    private int baseWidth, baseHeight;
+    private final int baseWidth, baseHeight;
     private float xMult, yMult;
     private int newWidth, newHeight;
 
-    private Icon iconExpand, iconShrink;
+    private final Icon iconExpand, iconShrink;
 
-    private JFrame frame;
+    private final JFrame frame;
 
-    private boolean debug;
+    private final boolean debug;
     private boolean maximized = false;
 
     public ResizeWindowButton(
