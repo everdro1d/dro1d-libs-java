@@ -81,10 +81,11 @@ public class CollapsableTitledBorder extends TitledBorder {
 
         CollapsableTitledBorder.showTabbedPaneSeparators = showTabbedPaneSeparators;
 
-        CollapsableTitledBorderMouseAdapter adapter = new CollapsableTitledBorderMouseAdapter(
-                panel, titleText, expandedDefault, panelExpandedHeight, panelCollapsedHeight,
-                this, tabbedPaneExpandFunc, exclusive
-        );
+        CollapsableTitledBorderMouseAdapter adapter =
+                new CollapsableTitledBorderMouseAdapter(
+                    panel, titleText, expandedDefault, panelExpandedHeight,
+                    panelCollapsedHeight, this, tabbedPaneExpandFunc, exclusive
+                );
         panel.addMouseListener(adapter);
         panel.addMouseMotionListener(adapter);
 
@@ -138,13 +139,18 @@ public class CollapsableTitledBorder extends TitledBorder {
 
         private void togglePanelExpanded() {
             if (exclusive && panelExpanded && this == currentlyExpanded) {
-                return; // do not collapse the panel if it is exclusive and currently expanded
+                // do not collapse the panel if it is
+                // exclusive and currently expanded
+                return;
             }
             if (panelExpanded) collapsePanel(); else expandPanel();
         }
 
         private void expandPanel() {
-            if (exclusive && this != currentlyExpanded && currentlyExpanded != null) {
+            if (exclusive
+                && this != currentlyExpanded
+                && currentlyExpanded != null
+            ) {
                 currentlyExpanded.collapsePanel();
             }
             panelExpanded = true;
@@ -158,8 +164,10 @@ public class CollapsableTitledBorder extends TitledBorder {
         }
 
         private void updatePanel() {
-            panel.setPreferredSize(new Dimension(panel.getPreferredSize().width,
-                    panelExpanded ? panelExpandedHeight : panelCollapsedHeight));
+            panel.setPreferredSize(new Dimension(
+                    panel.getPreferredSize().width,
+                    panelExpanded ? panelExpandedHeight : panelCollapsedHeight
+            ));
 
             String s = panelExpanded ? "▼ " : "▲ ";
             border.setTitle(s + titleText);
@@ -167,13 +175,17 @@ public class CollapsableTitledBorder extends TitledBorder {
             if (panel instanceof JTabbedPane tabbedPane) {
                 for (int i = 0; i < tabbedPane.getTabCount(); i++) {
                     tabbedPane.setEnabledAt(i, panelExpanded);
-                    tabbedPane.setTabComponentAt(i, panelExpanded ? null : new JLabel());
+                    tabbedPane.setTabComponentAt(
+                            i, panelExpanded ? null : new JLabel()
+                    );
                 }
                 if (panelExpanded) tabbedPaneExpandFunc.accept(tabbedPane);
 
                 // tabbed pane cannot be hidden as the border is on the tabbed pane
                 if (showTabbedPaneSeparators) {
-                    UIManager.put("TabbedPane.showTabSeparators", panelExpanded);
+                    UIManager.put(
+                            "TabbedPane.showTabSeparators", panelExpanded
+                    );
                     tabbedPane.updateUI();
                 }
 
@@ -192,12 +204,15 @@ public class CollapsableTitledBorder extends TitledBorder {
             int cursorType = panel.getCursor().getType();
             if (exclusive && this == currentlyExpanded) {
                 if (cursorType == Cursor.HAND_CURSOR) {
-                    panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                    panel.setCursor(
+                            Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
+                    );
                 }
                 return;
             }
-            int newCursorType = e.getY() <= panel.getBorder().getBorderInsets(panel).top ?
-                    Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR;
+            int newCursorType =
+                    e.getY() <= panel.getBorder().getBorderInsets(panel).top
+                            ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR;
 
             if (cursorType != newCursorType) {
                 panel.setCursor(Cursor.getPredefinedCursor(newCursorType));
