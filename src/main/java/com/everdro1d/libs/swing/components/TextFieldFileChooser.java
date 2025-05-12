@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * and then write the path to the JTextField. Also allows the user to manually enter the path into the JTextField and
  * open the FileChooser to that path.
  */
-public class TextFieldFileChooser extends JComponent implements FileChooserAction {
+public class TextFieldFileChooser extends JComponent {
 
     // Variables ------------------------------------------------------------------------------------------------------|
     private String dialogTitle = "Select path:";
@@ -118,6 +118,13 @@ public class TextFieldFileChooser extends JComponent implements FileChooserActio
             }
         });
     }
+
+    /**
+     * Override this method to perform custom actions when a file is approved.
+     * For example, you can open the file or perform some other action
+     * @param file the file that was approved
+     */
+    public void customActionOnApprove(File file) {}
 
     private void addComponentToClassInLocale() {
         Map<String, String> fileChooserMap = new TreeMap<>();
@@ -226,13 +233,4 @@ public class TextFieldFileChooser extends JComponent implements FileChooserActio
 
     // End of Getters and Setters -------------------------------------------------------------------------------------|
 
-}
-
-interface FileChooserAction {
-    /**
-     * Override this method to perform custom actions when a file is approved.
-     * For example, you can open the file or perform some other action
-     * @param file the file that was approved
-     */
-    default void customActionOnApprove(File file) {}
 }
