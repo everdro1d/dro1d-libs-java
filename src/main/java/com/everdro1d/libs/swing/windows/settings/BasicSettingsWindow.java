@@ -8,7 +8,6 @@ import com.everdro1d.libs.core.Utils;
 import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.swing.ImageUtils;
 import com.everdro1d.libs.swing.SwingGUI;
-import com.everdro1d.libs.swing.components.FlexWidthSeparator;
 import com.everdro1d.libs.swing.components.HyperLinkButton;
 import com.everdro1d.libs.swing.components.WindowDependentSeparator;
 
@@ -41,7 +40,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                     private JButton openLocaleRepositoryButton;
             private JPanel southPanel;
                 private JPanel upperSouthPanel;
-                    private FlexWidthSeparator southPanelSeparator;
+                    private JSeparator southPanelSeparator;
                     private HyperLinkButton hyperlinkButton;
                 private JPanel lowerSouthPanel;
                     private JPanel leftLowerSouthPanel;
@@ -357,7 +356,7 @@ public abstract class BasicSettingsWindow extends JFrame {
                 {
                     gbcSeparator.weightx = 1;
                     gbcSeparator.weighty = 0;
-                    southPanelSeparator = new FlexWidthSeparator();
+                    southPanelSeparator = new JSeparator();
                     upperSouthPanel.add(southPanelSeparator, gbcSeparator);
 
                     gbcSeparator.gridx++;
