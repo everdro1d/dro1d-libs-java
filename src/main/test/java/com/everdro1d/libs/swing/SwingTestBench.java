@@ -41,7 +41,7 @@ public class SwingTestBench {
                 System.out.println("DarkMode?" + SwingGUI.isDarkModeActive());
                 darkMode = !darkMode;
                 SwingUtilities.invokeLater(() -> {
-                    SwingGUI.switchLightOrDarkMode(darkMode, getFrameArr(), false);
+                    SwingGUI.switchLightOrDarkMode(darkMode, getFrameArr());
                 });
             });
             panel.add(button);
@@ -93,7 +93,7 @@ public class SwingTestBench {
             frameArr[0] = s;
             //frameArr[1] = d;
 
-            SwingGUI.switchLightOrDarkMode(darkMode, frameArr, false);
+            SwingGUI.switchLightOrDarkMode(darkMode, frameArr);
         });
     }
 
