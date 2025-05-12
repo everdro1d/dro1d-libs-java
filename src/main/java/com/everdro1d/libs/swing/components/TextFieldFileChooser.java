@@ -29,27 +29,40 @@ public class TextFieldFileChooser extends JComponent {
     // End of variables -----------------------------------------------------------------------------------------------|
 
     // Constructors ---------------------------------------------------------------------------------------------------|
-    public TextFieldFileChooser(LocaleManager localeManager, String defaultPath) {
-        this(localeManager, true, true, defaultPath);
-    }
-
-    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, String defaultPath) {
-        this(localeManager, selectFiles, false, defaultPath);
-    }
 
     public TextFieldFileChooser(LocaleManager localeManager) {
         this(localeManager, true, true, null);
     }
 
-    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles) {
+    public TextFieldFileChooser(
+            LocaleManager localeManager, String defaultPath
+    ) {
+        this(localeManager, true, true, defaultPath);
+    }
+
+    public TextFieldFileChooser(
+            LocaleManager localeManager, boolean selectFiles
+    ) {
         this(localeManager, selectFiles, false, null);
     }
 
-    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories) {
+    public TextFieldFileChooser(
+            LocaleManager localeManager, boolean selectFiles, String defaultPath
+    ) {
+        this(localeManager, selectFiles, false, defaultPath);
+    }
+
+    public TextFieldFileChooser(
+            LocaleManager localeManager, boolean selectFiles,
+            boolean selectDirectories
+    ) {
         this(localeManager, selectFiles, selectDirectories, null);
     }
 
-    public TextFieldFileChooser(LocaleManager localeManager, boolean selectFiles, boolean selectDirectories, String defaultPath) {
+    public TextFieldFileChooser(
+            LocaleManager localeManager, boolean selectFiles,
+            boolean selectDirectories, String defaultPath
+    ) {
         if (localeManager != null) {
             this.localeManager = localeManager;
 
