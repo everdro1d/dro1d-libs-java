@@ -186,12 +186,11 @@ public final class Files {
 
             // Open the directory and select the file
             String os = ApplicationCore.detectOS();
-            if (os.equals("windows")) {
-                new ProcessBuilder("explorer.exe", "/select,", path).start();
-            } else if (os.equals("mac")) {
-                new ProcessBuilder("open", "-R", path).start();
-            } else {
-                System.err.println("Unsupported OS: " + System.getProperty("os.name")+ ". Cannot select in file manager.");
+            switch (os) {
+                case "windows" -> new ProcessBuilder("explorer.exe", "/select,", path).start();
+                case "mac" -> new ProcessBuilder("open", "-R", path).start();
+                case "unix" -> new ProcessBuilder("xdg-open", directory).start();
+                default -> System.err.println("Unsupported OS: " + os + ". Cannot select in file manager.");
             }
         } catch (IOException e) {
             e.printStackTrace(System.err);

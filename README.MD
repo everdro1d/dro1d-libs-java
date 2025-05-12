@@ -5,7 +5,7 @@ A collection of reusable Java libraries designed to simplify application develop
 
 ---
 
-[View Post ->](https://everdro1d.github.io/dro1d-libs-java/)
+[View Post ->](https://everdro1d.github.io/posts/dro1d-libs-java/)
 
 [View Javadocs ->](https://everdro1d.github.io/dro1d-libs-java/)
 
@@ -21,15 +21,17 @@ A collection of reusable Java libraries designed to simplify application develop
 
 ### Prerequisites
 
-- Java 21 or higher
-- LocaleManager requires org.json library to read & write locale files.
-- Swing GUI package uses flatlaf library (min: 3.4). Some things will definitely break without it, but components and the like should still work. It will be hit & miss, try it if you like.
+- Java 21+
+- org.json library (min: 20240303) 
+  - LocaleManager requires it to read & write locale files.
+- flatlaf library (min: 3.4)
+  - Some Swing GUI things will definitely break without it, but general things like smaller components or util methods should still work. Others will be hit & miss, try it if you like.
 
 ### Installation
 
-Add the JAR file as a dependency in your project. If you use LocaleManager, you will also need to add the org.json library, and if you use the Swing GUI stuff, you should add the flatlaf library (hit & miss regarding what breaks if you don't include it).
+Add the JAR file as a dependency in your project. If you use LocaleManager, you will also need to add the org.json library, and if you use the Swing GUI stuff, you should consider adding the flatlaf library to be safe.
 
-I haven't made a release jar yet, but you can clone the repository and build it from source. To build successfully, you will need the pre-requisites mentioned above, and a Java 21+ JDK.
+I haven't made a release jar because of how frequently I update this library, but you can clone the repository and build it from source. To build successfully, you will need the pre-requisites mentioned above, and a Java 21+ JDK. I've compiled a build chain in intellij that should work well, run `W7: Create Artifacts` for Windows (*needs powershell*), and `7: Create Artifacts` for Unix-based systems (MacOS and Linux).
 
 ## Usage
 
@@ -56,7 +58,7 @@ Contributions are welcome. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bugfix.
-3. Make your changes and create documentation (javadoc comments).
+3. Make your changes and create documentation (javadoc comments please "/**...*/").
 4. Create and run tests to ensure everything works as expected.
 5. Submit a pull request with a clear description of your changes.
 
