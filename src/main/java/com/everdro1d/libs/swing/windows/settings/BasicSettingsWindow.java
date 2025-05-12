@@ -312,6 +312,10 @@ public abstract class BasicSettingsWindow extends JFrame {
                                 System.out.println("Locale path is null.");
                             }
                         });
+                        // call themeChanged() when updateUI() is called
+                        openLocaleDirectoryButton.addPropertyChangeListener("UI", e -> {
+                            themeChanged();
+                        });
 
                         gbcAuto.gridx = 4;
                         gbcAuto.fill = GridBagConstraints.NONE;
@@ -324,6 +328,11 @@ public abstract class BasicSettingsWindow extends JFrame {
                         openLocaleRepositoryButton.addActionListener(e -> {
                             Utils.openLink(localeRepositoryURL);
                         });
+                        // call themeChanged() when updateUI() is called
+                        openLocaleRepositoryButton.addPropertyChangeListener("UI", e -> {
+                            themeChanged();
+                        });
+
                     }
                     gbc.gridy++;
                 }
