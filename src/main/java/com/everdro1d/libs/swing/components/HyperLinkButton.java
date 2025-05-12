@@ -34,4 +34,11 @@ public class HyperLinkButton extends JButton {
         addActionListener(e -> Utils.openLink(url));
 
     }
+
+    // override updateUI to set the foreground color
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        setForeground(UIManager.getColor("Component.accentColor"));
+    }
 }
