@@ -506,6 +506,18 @@ public abstract class BasicSettingsWindow extends JFrame {
         );
         openLocaleDirectoryButton.setIcon(folderIcon);
         openLocaleRepositoryButton.setIcon(repoIcon);
+
+        // Update the title bar colors for the settings frame
+        if (!UIManager.getBoolean("Application.useContrastTitleBars")) {
+            System.out.println("Title bar colors are not supported for this application.");
+            return;
+        }
+        SwingUtilities.invokeLater(() -> {
+            if (settingsFrame != null) { // because for some reason the title bar color doesn't change with the L&F
+                settingsFrame.getRootPane().putClientProperty("JRootPane.titleBarBackground", UIManager.getColor("TitlePane.background"));
+                settingsFrame.getRootPane().putClientProperty("JRootPane.titleBarForeground", UIManager.getColor("TitlePane.foreground"));
+            }
+        });
     }
 
     private boolean settingsChanged() {
