@@ -6,14 +6,11 @@ import com.everdro1d.libs.swing.themes.EverDarkLaf;
 import com.everdro1d.libs.swing.themes.EverLightLaf;
 import com.formdev.flatlaf.FlatLaf;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.*;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
