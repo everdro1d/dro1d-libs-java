@@ -128,6 +128,15 @@ public class SwingGUI {
 
     /**
      * Set the default UI settings for the application.
+     *
+     * @param font default font for the application (plain)
+     */
+    public static void uiSetup(Font font) {
+        uiSetup(font.getFontName(), font.getSize());
+    }
+
+    /**
+     * Set the default UI settings for the application.
      * @param fontName the name of the font to use
      */
     public static void uiSetup(String fontName, int fontSize) {
