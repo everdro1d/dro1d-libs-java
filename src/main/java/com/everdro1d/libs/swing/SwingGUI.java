@@ -434,6 +434,10 @@ public class SwingGUI {
         }
     }
 
+    /**
+     * Check if the current look and feel is dark mode.
+     * @return true if dark mode is active, false otherwise
+     */
     public static boolean isDarkModeActive() {
         if (UIManager.getLookAndFeel().getID().startsWith("FlatLaf")) {
             return FlatLaf.isLafDark();
@@ -442,10 +446,20 @@ public class SwingGUI {
         return UIManager.getLookAndFeel().getName().toLowerCase().contains("dark");
     }
 
+    /**
+     * Check if the component can hold text.
+     * @param component the component to check
+     * @return true if the component can hold text, false otherwise
+     */
     public static boolean canHoldText(JComponent component) {
         return component instanceof JTextComponent || component instanceof JLabel;
     }
 
+    /**
+     * Update the colors of the frame and its components.
+     * @param frame the frame to update
+     * @param isDarkModeEnabled whether dark mode is enabled
+     */
     public static void updateFrameColors(JFrame frame, boolean isDarkModeEnabled) {
         frame.getContentPane().setBackground(UIManager.getColor("RootPane.background"));
         frame.setBackground(UIManager.getColor("RootPane.background"));
@@ -460,10 +474,20 @@ public class SwingGUI {
         switchLightOrDarkMode(isDarkModeEnabled,new JFrame[]{frame});
     }
 
+    /**
+     * Get all components in a JFrame.
+     * @param frame the frame to get the components from
+     * @return an ArrayList of JComponents
+     */
     public static ArrayList<JComponent> getAllComponents(JFrame frame) {
         return getAllComponents(frame.getContentPane());
     }
 
+    /**
+     * Get all components in a container.
+     * @param container the container to get the components from
+     * @return an ArrayList of JComponents
+     */
     public static ArrayList<JComponent> getAllComponents(Container container) {
         ArrayList<JComponent> components = new ArrayList<>();
         for (Component c : container.getComponents()) {
