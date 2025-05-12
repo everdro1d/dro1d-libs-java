@@ -292,7 +292,19 @@ public class SwingGUI {
      * @param component the component to simulate the event on
      * @param keyCode ex: KeyEvent.VK_ENTER for ENTER
      * @param keyChar ex: '\n' for ENTER
-     * @param modifiers One of: {Event.SHIFT_MASK,Event.CTRL_MASK,Event.META_MASK,Event.ALT_MASK,InputEvent.SHIFT_DOWN_MASK,InputEvent.CTRL_DOWN_MASK,InputEvent.META_DOWN_MASK,InputEvent.ALT_DOWN_MASK,InputEvent.BUTTON1_DOWN_MASK,InputEvent.BUTTON2_DOWN_MASK,InputEvent.BUTTON3_DOWN_MASK,InputEvent.ALT_GRAPH_DOWN_MASK}
+     * @param modifiers One of: 
+     *                  {
+     *                      Event.SHIFT_MASK,Event.CTRL_MASK,
+     *                      Event.META_MASK,Event.ALT_MASK,
+     *                      InputEvent.SHIFT_DOWN_MASK,
+     *                      InputEvent.CTRL_DOWN_MASK,
+     *                      InputEvent.META_DOWN_MASK,
+     *                      InputEvent.ALT_DOWN_MASK,
+     *                      InputEvent.BUTTON1_DOWN_MASK,
+     *                      InputEvent.BUTTON2_DOWN_MASK,
+     *                      InputEvent.BUTTON3_DOWN_MASK,
+     *                      InputEvent.ALT_GRAPH_DOWN_MASK
+     *                  }
      * @param event KeyEvent.KEY_PRESSED, KeyEvent.KEY_RELEASED, or KeyEvent.KEY_TYPED
      * @see #simulateKeyEvent(JComponent)
      */
