@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SwingGUI {
 
@@ -46,7 +47,28 @@ public class SwingGUI {
     }
 
     /**
-     * Used to enable dark mode for the running application.
+     * Get all frames in the current application.
+     * <p>
+     *     <strong>NOTE:</strong>
+     *     Use {@code SwingUtilities.invokeLater(() -> {}} when calling this method.
+     * </p>
+     * @return array of JFrames
+     */
+    public static JFrame[] getAllFrames() {
+        JFrame[] frames = new JFrame[0];
+        try {
+            frames = Arrays.stream(Window.getWindows())
+                    .filter(window -> window instanceof JFrame)
+                    .map(window -> (JFrame) window)
+                    .toArray(JFrame[]::new);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return frames;
+    }
+
+    /**
+     * Used to enable dark mode for the running application. Defaults to false for contrastTitleBars.
      * <p>
      * FlatLaf is used to set the look and feel of the application
      *
