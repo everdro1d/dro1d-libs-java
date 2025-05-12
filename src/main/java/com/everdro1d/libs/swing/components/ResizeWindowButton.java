@@ -17,7 +17,7 @@ public abstract class ResizeWindowButton extends JButton {
 
     private JFrame frame;
 
-    private boolean debug = false;
+    private boolean debug;
     private boolean maximized = false;
 
     public ResizeWindowButton(
