@@ -23,9 +23,9 @@ public class SwingGUI {
      * Set the look and feel of the application.
      * @param useFlatLaf whether to use FlatLaf (defaults to system look and feel)
      * @param allowDarkMode whether to enable dark mode (FlatLaf only)
-     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
+     * @param startInDarkMode whether to start the application in dark mode (FlatLaf only)
      */
-    public static void setupLookAndFeel(boolean useFlatLaf, boolean allowDarkMode, boolean contrastTitleBars) {
+    public static void setupLookAndFeel(boolean useFlatLaf, boolean allowDarkMode, boolean startInDarkMode) {
         if (useFlatLaf) {
             FlatLaf.registerCustomDefaultsSource("com.everdro1d.libs.swing.themes");
             EverLightLaf.installLafInfo();
@@ -33,7 +33,7 @@ public class SwingGUI {
                 EverDarkLaf.installLafInfo();
             }
 
-            switchLightOrDarkMode(false, contrastTitleBars);
+            switchLightOrDarkMode(startInDarkMode);
 
             return;
         }
@@ -69,13 +69,12 @@ public class SwingGUI {
     }
 
     /**
-     * Used to enable dark mode for the running application. Defaults to false for contrastTitleBars and attempts to get all frames when called.
+     * Used to enable dark mode for the running application. Attempts to get all frames when called.
      * <p>
      * FlatLaf is used to set the look and feel of the application
      *
      * @param isDarkModeEnabled whether to enable dark mode
      * @see #switchLightOrDarkMode(boolean, JFrame[])
-     * @see #switchLightOrDarkMode(boolean, JFrame[], boolean)
      */
     public static void switchLightOrDarkMode(boolean isDarkModeEnabled) {
         SwingUtilities.invokeLater(() -> {
@@ -84,45 +83,15 @@ public class SwingGUI {
     }
 
     /**
-     * Used to enable dark mode for the running application. Defaults to false for contrastTitleBars.
-     * <p>
-     * FlatLaf is used to set the look and feel of the application
-     *
-     * @param isDarkModeEnabled whether to enable dark mode
-     * @param frames            array of JFrames to update
-     * @see #switchLightOrDarkMode(boolean)
-     * @see #switchLightOrDarkMode(boolean, JFrame[], boolean)
-     */
-    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
-        switchLightOrDarkMode(isDarkModeEnabled, frames, false);
-    }
-
-    /**
-     * Used to enable dark mode for the running application.
-     * <p>
-     * FlatLaf is used to set the look and feel of the application
-     *
-     * @param isDarkModeEnabled whether to enable dark mode
-     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
-     * @see #switchLightOrDarkMode(boolean)
-     * @see #switchLightOrDarkMode(boolean, JFrame[])
-     * @see #switchLightOrDarkMode(boolean, JFrame[], boolean)
-     */
-    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, boolean contrastTitleBars) {
-        switchLightOrDarkMode(isDarkModeEnabled, null, contrastTitleBars);
-    }
-
-    /**
      * Used to enable dark mode for the running application.
      * <p>
      * FlatLaf is used to set the look and feel of the application
      * @param isDarkModeEnabled whether to enable dark mode
      * @param frames array of JFrames to update
-     * @param contrastTitleBars whether to use contrasting titleBar colors for the application
      * @see #switchLightOrDarkMode(boolean)
      * @see #switchLightOrDarkMode(boolean, JFrame[])
      */
-    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames, boolean contrastTitleBars) {
+    public static void switchLightOrDarkMode(boolean isDarkModeEnabled, JFrame[] frames) {
         try {
             if (EverDarkLaf.isLafInstalled() || EverLightLaf.isLafInstalled()) {
                 if (isDarkModeEnabled && EverDarkLaf.isLafInstalled()) {
@@ -134,7 +103,7 @@ public class SwingGUI {
                 }
             }
 
-            if (!contrastTitleBars) {
+            if (!UIManager.getBoolean("Application.useContrastTitleBar")) {
                 return;
             }
 
