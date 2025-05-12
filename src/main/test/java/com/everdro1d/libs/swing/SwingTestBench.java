@@ -3,17 +3,14 @@
 package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.locale.LocaleManager;
-import com.everdro1d.libs.swing.components.LabeledTextField;
 import com.everdro1d.libs.swing.components.TextFieldFileChooser;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.prefs.Preferences;
 
 public class SwingTestBench {
