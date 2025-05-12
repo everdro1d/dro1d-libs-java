@@ -162,7 +162,7 @@ public class FileChooser extends JFileChooser {
         this.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
-                // TODO: save file into existing file add overwrite dialog.
+                // TODO: save file into existing file -> add overwrite dialog.
                 //       do same for existing file has same name.
                 //       consider adding presets for file chooser config.
 
