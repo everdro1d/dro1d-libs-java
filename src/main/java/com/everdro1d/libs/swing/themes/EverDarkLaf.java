@@ -4,6 +4,8 @@ package com.everdro1d.libs.swing.themes;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import javax.swing.UIManager;
+
 public class EverDarkLaf extends FlatDarkLaf {
     public static final String NAME = "EverDarkLaf";
 
@@ -13,6 +15,16 @@ public class EverDarkLaf extends FlatDarkLaf {
 
     public static void installLafInfo() {
         installLafInfo( NAME, EverDarkLaf.class );
+    }
+
+    public static boolean isLafInstalled() {
+        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            if (info.getName().equals(NAME)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
