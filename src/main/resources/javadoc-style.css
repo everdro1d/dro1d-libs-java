@@ -125,6 +125,14 @@ body > div.flex-box > div > main {
     font-weight: bold;
 }
 
+.about-language {
+    padding: 8px 21px 0 8px;
+
+    b {
+        font-size: 20px;
+    }
+}
+
 /* A - LINKS */
 a:link, a, #navbar-top-firstrow > li > a {
     color: var(--link-color);
