@@ -4,3 +4,9 @@ com.everdro1d.libs.core
 com.everdro1d.libs.io
 com.everdro1d.libs.locale
 com.everdro1d.libs.structs
+com.everdro1d.libs.swing
+com.everdro1d.libs.swing.components
+com.everdro1d.libs.swing.dialogs
+com.everdro1d.libs.swing.themes
+com.everdro1d.libs.swing.windows
+com.everdro1d.libs.swing.windows.settings
