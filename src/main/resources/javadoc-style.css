@@ -126,10 +126,23 @@ body > div.flex-box > div > main {
 }
 
 .about-language {
-    padding: 8px 21px 0 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    vertical-align: center;
+    float:right;
+    overflow:hidden;
+    margin-top: -4px;
 
-    b {
-        font-size: 20px;
+    a {
+        background: var(--navbar-background-color);
+        color: var(--link-color) !important;
+        text-decoration: none;
+        padding: 5px 10px;
+    }
+
+    a:hover {
+        color: var(--link-color-active) !important;
     }
 }
 
