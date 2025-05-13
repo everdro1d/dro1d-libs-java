@@ -7,10 +7,31 @@ import com.everdro1d.libs.core.Utils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A custom Swing button that looks like a hyperlink.
+ * <p>
+ * The button displays a URL as underlined text and opens it in
+ * the default browser when clicked.
+ * It supports customizable tool tip text, horizontal padding,
+ * font name, and font size.
+ * </p>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <blockquote><pre>
+ * HyperLinkButton linkButton = new HyperLinkButton(
+ *     "https://everdro1d.github.io",
+ *     "Click to visit everdro1d's website",
+ *     SwingConstants.LEFT,
+ *     "Tahoma",
+ *     12
+ * );
+ * </pre></blockquote>
+ */
 public class HyperLinkButton extends JButton {
     /**
+     * Creates a new HyperLinkButton with the specified URL and tool tip text.
      *
-     * @param url the url to open & show
+     * @param url the url to open and show
      * @param toolTipText tool tip text to show
      * @param horizontalPadding use SwingConstants.LEFT or SwingConstants.RIGHT
      * @param fontName name of font ex: "Tahoma"

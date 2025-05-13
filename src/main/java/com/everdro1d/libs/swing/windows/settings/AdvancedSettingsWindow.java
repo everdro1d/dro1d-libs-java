@@ -15,6 +15,16 @@ import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.swing.windows.settings.SettingsWindowCommon.*;
 
+/**
+ * <h2>WIP - Not ready for use</h2>
+ * <p><strong>Use {@link BasicSettingsWindow} instead.</strong></p>
+ *
+ * <p>A base class for creating advanced settings windows with a tabbed interface.</p>
+ * This class provides a framework for creating settings windows with a title, tabs, and buttons for applying and canceling changes.
+ * It also includes functionality for importing and exporting settings.
+ *
+ * <p>Instances should implement the {@link #applySettings()} method to handle the actual saving of settings.</p>
+ */
 public abstract class AdvancedSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
@@ -61,6 +71,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
      * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
+     * @param settingsTabPanelMap a map of tabs and their jpanels
      * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LocaleManager, LinkedHashMap)
      * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
@@ -78,6 +89,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
+     * @param settingsTabPanelMap a map of tabs and their jpanels
      * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
      * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, String, int, Preferences, boolean, LocaleManager, LinkedHashMap)
      */
@@ -97,7 +109,7 @@ public abstract class AdvancedSettingsWindow extends JFrame {
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @param settingsTabPanelMap a map of tabs and their contents
+     * @param settingsTabPanelMap a map of tabs and their jpanels
      * @see AdvancedSettingsWindow#AdvancedSettingsWindow(JFrame, Preferences, boolean, LinkedHashMap)
      */
     public AdvancedSettingsWindow(

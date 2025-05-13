@@ -19,6 +19,16 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
+/**
+ * A debug console window that displays debug information and allows the user to clear, copy, or save the console output.
+ * <p>
+ * This class is used to create a debug console window that can be used to display debug information. The window
+ * contains a text area for displaying the debug output, as well as buttons for clearing, copying, and saving the output.
+ * </p>
+ * The window can be customized with different fonts and sizes, and it can also be localized using a {@link LocaleManager}.
+ *
+ * @see <a href="https://github.com/everdro1d/SwingGUIApplicationTemplate/blob/master/src/main/com/everdro1d/swingtemplate/core/MainWorker.java#L249">DebugConsoleWindow Example Implementation</a>
+ */
 public class DebugConsoleWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 

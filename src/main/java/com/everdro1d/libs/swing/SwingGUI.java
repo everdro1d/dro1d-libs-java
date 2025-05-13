@@ -15,6 +15,30 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The {@code SwingGUI} class provides utility methods for setting up the
+ * look and feel of a Swing application, managing dark mode, and handling
+ * various GUI components.
+ * <p>
+ * This class is non-instantiable and contains only static methods.
+ * </p>
+ *
+ * <p><strong>Features:</strong></p>
+ * <ul>
+ *   <li>Setup look and feel with optional dark mode support.</li>
+ *   <li>Get all frames in the current application.</li>
+ *   <li>Simulate key and mouse events on components.</li>
+ *   <li>Create and update combo boxes with custom font settings.</li>
+ *   <li>Set hand cursor for clickable components.</li>
+ * </ul>
+ *
+ * <p><strong>Example Usage:</strong></p>
+ * <blockquote><pre>
+ * SwingGUI.setupLookAndFeel(true, true, false);
+ * </pre></blockquote>
+ *
+ * <p><strong>Note:</strong> This class cannot be instantiated.</p>
+ */
 public class SwingGUI {
 
     // Private constructor to prevent instantiation.
@@ -141,6 +165,7 @@ public class SwingGUI {
     /**
      * Set the default UI settings for the application.
      * @param fontName the name of the font to use
+     * @param fontSize the size of the font to use
      */
     public static void uiSetup(String fontName, int fontSize) {
         Font font = new Font(fontName, Font.PLAIN, fontSize);
@@ -342,6 +367,14 @@ public class SwingGUI {
         return comboBox;
     }
 
+    /**
+     * Set up the combo box with the specified parameters.
+     * @param comboBox the combo box to set up
+     * @param selectedIndex default selected index
+     * @param fontName the name of the font to use
+     * @param fontSize the size of the font to use
+     * @see #stringComboBoxConstructor(String[], int, String, int)
+     */
     public static void setupComboBox(JComboBox<String> comboBox, int selectedIndex, String fontName, int fontSize) {
         comboBox.setFont(new Font(fontName, Font.PLAIN, fontSize));
         comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -494,6 +527,25 @@ public class SwingGUI {
         return components;
     }
 
+    /**
+     * Get the default font name for the current operating system.
+     * <p>
+     * This method first checks if the "Tahoma" font is available on the system.
+     * If it is, it returns "Tahoma". Otherwise, it falls back to the default font
+     * for the current operating system:
+     * </p>
+     * <ul>
+     *     <li>Windows: "Segoe UI"</li>
+     *     <li>Mac: "San Francisco"</li>
+     *     <li>Unix: "Liberation Sans"</li>
+     *     <li>Everything Else: "Arial"</li>
+     * </ul>
+     * <p>Note that if none of these fonts are available,
+     * the font will be up to the look and feel to decide.
+     * </p>
+     *
+     * @return the default font name
+     */
     public static String getDefaultFontNameForOS() {
         // check if font is available
         String[] availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();

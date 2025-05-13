@@ -24,6 +24,21 @@ public class CollapsableTitledBorder extends TitledBorder {
 
     private static boolean showTabbedPaneSeparators;
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * panelCollapsedHeight = 50
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param showTabbedPaneSeparators true if the tabbed pane separators should be shown when expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, boolean showTabbedPaneSeparators
@@ -31,6 +46,22 @@ public class CollapsableTitledBorder extends TitledBorder {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, showTabbedPaneSeparators);
     }
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * tabbedPaneExpandFunc = null
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param panelCollapsedHeight the height of the panel when collapsed
+     * @param showTabbedPaneSeparators true if the tabbed pane separators should be shown when expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight, boolean showTabbedPaneSeparators
@@ -38,6 +69,23 @@ public class CollapsableTitledBorder extends TitledBorder {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null, showTabbedPaneSeparators);
     }
 
+
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * panelCollapsedHeight = 50
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param tabbedPaneExpandFunc a function to call when the tabbed pane is expanded
+     * @param showTabbedPaneSeparators true if the tabbed pane separators should be shown when expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight,
@@ -46,13 +94,45 @@ public class CollapsableTitledBorder extends TitledBorder {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc, showTabbedPaneSeparators);
     }
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * panelCollapsedHeight = 50
+     * tabbedPaneExpandFunc = null
+     * showTabbedPaneSeparators = false
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight
     ) {
-        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, false);
+        this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, null, false);
     }
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * tabbedPaneExpandFunc = null
+     * showTabbedPaneSeparators = false
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param panelCollapsedHeight the height of the panel when collapsed
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight
@@ -60,6 +140,22 @@ public class CollapsableTitledBorder extends TitledBorder {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, panelCollapsedHeight, null, false);
     }
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * <p><strong>Default params set to:</strong></p>
+     * <blockquote><pre>
+     * panelCollapsedHeight = 50
+     * showTabbedPaneSeparators = false
+     * </pre></blockquote>
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param tabbedPaneExpandFunc a function to call when the tabbed pane is expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight,
@@ -68,6 +164,18 @@ public class CollapsableTitledBorder extends TitledBorder {
         this(panel, titleText, expandedDefault, exclusive, panelExpandedHeight, 50, tabbedPaneExpandFunc, false);
     }
 
+    /**
+     * Creates a collapsable titled border for a JPanel or JTabbedPane.
+     *
+     * @param panel the panel to add the border to
+     * @param titleText the text to display in the title
+     * @param expandedDefault true if the panel should be expanded by default
+     * @param exclusive true if only one panel can be expanded at a time
+     * @param panelExpandedHeight the height of the panel when expanded
+     * @param panelCollapsedHeight the height of the panel when collapsed
+     * @param tabbedPaneExpandFunc a function to call when the tabbed pane is expanded
+     * @param showTabbedPaneSeparators true if the tabbed pane separators should be shown when expanded
+     */
     public CollapsableTitledBorder(
             JComponent panel, String titleText, boolean expandedDefault,
             boolean exclusive, int panelExpandedHeight, int panelCollapsedHeight,

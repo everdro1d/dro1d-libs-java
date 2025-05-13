@@ -10,6 +10,15 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
+/**
+ * A confirmation dialog with a "Do not ask again" checkbox.
+ * <p>
+ * This class extends JPanel and provides a static method to show a confirmation dialog with a message,
+ * title, options, and a "Do not ask again" checkbox. The state of the checkbox is saved in user preferences.
+ * </p>
+ *
+ * @see <a href="https://github.com/everdro1d/YouTubeVideoDownloader/blob/master/src/main/com/everdro1d/ytvd/ui/HistoryWindow.java#L619">DoNotAskAgainConfirmDialog Example Implementation</a>
+ */
 public class DoNotAskAgainConfirmDialog extends JPanel {
     private LocaleManager localeManager;
     private final JCheckBox doNotAskAgainCheckBox;
@@ -42,17 +51,22 @@ public class DoNotAskAgainConfirmDialog extends JPanel {
         add(checkBoxPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Returns the state of the "Do not ask again" checkbox.
+     * @return true if the checkbox is selected, false otherwise
+     */
     public boolean isDoNotAskAgainSelected() { return doNotAskAgainCheckBox.isSelected(); }
 
     /**
      * Shows a confirmation dialog with the selected options.
      * @param parentComponent Parent
-     * @param message Message to show in the dialog <html> format
+     * @param message Message to show in the dialog &lt;html&gt; format
      * @param title Dialog title
      * @param optionType JOptionPane.[OPTIONS]
      * @param messageType JOptionPane.[MESSAGE_TYPE]
      * @param prefs user preferences to save do not ask again
      * @param prefsKey key for do not ask again
+     * @param localeManager LocaleManager for localization
      * @return int selected option
      */
     public static int showConfirmDialog(

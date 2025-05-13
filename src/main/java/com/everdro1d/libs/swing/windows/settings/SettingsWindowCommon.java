@@ -13,7 +13,42 @@ import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.core.ApplicationCore.getApplicationName;
 
+/**
+ * The {@code SettingsWindowCommon} class provides utility methods for importing and exporting user settings,
+ * managing file paths for settings, and interacting with file choosers.
+ * <p>
+ * This class is non-instantiable and contains only static methods.
+ * </p>
+ *
+ * <p><strong>Features:</strong></p>
+ * <ul>
+ *   <li>Import settings from an XML file and apply them using {@link Preferences}.</li>
+ *   <li>Export current settings to an XML file using {@link Preferences}.</li>
+ *   <li>Retrieve or set file paths for settings using a custom file chooser.</li>
+ * </ul>
+ *
+ * <p><strong>Example Usage:</strong></p>
+ * <blockquote><pre>
+ * String filePath = SettingsWindowCommon.getFilePathUser(true, true, frame, localeManager, prefs);
+ * SettingsWindowCommon.exportSettings(filePath, true, frame, prefs);
+ * </pre></blockquote>
+ *
+ * <p><strong>Note:</strong> This class cannot be instantiated.</p>
+ */
 public class SettingsWindowCommon {
+
+    // Private constructor to prevent instantiation.
+    private SettingsWindowCommon() {
+        throw new UnsupportedOperationException("SettingsWindowCommon class cannot be instantiated");
+    }
+
+    /**
+     * Imports settings from an XML file and applies them using {@link Preferences}.
+     *
+     * @param filePath      the path to the XML file containing the settings
+     * @param debug         whether to enable debug logging
+     * @param settingsFrame the parent frame for displaying messages
+     */
     public static void importSettings(
             String filePath, boolean debug,
             JFrame settingsFrame
@@ -40,6 +75,14 @@ public class SettingsWindowCommon {
         }
     }
 
+    /**
+     * Exports current settings to an XML file using {@link Preferences}.
+     *
+     * @param filePath      the path to save the XML file
+     * @param debug         whether to enable debug logging
+     * @param settingsFrame the parent frame for displaying messages
+     * @param prefs         the {@link Preferences} node to export
+     */
     public static void exportSettings(
             String filePath, boolean debug,
             JFrame settingsFrame, Preferences prefs
@@ -68,6 +111,16 @@ public class SettingsWindowCommon {
         }
     }
 
+    /**
+     * Retrieves the file path for importing or exporting settings using a file chooser.
+     *
+     * @param export        whether the operation is an export
+     * @param debug         whether to enable debug logging
+     * @param settingsFrame the parent frame for the file chooser
+     * @param localeManager the {@link LocaleManager} for localization
+     * @param prefs         the {@link Preferences} node to store the file path
+     * @return the selected file path, or an empty string if canceled
+     */
     public static String getFilePathUser(
             boolean export, boolean debug,
             JFrame settingsFrame,
@@ -89,6 +142,15 @@ public class SettingsWindowCommon {
         return settingsFilePath;
     }
 
+    /**
+     * Opens a file chooser dialog for selecting a file path.
+     *
+     * @param existingFilePath the existing file path to preselect
+     * @param export           whether the operation is an export
+     * @param settingsFrame    the parent frame for the file chooser
+     * @param localeManager    the {@link LocaleManager} for localization
+     * @return the selected file path, or a "Cancel-" prefixed string if canceled
+     */
     private static String openFileChooser(
             String existingFilePath, boolean export,
             JFrame settingsFrame, LocaleManager localeManager

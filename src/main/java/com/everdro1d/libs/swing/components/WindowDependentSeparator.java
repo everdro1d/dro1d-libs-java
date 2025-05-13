@@ -7,6 +7,14 @@ import com.formdev.flatlaf.FlatClientProperties;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A separator that adjusts its width based on the width of a given JFrame.
+ * <p>
+ * This class allows you to create a separator that is dependent on a percentage of the
+ * frame's width or a fixed amount subtracted from the frame's width. It can be used to
+ * create responsive layouts in Swing applications.
+ * </p>
+ */
 public class WindowDependentSeparator extends JPanel {
 
     /**

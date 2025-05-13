@@ -12,6 +12,33 @@ import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * A custom file chooser dialog for selecting files or directories with localization support.
+ *
+ * <p>This class extends {@link JFileChooser} and provides additional functionality such as:</p>
+ * <ul>
+ *   <li>Customizable UI text and tooltips through a {@link LocaleManager}.</li>
+ *   <li>Support for filtering files by extension.</li>
+ *   <li>Customizable dialog properties like title, selection mode, and description messages.</li>
+ *   <li>Automatic application of localized text to the file chooser components.</li>
+ * </ul>
+ *
+ * <p><strong>Example usage:</strong></p>
+ * <blockquote><pre>
+ * LocaleManager localeManager = new LocaleManager();
+ * FileChooser fileChooser = new FileChooser(
+ *     System.getProperty("user.home"),
+ *     "Select a File",
+ *     true,
+ *     localeManager
+ * );
+ * int result = fileChooser.showOpenDialog(null);
+ * if (result == JFileChooser.APPROVE_OPTION) {
+ *     File selectedFile = fileChooser.getSelectedFile();
+ *     System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+ * }
+ * </pre></blockquote>
+ */
 public class FileChooser extends JFileChooser {
     // UI text
     private LocaleManager localeManager;

@@ -12,6 +12,32 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.prefs.Preferences;
 
+/**
+ * The {@code UpdateCheckerDialog} class provides functionality to check for application updates
+ * and display a dialog prompting the user to update if a newer version is available.
+ * <p>
+ * This class integrates with GitHub release tags (formatted as "vX.Y.Z") to determine
+ * the latest version and supports localization through the {@link LocaleManager}.
+ * </p>
+ *
+ * <p><strong>Features:</strong></p>
+ * <ul>
+ *   <li>Checks for updates using the GitHub releases page.</li>
+ *   <li>Displays a localized dialog with options to update or skip.</li>
+ *   <li>Supports "Do not ask again" functionality using {@link Preferences}.</li>
+ * </ul>
+ *
+ * <p><strong>Example Usage:</strong></p>
+ * <blockquote><pre>
+ * UpdateCheckerDialog.showUpdateCheckerDialog(
+ *     "1.2.1", parentFrame, true,
+ *     "https://github.com/user/repo/releases/latest/",
+ *     "https://someurl.com/download", prefs, localeManager
+ * );
+ * </pre></blockquote>
+ *
+ * <p><strong>Note:</strong> This class is not intended to be instantiated directly.</p>
+ */
 public class UpdateCheckerDialog {
     private LocaleManager localeManager;
     private static String[] updateCheckerDialogText = {
@@ -30,7 +56,7 @@ public class UpdateCheckerDialog {
         } else System.out.println("LocaleManager is null. UpdateCheckerDialog will launch without localization.");
     }
 
-    /** TODO - update for localeManager
+    /**
      * Check for updates and display a dialog if an update is available.
      * @param currentVersion the current version of the application - "1.2.1"
      * @param parentFrame the parent frame of the dialog

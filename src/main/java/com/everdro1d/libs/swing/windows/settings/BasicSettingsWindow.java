@@ -22,6 +22,21 @@ import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.swing.windows.settings.SettingsWindowCommon.*;
 
+/**
+ * A basic settings window that can be used to create a settings window for any application.
+ * <p>This class is abstract and must be extended to implement:</p>
+ * <ul>
+ *     <li>{@link #applySettings()}</li>
+ *     <li>{@link #setOriginalSettingsMap()}</li>
+ *     <li>{@link #setRestartRequiredSettingsMap()}</li>
+ * </ul>
+ *
+ * <p>If a {@link LocaleManager} is passed, a locale switch will be shown
+ * automatically. For other settings you will need to create a JPanel and
+ * customize the above methods to use them.</p>
+ * @see <a href="https://github.com/everdro1d/SwingGUIApplicationTemplate/blob/master/src/main/com/everdro1d/swingtemplate/ui/panels/GeneralSettingsPanel.java">GenericSettingsPanel Example Implementation</a>
+ * @see <a href="https://github.com/everdro1d/SwingGUIApplicationTemplate/blob/master/src/main/com/everdro1d/swingtemplate/core/ButtonAction.java#L21">showSettingsWindow Example Implementation</a>
+ */
 public abstract class BasicSettingsWindow extends JFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
@@ -88,6 +103,18 @@ public abstract class BasicSettingsWindow extends JFrame {
 
     // End of variables -----------------------------------------------------------------------------------------------|
 
+    /**
+     * Constructor for the BasicSettingsWindow.
+     * @param parent Parent frame to center the settings window on.
+     * @param fontName Font name to use for the settings window.
+     * @param fontSize Font size to use for the settings window.
+     * @param prefs Preferences object to store settings.
+     * @param debug Debug mode flag.
+     * @param localeManager LocaleManager object for localization.
+     * @param settingsPanel JPanel containing the settings components.
+     * @param localeRepositoryURL URL for the locale repository.
+     * @param helpWebsiteURL URL for the help website.
+     */
     public BasicSettingsWindow(
             JFrame parent, String fontName, int fontSize, Preferences prefs,
             boolean debug, LocaleManager localeManager, JPanel settingsPanel,
@@ -572,33 +599,43 @@ public abstract class BasicSettingsWindow extends JFrame {
     public abstract void applySettings();
 
     /**
-     * Add current settings for GeneralSettingsPanel here ex:<p>
-     *     <h2>NOTE! Name these keys the same as your prefs keys!</h2><p>
+     * Add current settings for GeneralSettingsPanel here ex:
+     * <p><b>NOTE! Name these keys the same as your prefs keys!</b></p>
      * <blockquote><pre>
-     *     Map<String,String> originalSettings = new HashMap<>();
+     *     Map&lt;String,String&gt; originalSettings = new HashMap&lt;&gt;();
      *         originalSettings.put("currentLocale",
      *             localeManager.getCurrentLocale())
      *         );
      *     return originalSettings;
      * </pre></blockquote>
+     * @return map that saves the original settings to reset any changes
      */
     public abstract Map<String,String> setOriginalSettingsMap();
 
     /**
-     * Add current settings for GeneralSettingsPanel here ex:<p>
-     *     <h2>NOTE! Name these keys the same as your prefs keys!</h2><p>
+     * Add current settings for GeneralSettingsPanel here ex:
+     * <p><b>NOTE! Name these keys the same as your prefs keys!</b></p>
      * <blockquote><pre>
-     *     Map<String,String> restartRequiredSettings = new HashMap<>();
+     *     Map&lt;String,String&gt; restartRequiredSettings = new HashMap&lt;&gt;();
      *         restartRequiredSettings.put("currentLocale", true));
      *     return restartRequiredSettings;
      * </pre></blockquote>
+     * @return map of settings that require a restart
      */
     public abstract Map<String,Boolean> setRestartRequiredSettingsMap();
 
+    /**
+     * Retrieves the map of original settings.
+     * @return original settings map
+     */
     public Map<String,String> getOriginalSettingsMap() {
         return originalSettingsMap;
     }
 
+    /**
+     * Retrieves the map of settings that require a restart.
+     * @return restart required settings map
+     */
     public Map<String,Boolean> getRestartRequiredSettingsMap() {
         return restartRequiredSettingsMap;
     }

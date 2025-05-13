@@ -6,16 +6,28 @@ import javax.swing.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * A tabbed pane with a row/column of tabs on each axis.
+ * <p>
+ * This class extends JTabbedPane and provides a constructor to create a dual-axis tabbed pane.
+ * The tabs on the x-axis can be placed at the top or bottom, and the tabs on the y-axis can be placed
+ * on the left or right. The tabs can also be set to wrap or scroll based on the number of tabs.
+ * </p>
+ * <p>
+ * The set of side tabs is switched based on the tab selected on the top tabbed pane.
+ * Both the top and left tabbed panes do not wrap tabs and must be scrollable
+ * if the tabs exceed the width or height, respectively.
+ * </p>
+ * <pre>
+ * | Outer Tab 1 | Outer Tab 2 | Outer Tab 3 |
+ * | ----------- | ----------- | ----------- |
+ * | Panel Tab 1 | A JPanel                  |
+ * | Panel Tab 2 |                           |
+ * | Panel Tab 3 |                           |
+ * </pre>
+ */
 public class DualAxisTabbedPane extends JTabbedPane {
-    // a tabbed pane on top containing a tabbed pane on the left vertically
-    // based on the tab selected on the top tabbed pane, switch the set of left tabs
-    // both the top and left tabbed panes don't wrap tabs and must be scrollable
-    // if the tabs exceed the width or height, respectively.
-    // | Outer Tab 1 | Outer Tab 2 | Outer Tab 3 |
-    // | ----------- | ----------- | ----------- |
-    // | Panel Tab 1 | A JPanel                  |
-    // | Panel Tab 2 |                           |
-    // | Panel Tab 3 |                           |
+
     private int tabLayoutPolicy;
     private int xTabPlacement;
     private int yTabPlacement;

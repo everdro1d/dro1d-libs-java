@@ -8,6 +8,29 @@ import java.awt.*;
 import java.awt.image.*;
 import java.io.InputStream;
 
+/**
+ * Utility class for handling image-related operations in Swing applications.
+ * <p>
+ * This class provides methods for setting frame icons, retrieving application icons,
+ * changing icon colors, and applying transformations such as darkening icons.
+ * </p>
+ *
+ * <p><strong>Features:</strong></p>
+ * <ul>
+ *   <li>Set the icon of a {@link JFrame} from application resources.</li>
+ *   <li>Retrieve an image as an {@link Icon} from the application's resources.</li>
+ *   <li>Change the color of an icon while preserving transparency.</li>
+ *   <li>Darken an icon by reducing its brightness.</li>
+ * </ul>
+ *
+ * <p><strong>Example Usage:</strong></p>
+ * <blockquote><pre>
+ * JFrame frame = new JFrame();
+ * ImageUtils.setFrameIcon(frame, "icons/app_icon.png", MyApp.class);
+ * </pre></blockquote>
+ *
+ * <p><strong>Note:</strong> This class cannot be instantiated.</p>
+ */
 public class ImageUtils {
 
     // Private constructor to prevent instantiation.

@@ -8,6 +8,29 @@ import com.everdro1d.libs.swing.SwingGUI;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Abstract class for a button that resizes a window when clicked.
+ * <p>
+ * This class provides functionality to create a button that can resize a JFrame
+ * from a specified width and height, with customizable multipliers for
+ * resizing. It also allows for custom actions to be performed after resizing.
+ * </p>
+ *
+ * <p><strong>Example Usage:</strong></p>
+ * <blockquote><pre>
+ * JFrame frame = new JFrame();
+ * ResizeWindowButton resizeButton = new ResizeWindowButton(frame, 800, 600, 1.5f, 1.5f, true) {
+ *   &#64;Override
+ *   public void customResizeActions() {
+ *    // Custom actions to perform after resizing
+ *    System.out.println("Window resized to: " + getNewWidth() + "x" + getNewHeight());
+ *    }
+ * };
+ *
+ * </pre></blockquote>
+ *
+ * @see JButton
+ */
 public abstract class ResizeWindowButton extends JButton {
     private final int baseWidth, baseHeight;
     private float xMult, yMult;
@@ -20,6 +43,16 @@ public abstract class ResizeWindowButton extends JButton {
     private final boolean debug;
     private boolean maximized = false;
 
+    /**
+     * Constructor for {@link ResizeWindowButton}.
+     *
+     * @param frame      the JFrame to resize
+     * @param baseWidth  the base width of the window
+     * @param baseHeight the base height of the window
+     * @param xMult      the multiplier for width resizing
+     * @param yMult      the multiplier for height resizing
+     * @param debug      whether to enable debug output
+     */
     public ResizeWindowButton(
             JFrame frame,
             int baseWidth,
@@ -51,7 +84,14 @@ public abstract class ResizeWindowButton extends JButton {
 
     }
 
-    public void resizeWindow() {
+    /**
+     * Resize the window based on the current state (maximized or minimized).
+     * <p>
+     * This method toggles the window size between the base size and the
+     * multiplied size, and performs custom actions after resizing.
+     * </p>
+     */
+    private void resizeWindow() {
         if (maximized) {
             newWidth = this.baseWidth;
             newHeight = this.baseHeight;
@@ -75,6 +115,13 @@ public abstract class ResizeWindowButton extends JButton {
         this.maximized = !maximized;
     }
 
+    /**
+     * Custom actions to perform after resizing the window.
+     * <p>
+     * This method can be overridden to provide custom behavior after the
+     * window has been resized.
+     * </p>
+     */
     public abstract void customResizeActions();
 
     @Override
@@ -84,7 +131,8 @@ public abstract class ResizeWindowButton extends JButton {
     }
 
     /**
-     * Overload method for default color based on rootpane foreground color
+     * Overload method for default color based on root pane foreground color.
+     * @see #resizeWindowButtonColorChange(Color)
      */
     public void resizeWindowButtonColorChange() {
         Color c = UIManager.getColor("RootPane.foreground");
@@ -107,17 +155,61 @@ public abstract class ResizeWindowButton extends JButton {
     }
 
     // getters
+    /**
+     * Retrieve the base width (width before resize).
+     * @return the base width of the window
+     */
     public int      getBaseWidth()      { return this.baseWidth;    }
+
+    /**
+     * Retrieve the base height (height before resize).
+     * @return the base height of the window
+     */
     public int      getBaseHeight()     { return this.baseHeight;   }
+
+    /**
+     * Retrieve the new width (width after resize).
+     * @return the new width of the window
+     */
     public int      getNewWidth()       { return this.newWidth;     }
+
+    /**
+     * Retrieve the new height (height after resize).
+     * @return the new height of the window
+     */
     public int      getNewHeight()      { return this.newHeight;    }
+
+    /**
+     * Retrieve the multiplier for width resizing.
+     * @return the multiplier for width resizing
+     */
     public float    getXMultiplier()    { return this.xMult;        }
+
+    /**
+     * Retrieve the multiplier for height resizing.
+     * @return the multiplier for height resizing
+     */
     public float    getYMultiplier()    { return yMult;             }
+
+    /**
+     * Retrieve whether the window is maximized (using this button).
+     * @return true if the window is maximized, false otherwise
+     */
     public boolean  isMaximized()       { return maximized;         }
 
+    // setters
+    /**
+     * Set the width multiplier for resizing.
+     * @param newXMult the new width multiplier
+     */
     public void setXMultiplier(float newXMult) {
         this.xMult = newXMult;
     }
+
+    /**
+     * Set the height multiplier for resizing.
+     * @param newYMult the new height multiplier
+     */
     public void setYMultiplier(float newYMult) {
         this.yMult = newYMult;
     }
