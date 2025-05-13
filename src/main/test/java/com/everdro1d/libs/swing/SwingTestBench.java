@@ -4,6 +4,7 @@ package com.everdro1d.libs.swing;
 
 import com.everdro1d.libs.locale.LocaleManager;
 import com.everdro1d.libs.swing.components.TextFieldFileChooser;
+import com.everdro1d.libs.swing.windows.DebugConsoleWindow;
 import com.everdro1d.libs.swing.windows.settings.BasicSettingsWindow;
 
 
@@ -94,10 +95,10 @@ public class SwingTestBench {
 //                }
 //            };
 
-            //DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
+            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
 
             frameArr[0] = s;
-            //frameArr[1] = d;
+            frameArr[1] = d;
 
             SwingGUI.switchLightOrDarkMode(darkMode, frameArr);
         });
