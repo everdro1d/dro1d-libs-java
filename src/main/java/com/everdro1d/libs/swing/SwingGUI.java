@@ -381,7 +381,7 @@ public class SwingGUI {
         comboBox.setSelectedIndex(selectedIndex);
     }
 
-    /** OVERLOAD <p>
+    /**
      * Update the width of the combobox depending on the width of the longest string within its array.
      * Padding defaults to 40.
      * @param strArr the array of items for the combo box
