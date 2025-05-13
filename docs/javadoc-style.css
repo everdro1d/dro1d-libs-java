@@ -16,6 +16,7 @@
         --section-background-color: #f8f8f8;
         --navbar-background-color: var(--detail-background-color);
         --subnav-background-color: #f9f9f9;
+        --selected-background-color: var(--detail-background-color);
 
         --text-color: #141414;
         --secondary-text-color: #434c5d;
@@ -26,12 +27,21 @@
         --link-color-active: #4c6b87;
         --search-input-text-color: var(--text-color);
         --search-input-placeholder-color: var(--placeholder-color);
+        --selected-text-color: var(--text-color);
+        --selected-link-color: var(--link-color);
+
+        --table-border-color: var(--text-color);
 
         --border-color: #dfe3e5;
         --placeholder-color: #a3a5a7;
         --highlight-color: #f5f8fa;
+        --snippet-highlight-color: var(--highlight-color);
+        --search-tag-highlight-color: var(--highlight-color);
         --deprecation-color: #ffe9e9;
         --secondary-border-color: #b4b4b4;
+
+        --invalid-tag-background-color: var(--detail-background-color);
+        --invalid-tag-text-color: var(--text-color);
 
         --shadow: rgba(0, 0, 0, 0.05) 0px 6px 9px 0px;
     }
@@ -45,10 +55,12 @@
         --section-background-color: var(--detail-background-color);
         --navbar-background-color: var(--detail-background-color);
         --subnav-background-color: var(--detail-background-color);
+        --selected-background-color: var(--detail-background-color);
+        --snippet-background-color: var(--detail-background-color);
 
         --text-color: #cecece;
         --secondary-text-color: #afb0b1;
-        --block-text-color: #8a8a8a;
+        --block-text-color: #aeaeae;
         --body-text-color: var(--secondary-text-color);
         --title-color: #a9b4cc;
         --link-color: #7bb3df;
@@ -56,12 +68,22 @@
         --navbar-text-color: var(--text-color);
         --search-input-text-color: var(--text-color);
         --search-input-placeholder-color: var(--placeholder-color);
+        --selected-text-color: var(--text-color);
+        --selected-link-color: var(--link-color);
+        --snippet-text-color: var(--text-color);
+
+        --table-border-color: var(--text-color);
 
         --border-color: #434c5d;
         --placeholder-color: #a3a5a7;
         --highlight-color: #1a1a1a;
+        --snippet-highlight-color: var(--highlight-color);
+        --search-tag-highlight-color: var(--highlight-color);
         --deprecation-color: #5c2a2a;
         --secondary-border-color: #434c5d;
+
+        --invalid-tag-background-color: var(--detail-background-color);
+        --invalid-tag-text-color: var(--text-color);
 
         --shadow: rgba(255, 255, 255, 0.05) 0px 6px 9px 0px;
     }
