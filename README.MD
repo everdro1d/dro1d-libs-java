@@ -64,5 +64,5 @@ Contributions are welcome. Please follow these steps:
 
 ## Support
 
-For issues or questions, please [open an issue](https://github.com/everdro1d/dro1d-libs-java/issues/new/choose) in the repository or [contact me](mailto:everdro1d-github@pm.me).
+For issues or questions, please [open an issue](https://github.com/everdro1d/dro1d-libs-java/issues/new/choose) in the repository or [contact the developer](mailto:everdro1d-github@pm.me).
 
