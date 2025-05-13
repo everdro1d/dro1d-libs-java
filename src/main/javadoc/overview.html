@@ -1,0 +1,53 @@
+<!-- dro1dDev - created: 2025-05-13 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <header>
+        <p>A collection of reusable Java libraries to simplify application development.</p>
+    </header>
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li><strong>Command Management:</strong> Simplify the creation and execution of CLI arguments.</li>
+                <li><strong>I/O Utilities:</strong> Streamline input/output operations with reusable implementations.</li>
+                <li><strong>Localization:</strong> Manage, create, and use locales with ease.</li>
+                <li><strong>Extensibility:</strong> Modular design for easy integration into projects.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Getting Started</h2>
+            <p>To use this library, ensure you have the following prerequisites:</p>
+            <ul>
+                <li>Java 21+</li>
+                <li><code>org.json</code> library (min: 20240303) for localization features.</li>
+                <li><code>flatlaf</code> library (min: 3.4) for Swing GUI components.</li>
+            </ul>
+            <p>Clone the repository and build it from source using the provided IntelliJ build chain.</p>
+        </section>
+        <section>
+            <h2>Documentation</h2>
+            <p>For detailed documentation on classes and methods, refer to the Javadocs (this site).</p>
+        </section>
+        <section>
+            <h2>Examples</h2>
+            <h3>Command Management</h3>
+            <pre><code>
+CommandManager commandManager = new CommandManager();
+commandManager.registerCommand("example", new ExampleCommand());
+commandManager.executeCommand("example");
+            </code></pre>
+            <h3>Localization</h3>
+            <pre><code>
+LocaleManager localeManager = new LocaleManager(Main.class, "dro1dDev");
+localeManager.loadLocaleFromFile("eng");
+String message = localeManager.getVariableInComponent("MainWindow", "greetingLabel", "messageText");
+System.out.println(message);
+            </code></pre>
+        </section>
+        <section>
+            <h2>Support</h2>
+            <p>For issues or questions, <a href="https://github.com/everdro1d/dro1d-libs-java/issues/new/choose">open an issue</a> or <a href="mailto:everdro1d-github@pm.me">contact the developer</a>.</p>
+        </section>
+</body>
+</html>
