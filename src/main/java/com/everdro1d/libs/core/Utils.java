@@ -102,10 +102,10 @@ public final class Utils {
      * @param testString the string to test
      * @return {@code true} if the test string contains any of the substrings, {@code false} otherwise
      * <p><strong>Example:</strong></p>
-     * <p>{@code containsAny(new String[]{"a", "b", "ab", "c"}, "abc")} -> {@code true}</p>
-     * <p>{@code containsAny(new String[]{"a", "b", "c"}, "def")} -> {@code false}</p>
+     * <p>{@code stringContainsAny(new String[]{"a", "b", "ab", "c"}, "abc")} -> {@code true}</p>
+     * <p>{@code stringContainsAny(new String[]{"a", "b", "c"}, "def")} -> {@code false}</p>
      */
-    public static boolean containsAny(String[] matchingArray, String testString) {
+    public static boolean stringContainsAny(String[] matchingArray, String testString) {
         for (String s : matchingArray) {
             if (testString.contains(s)) {
                 return true;
