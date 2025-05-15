@@ -115,6 +115,43 @@ public final class Utils {
     }
 
     /**
+     * Checks if the given 2D array contains the specified test string.
+     * @param matchingArray the 2D array to check in
+     * @param testString the string to test
+     * @return {@code true} if the array contains the test string, {@code false} otherwise
+     */
+    public static boolean arrayContains(String[][] matchingArray, String testString) {
+        return arrayContains(matchingArray, testString, false);
+    }
+
+    /**
+     * Checks if the given 2D array contains the specified test string.
+     * @param matchingArray the 2D array to check in
+     * @param testString the string to test
+     * @param treatAsKey whether to treat the test string as a key (2D array pretending to be a map)
+     * @return {@code true} if the array contains the test string, {@code false} otherwise
+     */
+    public static boolean arrayContains(String[][] matchingArray, String testString, boolean treatAsKey) {
+        if (treatAsKey) {
+            for (String[] entry : matchingArray) {
+                if (entry[0].equals(testString)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        for (String[] entry : matchingArray) {
+            for (String s : entry) {
+                if (s.equals(testString)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Replaces the character at the specified index in the given string with the provided replacement string.
      * @param string the original string
      * @param i the index of the character to replace
