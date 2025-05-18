@@ -19,13 +19,15 @@ A collection of reusable Java libraries designed to simplify application develop
 
 ## Getting Started
 
-### Prerequisites
-
+### Dependencies
 - Java 21+
-- org.json library (min: 20240303) 
-  - LocaleManager requires it to read & write locale files.
-- flatlaf library (min: 3.4)
+- org.json:json:20240303
+  - LocaleManager requires it to read and write locale files.
+- com.formdev:flatlaf:3.4
   - Some Swing GUI things will definitely break without it, but general things like smaller components or util methods should still work. Others will be hit & miss, try it if you like.
+
+#### Test Dependencies:
+- org.junit.jupiter:junit-jupiter:5.12.1
 
 ### Installation
 
