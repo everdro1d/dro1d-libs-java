@@ -353,6 +353,13 @@ public class CommandManager {
         if (expectedArgs == 0) {
             commandToExecute.execute(this);
 
+            if (providedArgs > 0) {
+                System.err.printf(
+                    "Command [%s] does not accept arguments. Ignoring args.%n",
+                    commandString
+                );
+            }
+
         } else if (providedArgs != expectedArgs) {
             System.err.printf(
                 "Invalid number of arguments for command: [%s] Skipping.%nExpected: %d%nProvided: %d%n",
