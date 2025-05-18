@@ -54,7 +54,7 @@ If this number changes, please check your Javadoc comments,
 
 ## Usage
 
-Please refer to the [javadocs](https://everdro1d.github.io/dro1d-libs-java/) for detailed documentation on each class and its methods.
+Please refer to the [Javadocs](https://everdro1d.github.io/dro1d-libs-java/) for detailed documentation on each class and its methods.
 
 ### Example: Command Management
 ```java
