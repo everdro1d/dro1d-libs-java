@@ -13,7 +13,7 @@ class ApplicationCoreTest {
     @Test
     void checkCLIArgs_ValidCommandWithoutArgs() {
         CommandManager commandManager = new CommandManager();
-        commandManager.registerCommand("-test", new CommandInterface() {
+        commandManager.registerCommand("--test", new CommandInterface() {
             @Override
             public int getExpectedArguments() {
                 return 0;
@@ -40,13 +40,13 @@ class ApplicationCoreTest {
             }
         });
 
-        ApplicationCore.checkCLIArgs(new String[]{"-test"}, commandManager);
+        ApplicationCore.checkCLIArgs(new String[]{"--test"}, commandManager);
     }
 
     @Test
     void checkCLIArgs_ValidCommandWithArgs() {
         CommandManager commandManager = new CommandManager();
-        commandManager.registerCommand("-test", new CommandInterface() {
+        commandManager.registerCommand("--test", new CommandInterface() {
             @Override
             public int getExpectedArguments() {
                 return 2;
@@ -75,21 +75,21 @@ class ApplicationCoreTest {
             }
         });
 
-        ApplicationCore.checkCLIArgs(new String[]{"-test", "arg1", "arg2"}, commandManager);
+        ApplicationCore.checkCLIArgs(new String[]{"--test", "arg1", "arg2"}, commandManager);
     }
 
     @Test
     void checkCLIArgs_InvalidCommand() {
         CommandManager commandManager = new CommandManager();
 
-        ApplicationCore.checkCLIArgs(new String[]{"-invalid"}, commandManager);
-        assertNull(commandManager.getCommand("-invalid"));
+        ApplicationCore.checkCLIArgs(new String[]{"--invalid"}, commandManager);
+        assertNull(commandManager.getCommand("--invalid"));
     }
 
     @Test
     void checkCLIArgs_TooFewArguments() {
         CommandManager commandManager = new CommandManager();
-        commandManager.registerCommand("-test", new CommandInterface() {
+        commandManager.registerCommand("--test", new CommandInterface() {
             @Override
             public int getExpectedArguments() {
                 return 2;
@@ -116,13 +116,13 @@ class ApplicationCoreTest {
             }
         });
 
-        ApplicationCore.checkCLIArgs(new String[]{"-test", "arg1"}, commandManager);
+        ApplicationCore.checkCLIArgs(new String[]{"--test", "arg1"}, commandManager);
     }
 
     @Test
     void checkCLIArgs_TooManyArguments() {
         CommandManager commandManager = new CommandManager();
-        commandManager.registerCommand("-test", new CommandInterface() {
+        commandManager.registerCommand("--test", new CommandInterface() {
             @Override
             public int getExpectedArguments() {
                 return 2;
@@ -151,6 +151,6 @@ class ApplicationCoreTest {
             }
         });
 
-        ApplicationCore.checkCLIArgs(new String[]{"-test", "arg1", "arg2", "arg3"}, commandManager);
+        ApplicationCore.checkCLIArgs(new String[]{"--test", "arg1", "arg2", "arg3"}, commandManager);
     }
 }

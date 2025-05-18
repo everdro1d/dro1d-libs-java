@@ -6,7 +6,7 @@ import com.everdro1d.libs.commands.*;
 import com.everdro1d.libs.core.Utils;
 
 /**
- * A {@code -help} command that prints all valid CLI argument commands when executed.
+ * A {@code --help} command that prints all valid CLI argument commands when executed.
  * <p>
  * This command is designed to provide users with a list of all available commands
  * managed by the {@link CommandManager}. It is particularly useful for providing
@@ -14,13 +14,13 @@ import com.everdro1d.libs.core.Utils;
  * </p>
  * <h2>Usage</h2>
  * <p>
- * To use this command, include {@code -help} as an argument when running the application.
+ * To use this command, include {@code --help} as an argument when running the application.
  * The command will output a list of valid commands to the console.
  * </p>
  * <p><strong>Example:</strong></p>
  * <blockquote><pre>
  * CommandManager commandManager = new CommandManager();
- * commandManager.executeCommand("-help");
+ * commandManager.executeCommand("--help");
  * </pre></blockquote>
  * @see CommandManager
  */

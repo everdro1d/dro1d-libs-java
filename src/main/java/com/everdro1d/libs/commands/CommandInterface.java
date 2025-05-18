@@ -29,7 +29,7 @@ public interface CommandInterface {
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
      * CommandManager commandManager = new CommandManager();
-     * commandManager.executeCommand("-help");
+     * commandManager.executeCommand("--help");
      * </pre></blockquote>
      */
     void execute(CommandManager commandManager);
@@ -74,9 +74,9 @@ public interface CommandInterface {
      * @param description a {@code String} describing the command
      * <p><strong>Example:</strong></p>
      * <blockquote><pre>
-     * HelpCommand helpCommand = new HelpCommand("Change Me!");
+     * HelpCommand helpCommand = new HelpCommand("--change-me");
      * System.out.println(helpCommand.getDescription());
-     * // Output: "Change Me!
+     * // Output: "--change-me"
      * helpCommand.setDescription("Displays a list of valid commands");
      * System.out.println(helpCommand.getDescription());
      * // Output: "Displays a list of valid commands"
