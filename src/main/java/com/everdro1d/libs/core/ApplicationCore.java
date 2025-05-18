@@ -6,6 +6,9 @@ import com.everdro1d.libs.commands.*;
 
 import java.io.*;
 import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.prefs.Preferences;
 
@@ -105,17 +108,20 @@ public final class ApplicationCore {
      */
     public static String getLatestVersion(String githubURL) {
         try {
-            URL url = new URI(githubURL).toURL();
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setInstanceFollowRedirects(false);
-            connection.connect();
-            String location = connection.getHeaderField("Location");
-            connection.disconnect();
             if (location != null) {
                 String[] s = location.split("/v");
                 if (s.length > 1) return s[1];
                 System.err.println("Error: No valid version tag found in URL: " + location);
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(remoteURL))
+                    .method("HEAD", HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+
+            String location = response.headers().firstValue("Location").orElse(null);
+
                 return null;
             }
         } catch (Exception e) {
