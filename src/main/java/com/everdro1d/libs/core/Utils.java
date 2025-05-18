@@ -333,13 +333,13 @@ public final class Utils {
      * @param map the map to search
      * @return the key associated with the given value, or {@code null} if not found
      */
-    public static String reverseKeyFromValueInMap(String value, Map<String, String> map) {
+    public static <T> String reverseKeyFromValueInMap(T value, Map<String, T> map) {
         if (!map.containsValue(value)) {
             System.err.println("Given Map does not contain such a value. Please check again.");
             return null;
         }
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, T> entry : map.entrySet()) {
             if (Objects.equals(entry.getValue(), value)) {
                 return entry.getKey();
             }
@@ -356,7 +356,7 @@ public final class Utils {
      * @param map the map to search
      * @return an array of keys associated with the given value, or null if not found
      */
-    public static String[] reverseKeysFromValueInMap(String value, Map<String, String> map) {
+    public static <T> String[] reverseKeysFromValueInMap(T value, Map<String, T> map) {
         if (!map.containsValue(value)) {
             System.err.println("Given Map does not contain such a value. Please check again.");
             return null;
@@ -364,7 +364,7 @@ public final class Utils {
 
         List<String> keys = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, T> entry : map.entrySet()) {
             if (Objects.equals(entry.getValue(), value)) {
                 keys.add(entry.getKey());
             }
