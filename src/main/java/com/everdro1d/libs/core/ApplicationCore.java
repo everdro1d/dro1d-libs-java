@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.core.Utils.getUserConfigDirectory;
+import static com.everdro1d.libs.core.Utils.validateVersion;
 import static com.everdro1d.libs.io.Files.getJarPath;
 
 /**
@@ -100,18 +101,73 @@ public final class ApplicationCore {
     }
 
     /**
-     * Retrieves the latest version of the application from the GitHub releases page using latest tag redirect function.
-     * <p>Uses version tags in the format "vX.Y.Z".</p>
-     * @param githubURL the URL of the GitHub latest releases page (/releases/latest/)
+     * Retrieves the latest version of the application from the remote's
+     * releases page using releases/latest tag redirect function.
+     *
+     * <p>Uses version tags in the format "X.Y.Z".</p>
+     *
+     * <p>Defaults tag prefix to "v" without a suffix, (vX.Y.Z).</p>
+     *
+     * <p><strong>Example URL:</strong></p>
+     * <p>{@code https://gitlab.example.com/namespace/project/-/releases/permalink/latest}</p>
+     * <p>{@code https://github.com/user/project/releases/latest}</p>
+     *
+     * @param remoteURL the URL of the latest releases page
      * @return the latest version as a string (ex: "1.2.1"), or {@code null} if no valid version is found
-     * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog
+     *
+     * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog UpdateCheckerDialog
+     * @see #getLatestVersion(String, String)
+     * @see #getLatestVersion(String, String, String)
      */
-    public static String getLatestVersion(String githubURL) {
-        try {
-            if (location != null) {
-                String[] s = location.split("/v");
-                if (s.length > 1) return s[1];
-                System.err.println("Error: No valid version tag found in URL: " + location);
+    public static String getLatestVersion(String remoteURL) {
+        return getLatestVersion(remoteURL, "v", "");
+    }
+
+    /**
+     * Retrieves the latest version of the application from the remote's
+     * releases page using releases/latest tag redirect function.
+     *
+     * <p>Uses version tags in the format "X.Y.Z".</p>
+     *
+     * <p>Defaults to tag prefix without a suffix, (&lt;your-prefix&gt;X.Y.Z).</p>
+     *
+     * <p><strong>Example URL:</strong></p>
+     * <p>{@code https://gitlab.example.com/namespace/project/-/releases/permalink/latest}</p>
+     * <p>{@code https://github.com/user/project/releases/latest}</p>
+     *
+     * @param remoteURL the URL of the latest releases page
+     * @return the latest version as a string (ex: "1.2.1"), or {@code null} if no valid version is found
+     *
+     * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog UpdateCheckerDialog
+     * @see #getLatestVersion(String)
+     * @see #getLatestVersion(String, String, String)
+     */
+    public static String getLatestVersion(String remoteURL, String prefix) {
+        return getLatestVersion(remoteURL, prefix, "");
+    }
+
+    /**
+     * Retrieves the latest version of the application from the remote's
+     * releases page using releases/latest tag redirect function.
+     *
+     * <p>Uses version tags in the format "X.Y.Z".</p>
+     *
+     * <p>Defaults to tag prefix without a suffix, (&lt;your-prefix&gt;X.Y.Z&lt;your-suffix&gt;).</p>
+     *
+     * <p><strong>Example URL:</strong></p>
+     * <p>{@code https://gitlab.example.com/namespace/project/-/releases/permalink/latest}</p>
+     * <p>{@code https://github.com/user/project/releases/latest}</p>
+     *
+     * @param remoteURL the URL of the latest releases page
+     * @return the latest version as a string (ex: "1.2.1"), or {@code null} if no valid version is found
+     *
+     * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog UpdateCheckerDialog
+     * @see #getLatestVersion(String)
+     * @see #getLatestVersion(String, String)
+     */
+    public static String getLatestVersion(String remoteURL, String customPrefix, String customSuffix) {
+        String location = null;
+
         try ( HttpClient client = HttpClient.newHttpClient() ) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(remoteURL))
@@ -120,13 +176,28 @@ public final class ApplicationCore {
 
             HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
 
-            String location = response.headers().firstValue("Location").orElse(null);
+            location = response.headers().firstValue("Location").orElse(null);
 
-                return null;
-            }
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
+
+        if (location == null) {
+            System.err.println("Error: No redirect location found in response.");
+            return null;
+        }
+
+        String version = location.split(customPrefix)[1];
+
+        if (customSuffix != null && !customSuffix.isBlank()) {
+            version = version.split(customSuffix)[0];
+        }
+
+        if (validateVersion(version)) {
+            return version;
+        }
+
+        System.err.println("Error: Invalid version tag in URL: " + location);
         return null;
     }
 

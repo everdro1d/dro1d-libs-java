@@ -6,6 +6,8 @@ import com.everdro1d.libs.commands.CommandInterface;
 import com.everdro1d.libs.commands.CommandManager;
 import org.junit.jupiter.api.Test;
 
+import java.net.http.HttpClient;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ApplicationCoreTest {
@@ -152,5 +154,40 @@ class ApplicationCoreTest {
         });
 
         ApplicationCore.checkCLIArgs(new String[]{"--test", "arg1", "arg2", "arg3"}, commandManager);
+    }
+
+    @Test
+    void getLatestVersion_ValidRedirect() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        String mockRedirectUrl = "https://httpbin.org/redirect-to?url=https://example.com/releases/v1.2.3";
+
+        String version = ApplicationCore.getLatestVersion(mockRedirectUrl, "v", "");
+        assertEquals("1.2.3", version);
+    }
+
+    @Test
+    void getLatestVersion_NoRedirect() {
+        HttpClient client = HttpClient.newHttpClient();
+        String url = "https://httpbin.org/status/200";
+
+        String version = ApplicationCore.getLatestVersion(url, "v", "");
+        assertNull(version);
+    }
+
+    @Test
+    void getLatestVersion_InvalidVersionFormat() {
+        HttpClient client = HttpClient.newHttpClient();
+        String mockRedirectUrl = "https://httpbin.org/redirect-to?url=https://example.com/releases/invalid-version";
+
+        String version = ApplicationCore.getLatestVersion(mockRedirectUrl, "v", "");
+        assertNull(version);
+    }
+
+    @Test
+    void getLatestVersion_ExceptionThrown() {
+        String invalidUrl = "invalid-url";
+
+        String version = ApplicationCore.getLatestVersion(invalidUrl, "v", "");
+        assertNull(version);
     }
 }
