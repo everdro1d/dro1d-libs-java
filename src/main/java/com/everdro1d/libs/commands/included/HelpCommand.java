@@ -56,7 +56,7 @@ public class HelpCommand implements CommandInterface {
     public void execute(CommandManager commandManager) {
         System.out.println("List of valid commands: ");
         Utils.printlnList(
-                commandManager.getValidCommandsWithDescription()
+                commandManager.getValidCommandsWithInfo()
         );
     }
 
