@@ -61,4 +61,20 @@ class UtilsTest {
         results = Utils.reverseKeysFromValueInMap("value1", new HashMap<>());
         assertNull(results);
     }
+
+    @Test
+    void validateVersionTest() {
+        String version = "1.0.0";
+        String expectedVersion = "^(\\d+\\.\\d+\\.\\d+)";
+        assertTrue(Utils.validateVersion(version, expectedVersion));
+
+        version = "1.0";
+        assertFalse(Utils.validateVersion(version, expectedVersion));
+
+        version = "1.0.1024";
+        assertTrue(Utils.validateVersion(version, expectedVersion));
+
+        version = "1.0.0-alpha";
+        assertFalse(Utils.validateVersion(version, expectedVersion));
+    }
 }

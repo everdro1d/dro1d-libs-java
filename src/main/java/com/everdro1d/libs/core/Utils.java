@@ -396,4 +396,30 @@ public final class Utils {
         }
         return configDir;
     }
+
+    /**
+     * Validates the version string against a regex pattern.
+     * <p>This overload matches versioning: "X.Y.Z".</p>
+     *
+     * @param version the version string to validate
+     * @return {@code true} if the version string matches the pattern, {@code false} otherwise
+     *
+     * @see #validateVersion(String, String)
+     */
+    public static boolean validateVersion(String version) {
+        // Check if the version string matches the pattern "X.Y.Z"
+        return validateVersion(version, "^(\\d+\\.\\d+\\.\\d+)");
+    }
+
+    /**
+     * Validates the version string against a regex pattern.
+     * @param version the version string to validate
+     * @param expectedVersionRegex the regex pattern to match against (ex: {@code "^(\\d+\\.\\d+\\.\\d+)"})
+     * @return {@code true} if the version string matches the pattern, {@code false} otherwise
+     *
+     * @see #validateVersion(String)
+     */
+    public static boolean validateVersion(String version, String expectedVersionRegex) {
+        return version.matches(expectedVersionRegex);
+    }
 }
