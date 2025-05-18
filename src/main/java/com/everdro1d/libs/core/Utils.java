@@ -331,6 +331,7 @@ public final class Utils {
      * Reverses the key associated with the given value in the provided map.
      * @param value the value to search for in the map
      * @param map the map to search
+     * @param <T> the type of the value in the map
      * @return the key associated with the given value, or {@code null} if not found
      */
     public static <T> String reverseKeyFromValueInMap(T value, Map<String, T> map) {
@@ -354,6 +355,7 @@ public final class Utils {
      * Reverses all keys associated with the given value in the provided map.
      * @param value the value to search for in the map
      * @param map the map to search
+     * @param <T> the type of the value in the map
      * @return an array of keys associated with the given value, or null if not found
      */
     public static <T> String[] reverseKeysFromValueInMap(T value, Map<String, T> map) {
