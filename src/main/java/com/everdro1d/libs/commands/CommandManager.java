@@ -340,7 +340,10 @@ public class CommandManager {
         CommandInterface commandToExecute = getCommand(commandString);
 
         if (commandToExecute == null) {
-            System.err.printf("Unknown command: [%s] Skipping.%nUse \"--help\" or \"-h\" to list valid commands.%n", commandString);
+            System.err.printf(
+                    "Unknown command: [%s] Skipping.%nUse \"--help\" or \"-h\" to list valid commands.%n",
+                    commandString
+            );
             return;
         }
 
