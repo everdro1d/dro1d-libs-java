@@ -338,11 +338,40 @@ public final class Utils {
             System.err.println("Given Map does not contain such a value. Please check again.");
             return null;
         }
+
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (Objects.equals(entry.getValue(), value)) {
                 return entry.getKey();
             }
         }
+
+        System.err.println("The value exists in the map, but no matching key-value pair is found during the iteration.\n"
+                + "Check if key=null, or if map is modified during check.");
+        return null;
+    }
+
+    /**
+     * Reverses all keys associated with the given value in the provided map.
+     * @param value the value to search for in the map
+     * @param map the map to search
+     * @return an array of keys associated with the given value, or null if not found
+     */
+    public static String[] reverseKeysFromValueInMap(String value, Map<String, String> map) {
+        if (!map.containsValue(value)) {
+            System.err.println("Given Map does not contain such a value. Please check again.");
+            return null;
+        }
+
+        List<String> keys = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (Objects.equals(entry.getValue(), value)) {
+                keys.add(entry.getKey());
+            }
+        }
+
+        if (!keys.isEmpty()) return keys.toArray(new String[0]);
+
         System.err.println("The value exists in the map, but no matching key-value pair is found during the iteration.\n"
                 + "Check if key=null, or if map is modified during check.");
         return null;
