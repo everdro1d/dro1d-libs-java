@@ -16,10 +16,10 @@ class CommandManagerTest {
         CommandManager commandManager = new CommandManager();
         CommandInterface testCommand = new HelpCommand("Test command");
 
-        commandManager.registerCommand("-test", testCommand);
+        commandManager.registerCommand("--test", testCommand);
 
-        assertNotNull(commandManager.getCommand("-test"));
-        assertEquals(testCommand, commandManager.getCommand("-test"));
+        assertNotNull(commandManager.getCommand("--test"));
+        assertEquals(testCommand, commandManager.getCommand("--test"));
     }
 
     @Test
@@ -27,10 +27,10 @@ class CommandManagerTest {
         CommandManager commandManager = new CommandManager();
         CommandInterface testCommand = new HelpCommand("Test command");
 
-        commandManager.registerCommand("-test", testCommand);
+        commandManager.registerCommand("--test", testCommand);
 
         // Capture output
-        commandManager.executeCommand("-test");
+        commandManager.executeCommand("--test");
         // Verify no exceptions are thrown
     }
 
@@ -66,9 +66,9 @@ class CommandManagerTest {
             }
         };
 
-        commandManager.registerCommand("-test", testCommand);
+        commandManager.registerCommand("--test", testCommand);
 
-        commandManager.executeCommand("-test", new String[]{"arg1", "arg2"});
+        commandManager.executeCommand("--test", new String[]{"arg1", "arg2"});
     }
 
     @Test
@@ -83,12 +83,12 @@ class CommandManagerTest {
     @Test
     void testGetValidCommands() {
         CommandManager commandManager = new CommandManager(Map.of(
-                "-test1", new HelpCommand("Test command 1"),
-                "-test2", new HelpCommand("Test command 2")
+                "--test1", new HelpCommand("Test command 1"),
+                "--test2", new HelpCommand("Test command 2")
         ));
 
-        assertTrue(commandManager.getValidCommands().contains("-test1"));
-        assertTrue(commandManager.getValidCommands().contains("-test2"));
+        assertTrue(commandManager.getValidCommands().contains("--test1"));
+        assertTrue(commandManager.getValidCommands().contains("--test2"));
     }
 
     @Test
@@ -121,9 +121,9 @@ class CommandManagerTest {
             }
         };
 
-        commandManager.registerCommand("-test", testCommand);
+        commandManager.registerCommand("--test", testCommand);
 
-        commandManager.executeCommand("-test", new String[]{"arg1"});
+        commandManager.executeCommand("--test", new String[]{"arg1"});
     }
 
     @Test
@@ -158,8 +158,8 @@ class CommandManagerTest {
             }
         };
 
-        commandManager.registerCommand("-test", testCommand);
+        commandManager.registerCommand("--test", testCommand);
 
-        commandManager.executeCommand("-test", new String[]{"arg1", "arg2", "arg3"});
+        commandManager.executeCommand("--test", new String[]{"arg1", "arg2", "arg3"});
     }
 }
