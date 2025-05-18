@@ -179,16 +179,40 @@ public class CommandManager {
      * @see HelpCommand#execute(CommandManager)
      */
     public void executeCommand(String commandString) {
+        executeCommand(commandString, null);
+    }
+
+    /**
+     * Execute a command from the map with arguments. If the command is not
+     * found or the number of arguments is different from expected, an error
+     * message is printed to {@code System.err}.
+     *
+     * @param commandString the key of the CommandInterface to execute
+     * @param args          an array of {@code String} arguments passed to the command
+     */
+    public void executeCommand(String commandString, String[] args) {
         CommandInterface commandToExecute = getCommand(commandString);
 
-        if (commandToExecute != null) {
+        if (commandToExecute == null) {
+            System.err.printf("Unknown command: [%s] Skipping.%nUse \"-help\" to list valid commands.%n", commandString);
+            return;
+        }
+
+        int expectedArgs = commandToExecute.getExpectedArguments();
+        int providedArgs = (args == null) ? 0 : args.length;
+
+        if (expectedArgs == 0) {
             commandToExecute.execute(this);
 
-        } else {
-            System.err.println(
-                    "Unknown command: [" + commandString + "] Skipping." +
-                            "\n    Use \"-help\" to list valid commands in console."
+        } else if (providedArgs != expectedArgs) {
+            System.err.printf(
+                "Invalid number of arguments for command: [%s] Skipping.%nExpected: %d%nProvided: %d%n",
+                commandString, expectedArgs, providedArgs
             );
+
+        } else {
+            commandToExecute.execute(this, args);
+
         }
 
     }

@@ -48,12 +48,20 @@ public class HelpCommand implements CommandInterface {
     }
 
     @Override
+    public int getExpectedArguments() {
+        return 0;
+    }
+
+    @Override
     public void execute(CommandManager commandManager) {
         System.out.println("List of valid commands: ");
         Utils.printlnList(
                 commandManager.getValidCommandsWithDescription()
         );
     }
+
+    @Override // no args for this command
+    public void execute(CommandManager commandManager, String[] args) {}
 
     @Override
     public String getDescription() {

@@ -8,6 +8,17 @@ package com.everdro1d.libs.commands;
  */
 public interface CommandInterface {
     /**
+     * Returns the number of arguments expected by the command.
+     * <p>
+     * This method is used to validate the number of arguments provided
+     * when executing the command.
+     * </p>
+     *
+     * @return an {@code int} representing the number of expected arguments
+     */
+    int getExpectedArguments();
+
+    /**
      * Executes the command using the provided {@link CommandManager}.
      * <p>
      * This method contains the logic for what the command should do when triggered.
@@ -22,6 +33,19 @@ public interface CommandInterface {
      * </pre></blockquote>
      */
     void execute(CommandManager commandManager);
+
+    /**
+     * Executes the command using the provided {@link CommandManager} and arguments.
+     * <p>
+     * This method contains the logic for what the command should do when triggered,
+     * including handling any additional arguments passed to it.
+     * It is invoked by the {@link CommandManager} when the associated command key is executed.
+     * </p>
+     *
+     * @param commandManager the {@link CommandManager} instance managing the command
+     * @param args           an array of {@code String} arguments passed to the command
+     */
+    void execute(CommandManager commandManager, String[] args);
 
     /**
      * Returns the description of the command.

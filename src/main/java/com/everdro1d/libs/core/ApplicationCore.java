@@ -6,6 +6,7 @@ import com.everdro1d.libs.commands.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 import static com.everdro1d.libs.core.Utils.getUserConfigDirectory;
@@ -50,8 +51,30 @@ public final class ApplicationCore {
      * @see CommandInterface
      */
     public static void checkCLIArgs(String[] args, CommandManager commandManager) {
-        for (String arg : args) {
-            commandManager.executeCommand(arg);
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (!arg.startsWith("-")) continue;
+
+            CommandInterface cmd = commandManager.getCommand(arg);
+
+            if (cmd == null || cmd.getExpectedArguments() == 0) {
+                commandManager.executeCommand(arg);
+
+            } else {
+                int j = 0; // actual number of arguments passed
+                          // (executeCommand() handles too few/many/invalid args)
+
+                // max length is total args length - current index - 1
+                String[] commandArgs = new String[args.length - i - 1];
+
+                // treat args starting with "-" as a new command
+                for (int k = ( i + 1 ); ( k < args.length && !args[k].startsWith("-") ); k++) {
+                    commandArgs[j++] = args[k];
+                }
+
+                // trims the array of args to the actual number of args passed before continuing
+                commandManager.executeCommand(arg, Arrays.copyOf(commandArgs, j));
+            }
         }
     }
 
