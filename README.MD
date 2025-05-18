@@ -47,6 +47,11 @@ I've compiled a build chain in intellij that should work well,
 run `W7: Create Artifacts` for Windows (*powershell*), 
 and `7: Create Artifacts` for Unix-based systems (MacOS and Linux).
 
+**Please note:** when generating Javadocs, there should be 176 warnings. 
+These are due to (private) locale fields not having comments.
+If this number changes, please check your Javadoc comments, 
+*90% of the time the warning (or error) will be at the start of the output.*
+
 ## Usage
 
 Please refer to the [javadocs](https://everdro1d.github.io/dro1d-libs-java/) for detailed documentation on each class and its methods.
