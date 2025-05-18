@@ -42,15 +42,21 @@ Please refer to the [javadocs](https://everdro1d.github.io/dro1d-libs-java/) for
 ### Example: Command Management
 ```java
 CommandManager commandManager = new CommandManager();
-commandManager.registerCommand("example", new ExampleCommand());
+commandManager.registerCommand(
+        "example", new ExampleCommand()
+);
 commandManager.executeCommand("example");
 ```
 
 ### Example: Localization
 ```java
-LocaleManager localeManager = new LocaleManager(Main.class, "dro1dDev");
+LocaleManager localeManager = new LocaleManager(
+        Main.class, "dro1dDev"
+);
 localeManager.loadLocaleFromFile("eng");
-String message = localeManager.getVariableInComponent("MainWindow", "greetingLabel", "messageText");
+String message = localeManager.getVariableInComponent(
+        "MainWindow", "greetingLabel", "messageText"
+);
 System.out.println(message);
 ```
 
