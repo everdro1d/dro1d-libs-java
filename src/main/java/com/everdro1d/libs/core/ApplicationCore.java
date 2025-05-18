@@ -112,7 +112,7 @@ public final class ApplicationCore {
                 String[] s = location.split("/v");
                 if (s.length > 1) return s[1];
                 System.err.println("Error: No valid version tag found in URL: " + location);
-            HttpClient client = HttpClient.newHttpClient();
+        try ( HttpClient client = HttpClient.newHttpClient() ) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(remoteURL))
                     .method("HEAD", HttpRequest.BodyPublishers.noBody())
