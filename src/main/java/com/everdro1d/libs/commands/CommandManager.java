@@ -71,7 +71,7 @@ public class CommandManager {
      * Creates a new CommandManager with only the default {@code -help} command.
      */
     public CommandManager() {
-        registerCommands(COMMANDS_MAP);
+        // Default constructor with only help command
     }
 
     /**
