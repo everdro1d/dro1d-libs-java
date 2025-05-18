@@ -136,14 +136,15 @@ public final class ApplicationCore {
      * <p>{@code https://github.com/user/project/releases/latest}</p>
      *
      * @param remoteURL the URL of the latest releases page
+     * @param customPrefix the prefix of the version tag (ex: "v" or "release-")
      * @return the latest version as a string (ex: "1.2.1"), or {@code null} if no valid version is found
      *
      * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog UpdateCheckerDialog
      * @see #getLatestVersion(String)
      * @see #getLatestVersion(String, String, String)
      */
-    public static String getLatestVersion(String remoteURL, String prefix) {
-        return getLatestVersion(remoteURL, prefix, "");
+    public static String getLatestVersion(String remoteURL, String customPrefix) {
+        return getLatestVersion(remoteURL, customPrefix, "");
     }
 
     /**
@@ -159,6 +160,8 @@ public final class ApplicationCore {
      * <p>{@code https://github.com/user/project/releases/latest}</p>
      *
      * @param remoteURL the URL of the latest releases page
+     * @param customPrefix the prefix of the version tag (ex: "v" or "release-")
+     * @param customSuffix the suffix of the version tag (ex: "-release" or "-stable")
      * @return the latest version as a string (ex: "1.2.1"), or {@code null} if no valid version is found
      *
      * @see com.everdro1d.libs.swing.dialogs.UpdateCheckerDialog UpdateCheckerDialog
