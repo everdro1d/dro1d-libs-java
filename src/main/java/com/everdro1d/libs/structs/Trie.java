@@ -258,61 +258,56 @@ public class Trie<T> {
      * @return true if the key was removed, false otherwise (including key does not exist)
      */
     public boolean remove(String key) {
-        return removeHelper(root, key, 0).keyRemoved;
+        return removeHelper(root, key, 0);
     }
 
     /**
      * Removes all keys in a given list from the Trie
      * @param list list of keys to remove
-     * @return true if all keys were removed, false otherwise (including key does not exist)
+     * @return true if none of the given keys exist in the Trie, false otherwise
      */
     public boolean removeAll(List<String> list) {
-        int removed = 0;
-        int shouldRemove = list.size();
-
         for (String key : list) {
-            if (remove(key)) {
-                removed++;
+            if (contains(key)) {
+                remove(key);
             }
         }
 
-        return removed == shouldRemove;
+        return !containsAny(list);
     }
 
     // ---
-    private static class RemovalResult {
-        boolean keyRemoved;
-        boolean deleteCurrentNode;
-
-        RemovalResult(boolean keyRemoved, boolean deleteCurrentNode) {
-            this.keyRemoved = keyRemoved;
-            this.deleteCurrentNode = deleteCurrentNode;
-        }
-    }
-
-    private RemovalResult removeHelper(TrieNode<T> currentNode, String key, int index) {
+    /**
+     * Helper method for remove. Recursively removes the key from the Trie.
+     * @param currentNode current node in the Trie
+     * @param key key to remove
+     * @param index current index in the key
+     * @return true if the current node should be deleted, false otherwise
+     */
+    private boolean removeHelper(TrieNode<T> currentNode, String key, int index) {
         if (index == key.length()) {
             if (!currentNode.isEndOfWord) {
-                return new RemovalResult(false, false); // key not exist
+                return false; // key does not exist
             }
             currentNode.isEndOfWord = false;
-            return new RemovalResult(true, currentNode.isEmpty()); // key removed, del if empty
+            // If node has no children, it can be deleted
+            return currentNode.isEmpty();
         }
 
         char character = key.charAt(index);
         TrieNode<T> childNode = currentNode.child.get(character);
         if (childNode == null) {
-            return new RemovalResult(false, false); // key not found
+            return false; // key does not exist
         }
 
-        RemovalResult childResult = removeHelper(childNode, key, index + 1);
+        boolean shouldDeleteChild = removeHelper(childNode, key, index + 1);
 
-        if (childResult.deleteCurrentNode) {
+        if (shouldDeleteChild) {
             currentNode.child.remove(character);
         }
 
-        boolean shouldDeleteCurrentNode = currentNode.isEmpty() && !currentNode.isEndOfWord;
-        return new RemovalResult(childResult.keyRemoved, shouldDeleteCurrentNode);
+        // Return true if current node is not end of another word and has no children
+        return !currentNode.isEndOfWord && currentNode.isEmpty();
     }
     // ---
 
