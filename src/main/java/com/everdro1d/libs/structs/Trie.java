@@ -321,10 +321,27 @@ public class Trie<T> {
 
     /**
      * List the keys in a Trie that match the prefix.
+     *
      * @param prefix prefix to match
      * @return List of all matching keys in the Trie
+     *
+     * @see #listKeysMatching(String, int)
      */
-    public List<String> listKeysMatching(String prefix) { // TODO: implement limit of hits to return?
+    public List<String> listKeysMatching(String prefix) {
+        return listKeysMatching(prefix, -1);
+    }
+
+    /**
+     * List the keys in a Trie that match the prefix with a limit on the number of matches.
+     * Matches prefer the shortest keys first.
+     *
+     * @param prefix prefix to match
+     * @param maxMatches maximum number of matches to return
+     * @return List of all matching keys in the Trie
+     *
+     * @see #listKeysMatching(String)
+     */
+    public List<String> listKeysMatching(String prefix, int maxMatches) {
         List<String> list = new ArrayList<>();
         StringBuffer stringAssembler = new StringBuffer();
         TrieNode<T> currentNode = root;
@@ -339,23 +356,27 @@ public class Trie<T> {
             stringAssembler.append(character);
         }
 
-        listKeysHelper(currentNode, list, stringAssembler);
+        listKeysHelper(currentNode, list, stringAssembler, maxMatches);
         return list;
     }
 
     // ---
-    private void listKeysHelper(TrieNode<T> currentNode, List<String> list, StringBuffer stringAssembler) {
-        if (currentNode.isEndOfWord) {
-            list.add(stringAssembler.toString());
-        }
+    private void listKeysHelper(
+            TrieNode<T> currentNode, List<String> list,
+            StringBuffer stringAssembler, int maxMatches
+    ) {
+        if (currentNode.isEndOfWord) list.add(stringAssembler.toString());
 
-        if (currentNode.isEmpty()) {
+        if ( currentNode.isEmpty() || (maxMatches != -1 && list.size() >= maxMatches) ) {
             return;
         }
 
         for (TrieNode<T> childNode : currentNode.getChildren()) {
             // branch into child nodes and append
-            listKeysHelper(childNode, list, stringAssembler.append(childNode.character));
+            listKeysHelper(
+                    childNode, list, stringAssembler.append(childNode.character),
+                    maxMatches
+            );
             // reset to childless state before probing next child
             stringAssembler.setLength(stringAssembler.length() - 1);
         }

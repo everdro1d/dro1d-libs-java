@@ -94,6 +94,23 @@ class TrieTest {
     }
 
     @Test
+    void testListKeysMatchingLimited() {
+        Trie<String> trie = new Trie<>();
+        trie.insert("apple", "fruit");
+        trie.insert("app", "prefix");
+        trie.insert("apricot", "fruit");
+        trie.insert("ap", "prefix");
+
+        List<String> keys = trie.listKeysMatching("ap", 2);
+        assertEquals(2, keys.size());
+
+        assertTrue(keys.contains("ap"));
+        assertTrue(keys.contains("app"));
+        assertFalse(keys.contains("apple"));
+        assertFalse(keys.contains("apricot"));
+    }
+
+    @Test
     void testGet() {
         Trie<String> trie = new Trie<>();
         trie.insert("apple", "fruit");
