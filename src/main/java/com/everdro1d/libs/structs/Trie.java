@@ -156,7 +156,7 @@ public class Trie<T> {
      */
     public void insert(List<String> list) {
         for (String key : list) {
-            insert(key, null);
+            insert(key);
         }
     }
 
