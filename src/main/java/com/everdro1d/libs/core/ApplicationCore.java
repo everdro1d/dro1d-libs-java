@@ -120,7 +120,7 @@ public final class ApplicationCore {
      * @see #getLatestVersion(String, String, String)
      */
     public static String getLatestVersion(String remoteURL) {
-        return getLatestVersion(remoteURL, "v", "");
+        return getLatestVersion(remoteURL, "/v", "");
     }
 
     /**
