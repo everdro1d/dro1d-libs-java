@@ -247,7 +247,7 @@ public final class ApplicationCore {
      * @return the path to the application's configuration directory
      */
     public static String getApplicationConfigDirectory(Class<?> clazz, String developerName) {
-        return getUserConfigDirectory() + File.separator + developerName + File.separator + getApplicationName(clazz);
+        return getUserConfigDirectory() + developerName + File.separator + getApplicationName(clazz);
     }
 
     /**
