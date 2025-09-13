@@ -26,7 +26,7 @@ command line (CLI) arguments, I/O operations, localization, and more.
 - Java 21+
 - org.json:json:20240303
   - LocaleManager requires it to read and write locale files.
-- com.formdev:flatlaf:3.4
+- com.formdev:flatlaf:3.5
   - Some Swing GUI things will definitely break without it, but general things 
     like smaller components or util methods should still work. Others will be 
     hit-and-miss, try it if you like.
