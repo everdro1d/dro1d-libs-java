@@ -101,7 +101,7 @@ public final class Files {
      * @param debug if {@code true}, prints debug information to System.out about the deletion process
      */
     public static void deleteFile(String path, boolean debug) {
-        java.io.File fileToDelete = new java.io.File(path);
+        File fileToDelete = new File(path);
         String name = fileToDelete.getName();
         if (fileToDelete.exists()) {
             if (fileToDelete.delete()) {
@@ -143,9 +143,9 @@ public final class Files {
      * @return a set of file names in the directory
      */
     public static Set<String> getAllFilesInDirectory(String inputDirectory) {
-        return Stream.of(Objects.requireNonNull(new java.io.File(inputDirectory).listFiles()))
+        return Stream.of(Objects.requireNonNull(new File(inputDirectory).listFiles()))
                 .filter(file -> !file.isDirectory())
-                .map(java.io.File::getName)
+                .map(File::getName)
                 .collect(Collectors.toSet());
     }
 
@@ -164,7 +164,7 @@ public final class Files {
         }
 
         String directory;
-        if (!new java.io.File(path).isDirectory()) {
+        if (!new File(path).isDirectory()) {
             String fileDiv = FileSystems.getDefault().getSeparator();
             if (fileDiv.equals("\\")) fileDiv = "\\\\";
             String fileName = path.split(fileDiv)[path.split(fileDiv).length - 1];
@@ -179,7 +179,7 @@ public final class Files {
                 System.err.println("File or Directory does not exist. Cannot open in file manager.");
                 return;
             } else if (directory.equals(path)) {
-                Desktop.getDesktop().open(new java.io.File(directory)); // Open the directory
+                Desktop.getDesktop().open(new File(directory)); // Open the directory
                 System.err.println("Path is not a file. Cannot select in file manager.");
                 return;
             }
@@ -224,7 +224,7 @@ public final class Files {
      * If the file does not exist or is empty, an error message is printed to {@code System.err}, and {@code null} is returned.
      * </p>
      *
-     * @param fileName the name of the file to load the map from
+     * @param filePath the full path of the file to load the map from
      * @return a {@code Map<String, String>} containing the key-value pairs from the file, or {@code null} if the file does not exist or is empty
      * @throws RuntimeException if an error occurs while reading the file
      * <p><strong>Example:</strong></p>
@@ -233,14 +233,36 @@ public final class Files {
      * // key1=value1
      * // key2=value2
      *
-     * Map&lt;String, String&gt; map = Files.loadMapFromFile("example.txt");
+     * Map&lt;String, String&gt; map = Files.loadMapFromFile("/path/to/example.txt");
      * System.out.println(map); // {key1=value1, key2=value2}
      * </pre></blockquote>
      */
-    public static Map<String,String> loadMapFromFile(String fileName) {
-        Path filePath = Path.of(fileName);
+    public static Map<String,String> loadMapFromFile(String filePath) {
+        return loadMapFromFile(Path.of(filePath));
+    }
+
+    /**
+     * Loads a map from a file where each line represents a key-value pair in the format `key=value`.
+     * <p>
+     * If the file does not exist or is empty, an error message is printed to {@code System.err}, and {@code null} is returned.
+     * </p>
+     *
+     * @param filePath the full path of the file to load the map from
+     * @return a {@code Map<String, String>} containing the key-value pairs from the file, or {@code null} if the file does not exist or is empty
+     * @throws RuntimeException if an error occurs while reading the file
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * // File content:
+     * // key1=value1
+     * // key2=value2
+     *
+     * Map&lt;String, String&gt; map = Files.loadMapFromFile("/path/to/example.txt");
+     * System.out.println(map); // {key1=value1, key2=value2}
+     * </pre></blockquote>
+     */
+    public static Map<String,String> loadMapFromFile(Path filePath) {
         if (!java.nio.file.Files.exists(filePath)) {
-            System.err.println("File does not exist: " + fileName);
+            System.err.println("File does not exist: " + filePath);
             return null;
         }
 
