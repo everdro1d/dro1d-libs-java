@@ -97,6 +97,15 @@ public final class Files {
     /**
      * Deletes a file at the specified path.
      *
+     * @param path the path of the file to delete
+     */
+    public static void deleteFile(String path) {
+        deleteFile(path, false);
+    }
+
+    /**
+     * Deletes a file at the specified path.
+     *
      * @param path  the path of the file to delete
      * @param debug if {@code true}, prints debug information to System.out about the deletion process
      */
@@ -110,6 +119,32 @@ public final class Files {
                 System.err.println("Failed to delete file: " + name);
             }
         }
+    }
+
+    /**
+     * Delete a directory & all files within.
+     * @param path path of the directory to delete
+     */
+    public static void deleteDirectory(String path) {
+        deleteDirectory(path, false);
+    }
+
+    /**
+     * Delete a directory & all files within.
+     * @param path path of the directory to delete
+     * @param debug whether to print debug information
+     */
+    public static void deleteDirectory(String path, boolean debug) {
+        Path recipePath = Path.of(path);
+
+        try (Stream<Path> paths = java.nio.file.Files.walk(recipePath)) {
+            paths.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        } catch (IOException e) {
+            if (debug) System.err.println("[deleteDirectory]: Could not delete directory: " + path);
+            return;
+        }
+
+        if (debug) System.out.println("[deleteDirectory]: Directory deleted: " + path);
     }
 
     /**
