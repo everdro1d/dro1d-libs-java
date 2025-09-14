@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -145,6 +143,47 @@ public final class Files {
         }
 
         if (debug) System.out.println("[deleteDirectory]: Directory deleted: " + path);
+    }
+
+    /**
+     * Copy a directory and its complete file tree to the target location.
+     * @param source source directory
+     * @param target target directory
+     * @throws IOException if an IOException is thrown by a visitor method in walkFileTree()
+     */
+    public static void copyDirectory(String source, String target) throws IOException {
+        copyDirectory(source, target);
+    }
+
+    /**
+     * Copy a directory and its complete file tree to the target location.
+     * @param source source directory
+     * @param target target directory
+     * @throws IOException if an IOException is thrown by a visitor method in walkFileTree()
+     */
+    public static void copyDirectory(Path source, Path target) throws IOException {
+        java.nio.file.Files.walkFileTree(source, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Path targetPath = target.resolve(source.relativize(dir));
+                if (!java.nio.file.Files.exists(targetPath)) {
+                    java.nio.file.Files.createDirectories(targetPath);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                java.nio.file.Files.copy(file, target.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                System.err.println("Failed to visit file: " + file + " - " + exc.getMessage());
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     /**
