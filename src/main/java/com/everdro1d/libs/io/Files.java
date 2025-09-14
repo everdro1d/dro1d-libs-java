@@ -276,8 +276,7 @@ public final class Files {
      * If overwrite is enabled, the existing file is deleted and replaced with the new content.
      * </p>
      *
-     * @param path      the directory path where the file will be saved
-     * @param fileName  the name of the file (without extension) to save the map to
+     * @param filePath      the full filepath where the file will be saved (some/dir/filename.txt)
      * @param map       the {@code Map<String, String>} to save
      * @param overwrite whether to overwrite the file if it already exists
      * @throws RuntimeException if an error occurs while writing to the file
@@ -287,14 +286,15 @@ public final class Files {
      * map.put("key1", "value1");
      * map.put("key2", "value2");
      *
-     * Files.saveMapToFile("/path/to/directory", "example", map, true);
+     * Files.saveMapToFile("/path/to/directory/file.txt", map, true);
      * // File content:
      * // key1=value1
      * // key2=value2
      * </pre></blockquote>
+     *
+     * @see #saveMapToFile(String, String, Map, boolean)
      */
-    public static void saveMapToFile(String path, String fileName, Map<String, String> map, boolean overwrite) {
-        Path filePath = Path.of(path + File.separator + fileName + ".txt");
+    public static void saveMapToFile(Path filePath, Map<String,String> map, boolean overwrite) {
         if (java.nio.file.Files.exists(filePath)) {
             if (!overwrite) {
                 System.err.println("File with that name already exists. Overwrite is disabled, stopping...");
@@ -334,6 +334,36 @@ public final class Files {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    /**
+     * Saves a map to a file in the format `key=value` with each entry on a new line.
+     * <p>
+     * If the file already exists and overwrite is disabled, the method stops and prints an error message to {@code System.err}.
+     * If overwrite is enabled, the existing file is deleted and replaced with the new content.
+     * </p>
+     *
+     * @param path      the directory path where the file will be saved
+     * @param fileName  the name of the file (without extension) to save the map to
+     * @param map       the {@code Map<String, String>} to save
+     * @param overwrite whether to overwrite the file if it already exists
+     * @throws RuntimeException if an error occurs while writing to the file
+     * <p><strong>Example:</strong></p>
+     * <blockquote><pre>
+     * Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+     * map.put("key1", "value1");
+     * map.put("key2", "value2");
+     *
+     * Files.saveMapToFile("/path/to/directory", "example", map, true);
+     * // File content:
+     * // key1=value1
+     * // key2=value2
+     * </pre></blockquote>
+     *
+     * @see #saveMapToFile(Path, Map, boolean)
+     */
+    public static void saveMapToFile(String path, String fileName, Map<String, String> map, boolean overwrite) {
+        Path filePath = Path.of(path + File.separator + fileName + ".txt");
+        saveMapToFile(filePath, map, overwrite);
     }
 }

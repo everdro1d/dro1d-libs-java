@@ -421,4 +421,19 @@ public class Trie<T> {
         return currentNode.isEndOfWord;
     }
 
+    /**
+     * Flatten the trie to a map.
+     * @return map key, value
+     */
+    public Map<String,T> getTrieAsMap() {
+        Map<String,T> map = new HashMap<>();
+        List<String> keys = listKeys();
+
+        for (String key : keys) {
+            map.put(key, get(key));
+        }
+
+        return map;
+    }
+
 }
