@@ -224,6 +224,19 @@ public final class Files {
     }
 
     /**
+     * Retrieves a set of all directory names in a specified directory.
+     *
+     * @param inputDirectory the directory to retrieve directory names from
+     * @return a set of directory names in the directory
+     */
+    public static Set<String> getAllDirectoriesInDirectory(String inputDirectory) {
+        return Stream.of(Objects.requireNonNull(new File(inputDirectory).listFiles()))
+                .filter(File::isDirectory)
+                .map(File::getName)
+                .collect(Collectors.toSet());
+    }
+
+    /**
      * Opens a directory in the default file manager and selects the specified file.
      *
      * @param path the path to the file or directory to open
