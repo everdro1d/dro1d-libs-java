@@ -122,7 +122,7 @@ public final class Files {
     }
 
     /**
-     * Delete a directory & all files within.
+     * Delete a directory and all files within.
      * @param path path of the directory to delete
      */
     public static void deleteDirectory(String path) {
@@ -130,7 +130,7 @@ public final class Files {
     }
 
     /**
-     * Delete a directory & all files within.
+     * Delete a directory and all files within.
      * @param path path of the directory to delete
      * @param debug whether to print debug information
      */
