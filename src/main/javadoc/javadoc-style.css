@@ -112,6 +112,10 @@
     font-style: normal;
 }
 
+.main-grid {
+    display: block;
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-color);
