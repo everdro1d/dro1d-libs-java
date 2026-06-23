@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --body-font-family: 'Roboto', sans;
+    --body-font-family: 'Roboto', sans-serif;;;
     --block-font-family: 'Roboto', serif;
     --code-font-family: 'JetBrains Mono', monospace;
     --body-font-size: 16px;
     --code-font-size: 16px;
+}
 
-    /* Color variables */
-    @media (prefers-color-scheme: light) {
+/* Color variables */
+@media (prefers-color-scheme: light) {
+    :root {
         --background-color: #ffffff;
         --detail-background-color: #f5f8fa;
         --body-background-color: var(--background-color);
@@ -45,9 +47,11 @@
 
         --shadow: rgba(0, 0, 0, 0.05) 0px 6px 9px 0px;
     }
+}
 
-    /* Color variables */
-    @media (prefers-color-scheme: dark) {
+/* Color variables */
+@media (prefers-color-scheme: dark) {
+    :root {
         --background-color: #141414;
         --detail-background-color: #1a1a1a;
         --body-background-color: var(--detail-background-color);
@@ -151,21 +155,21 @@ body > div.flex-box > div > main {
     display: flex;
     gap: 10px;
     align-items: center;
-    vertical-align: center;
+    vertical-align: middle;
     float:right;
     overflow:hidden;
     margin-top: -4px;
+}
 
-    a {
-        background: var(--navbar-background-color);
-        color: var(--link-color) !important;
-        text-decoration: none;
-        padding: 5px 10px;
-    }
+.about-language a {
+    background: var(--navbar-background-color);
+    color: var(--link-color) !important;
+    text-decoration: none;
+    padding: 5px 10px;
+}
 
-    a:hover {
-        color: var(--link-color-active) !important;
-    }
+.about-language a:hover {
+    color: var(--link-color-active) !important;
 }
 
 /* A - LINKS */
