@@ -155,4 +155,21 @@ public class ImageUtils {
             return null;
         }
     }
+
+    /**
+     * Resizes an image using a Graphics2D object backed by a BufferedImage.
+     * @param image image to scale
+     * @param width desired width
+     * @param height desired height
+     * @return - the new resized image
+     * @Source: <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/IconDemoProject/src/components/IconDemoApp.java">IconDemoApp.java</a>
+     */
+    public static Image getScaledImage(Image image, int width, int height){
+        BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(image, 0, 0, width, height, null);
+        g2.dispose();
+        return resizedImg;
+    }
 }
