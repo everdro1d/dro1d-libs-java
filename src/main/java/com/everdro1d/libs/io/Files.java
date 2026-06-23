@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -105,17 +106,20 @@ public final class Files {
      * Deletes a file at the specified path.
      *
      * @param path  the path of the file to delete
-     * @param debug if {@code true}, prints debug information to System.out about the deletion process
+     * @param debug if {@code true}, prints debug information to System.out and System.err about the deletion process
      */
     public static void deleteFile(String path, boolean debug) {
-        File fileToDelete = new File(path);
-        String name = fileToDelete.getName();
-        if (fileToDelete.exists()) {
-            if (fileToDelete.delete()) {
-                if (debug) System.out.println("Deleted file: " + name);
+        Path fileToDelete = Path.of(path);
+        try {
+            if (java.nio.file.Files.deleteIfExists(fileToDelete)) {
+                if (debug) System.out.println("Deleted file: " + path);
             } else {
-                System.err.println("Failed to delete file: " + name);
+                System.err.println("Failed to delete file, file does not exist: " + path);
             }
+        } catch (Exception e) {
+            System.err.println("[deleteFile]: Exception - Could not delete file at: " + path);
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
     }
 
@@ -136,9 +140,20 @@ public final class Files {
         Path recipePath = Path.of(path);
 
         try (Stream<Path> paths = java.nio.file.Files.walk(recipePath)) {
-            paths.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-        } catch (IOException e) {
-            if (debug) System.err.println("[deleteDirectory]: Could not delete directory: " + path);
+            paths.sorted(Comparator.reverseOrder())
+                    .forEach(p -> {
+                        try {
+                            java.nio.file.Files.deleteIfExists(p);
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
+        } catch (IOException | UncheckedIOException e) {
+            if (debug) {
+                System.err.println("[deleteDirectory]: Could not delete directory: " + path);
+                System.err.println(e.getMessage());
+                e.printStackTrace(System.err);
+            }
             return;
         }
 
