@@ -159,7 +159,7 @@ class ApplicationCoreTest {
     @Test
     void getLatestVersion_ValidRedirect() throws Exception {
         HttpClient client = HttpClient.newHttpClient();
-        String mockRedirectUrl = "https://httpbin.org/redirect-to?url=https://example.com/everdro1d/TestV/releases/tag/v1.2.3";
+        String mockRedirectUrl = "https://httpbingo.org/redirect-to?url=https://example.com/everdro1d/TestV/releases/tag/v1.2.3";
 
         String version = ApplicationCore.getLatestVersion(mockRedirectUrl, "/v", "");
         assertEquals("1.2.3", version);
