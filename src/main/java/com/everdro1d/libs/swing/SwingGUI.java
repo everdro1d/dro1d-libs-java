@@ -186,35 +186,18 @@ public class SwingGUI {
     /**
      * Gets the window's position on the current monitor.
      * @param frame the frame to get the position of
-     * @return int[] = {x, y, activeMonitor}
+     * @return int[] {x, y, activeMonitor}
      */
     public static int[] getFramePositionOnScreen(JFrame frame) {
-        int[] framePosition = new int[]{0, 0, 0};
         Point frameLocation = frame.getLocationOnScreen();
 
         // get the monitor that frame is on
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] gs = ge.getScreenDevices();
+        GraphicsDevice currentDevice = frame.getGraphicsConfiguration().getDevice();
+        GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 
-        for (int i = 0; i < gs.length; i++) {
-            GraphicsDevice gd = gs[i];
-            GraphicsConfiguration[] gc = gd.getConfigurations();
-            Rectangle screenBounds = gc[0].getBounds();
-            int screenWidth = screenBounds.width;
-            int screenHeight = screenBounds.height;
+        int activeMonitor = Arrays.asList(gs).indexOf(currentDevice);
 
-            framePosition[0] = frameLocation.x;
-            framePosition[1] = frameLocation.y;
-
-            if (frameLocation.x >= screenBounds.x && frameLocation.x <= screenBounds.x + screenWidth) {
-                if (frameLocation.y >= screenBounds.y && frameLocation.y <= screenBounds.y + screenHeight) {
-                    framePosition[2] = i;
-                    break;
-                }
-            }
-        }
-
-        return framePosition;
+        return new int[] { frameLocation.x, frameLocation.y, (activeMonitor == -1 ? 0 : activeMonitor) };
     }
 
     /**
@@ -228,34 +211,34 @@ public class SwingGUI {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();
 
-        if (activeMonitor > -1 && activeMonitor < gs.length) {
-            GraphicsDevice gd = gs[activeMonitor];
-            GraphicsConfiguration[] gc = gd.getConfigurations();
-            Rectangle screenBounds = gc[0].getBounds();
-            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc[0]);
-            int screenWidth = screenBounds.width;
-            int screenHeight = screenBounds.height;
-
-            // check if the window is on the screen and account for taskbar
-            if (framePosY > screenBounds.height - frame.getHeight() - screenInsets.bottom) {
-                framePosY = Math.min( Math.max(0, framePosY),
-                        screenBounds.height - frame.getHeight() - screenInsets.bottom
-                );
-            }
-
-            if (framePosX == 0 && framePosY == 0) {
-                //center on screen 0
-                framePosX = screenBounds.x + (screenWidth - frame.getWidth()) / 2;
-                framePosY = screenBounds.y + (screenHeight - frame.getHeight()) / 2;
-            }
-
-            if (framePosX >= screenBounds.x && framePosX <= screenBounds.x + screenWidth) {
-                if (framePosY >= screenBounds.y && framePosY <= screenBounds.y + screenHeight) {
-
-                    frame.setLocation(framePosX, framePosY);
-                }
-            }
+        if (activeMonitor < 0 || activeMonitor >= gs.length) {
+            activeMonitor = 0; // fallback to primary
         }
+
+        GraphicsDevice gd = gs[activeMonitor];
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+        Rectangle screenBounds = gc.getBounds();
+        Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc);
+
+        int usableX = screenBounds.x + screenInsets.left;
+        int usableY = screenBounds.y + screenInsets.top;
+        int usableWidth = screenBounds.width - screenInsets.left - screenInsets.right;
+        int usableHeight = screenBounds.height - screenInsets.top - screenInsets.bottom;
+
+        int frameWidth = frame.getWidth();
+        int frameHeight = frame.getHeight();
+
+        // default fallback
+        if (framePosX == 0 && framePosY == 0) {
+            framePosX = usableX + (usableWidth - frameWidth) / 2;
+            framePosY = usableY + (usableHeight - frameHeight) / 2;
+        } else {
+            // prevents the window from being dragged entirely off-screen or under taskbars
+            framePosX = Math.clamp(framePosX, usableX, usableX + usableWidth - frameWidth);
+            framePosY = Math.clamp(framePosY, usableY, usableY + usableHeight - frameHeight);
+        }
+
+        frame.setLocation(framePosX, framePosY);
     }
 
     /**
@@ -265,27 +248,36 @@ public class SwingGUI {
      */
     public static void setLocationOnResize(JFrame frame, boolean keepOnActiveMonitor) {
         int[] framePosition = getFramePositionOnScreen(frame);
-        if (keepOnActiveMonitor) {
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice[] gs = ge.getScreenDevices();
-            if (framePosition[2] > -1 && framePosition[2] < gs.length) {
-                GraphicsDevice gd = gs[framePosition[2]];
-                GraphicsConfiguration[] gc = gd.getConfigurations();
-                Rectangle screenBounds = gc[0].getBounds();
-                Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc[0]);
-                int screenWidth = screenBounds.width;
-                int screenHeight = screenBounds.height;
+        int posX = framePosition[0];
+        int posY = framePosition[1];
+        int activeMonitor = framePosition[2];
 
-                // Adjust the frame's position to fit within the monitor's dimensions
-                if (framePosition[0] + frame.getWidth() > screenBounds.x + screenWidth) {
-                    framePosition[0] = screenBounds.x + screenWidth - frame.getWidth();
-                }
-                if (framePosition[1] + frame.getHeight() > screenBounds.y + screenHeight - screenInsets.bottom) {
-                    framePosition[1] = screenBounds.y + screenHeight - frame.getHeight() - screenInsets.bottom;
-                }
+        if (!keepOnActiveMonitor) {
+            setFramePosition(frame, posX, posY, activeMonitor);
+            return;
+        }
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+
+        if (0 <= activeMonitor && activeMonitor < gs.length) {
+            GraphicsDevice gd = gs[activeMonitor];
+            GraphicsConfiguration gc = gd.getDefaultConfiguration();
+            Rectangle screenBounds = gc.getBounds();
+            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(gc);
+            int screenWidth = screenBounds.width;
+            int screenHeight = screenBounds.height;
+
+            // Adjust the frame's position to fit within the monitor's dimensions
+            if (posX + frame.getWidth() > screenBounds.x + screenWidth) {
+                posX = screenBounds.x + screenWidth - frame.getWidth();
+            }
+            if (posY + frame.getHeight() > screenBounds.y + screenHeight - screenInsets.bottom) {
+                posY = screenBounds.y + screenHeight - frame.getHeight() - screenInsets.bottom;
             }
         }
-        setFramePosition(frame, framePosition[0], framePosition[1], framePosition[2]);
+
+        setFramePosition(frame, posX, posY, activeMonitor);
     }
 
     /**
