@@ -9,6 +9,7 @@ import com.everdro1d.libs.io.Files;
 import com.everdro1d.libs.io.TiedOutputStream;
 import com.everdro1d.libs.swing.SwingGUI;
 import com.everdro1d.libs.swing.components.ResizeWindowButton;
+import com.everdro1d.libs.swing.components.TrackingFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,7 @@ import java.util.prefs.Preferences;
  *
  * @see <a href="https://github.com/everdro1d/SwingGUIApplicationTemplate/blob/master/src/main/com/everdro1d/swingtemplate/core/MainWorker.java#L249">DebugConsoleWindow Example Implementation</a>
  */
-public class DebugConsoleWindow extends JFrame {
+public class DebugConsoleWindow extends TrackingFrame {
     // Variables ------------------------------------------------------------------------------------------------------|
 
     // Swing components - Follow indent hierarchy for organization -----------|
@@ -80,40 +81,39 @@ public class DebugConsoleWindow extends JFrame {
 
     /**
      * Overload Constructor with default font and null locale.
-     * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean, LocaleManager)
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
+     * @see DebugConsoleWindow#DebugConsoleWindow(Preferences, boolean, LocaleManager)
+     * @see DebugConsoleWindow#DebugConsoleWindow(String, int, Preferences, boolean, LocaleManager)
      */
-    public DebugConsoleWindow(JFrame parent, Preferences prefs, boolean debug) {
-        this(parent, "Tahoma", 16, prefs, debug, null);
+    public DebugConsoleWindow(Preferences prefs, boolean debug) {
+        this("Tahoma", 16, prefs, debug, null);
     }
 
     /**
      * Overload Constructor with default font.
-     * @param parent frame to latch onto if called from another window
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean)
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, String, int, Preferences, boolean, LocaleManager)
+     * @see DebugConsoleWindow#DebugConsoleWindow(Preferences, boolean)
+     * @see DebugConsoleWindow#DebugConsoleWindow(String, int, Preferences, boolean, LocaleManager)
      */
-    public DebugConsoleWindow(JFrame parent, Preferences prefs, boolean debug, LocaleManager localeManager) {
-        this(parent, "Tahoma", 16, prefs, debug, localeManager);
+    public DebugConsoleWindow(Preferences prefs, boolean debug, LocaleManager localeManager) {
+        this("Tahoma", 16, prefs, debug, localeManager);
     }
 
     /**
      * Create a debug console window.
-     * @param parent frame to latch onto if called from another window
      * @param fontName the name of the font to use
      * @param fontSize the size of the font to use
      * @param prefs Preferences object for saving and loading user settings
      * @param debug whether to print debug information
      * @param localeManager LocaleManager object for handling locale changes
-     * @see DebugConsoleWindow#DebugConsoleWindow(JFrame, Preferences, boolean)
+     * @see DebugConsoleWindow#DebugConsoleWindow(Preferences, boolean)
      */
-    public DebugConsoleWindow(JFrame parent, String fontName, int fontSize, Preferences prefs, boolean debug, LocaleManager localeManager) {
+    public DebugConsoleWindow(String fontName, int fontSize, Preferences prefs, boolean debug, LocaleManager localeManager) {
+        super(prefs,"debugConsole");
+
         this.fontName = fontName;
         this.fontSize = fontSize;
         this.debug = debug;
@@ -131,7 +131,7 @@ public class DebugConsoleWindow extends JFrame {
             useLocale();
         } else System.out.println("LocaleManager is null. DebugConsoleWindow will launch without localization.");
 
-        initializeWindowProperties(parent);
+        initializeWindowProperties();
         initializeGUIComponents(prefs);
 
         debugFrame.setVisible(true);
@@ -184,13 +184,12 @@ public class DebugConsoleWindow extends JFrame {
         fileChooserCustomMessage = fileChooserMap.getOrDefault("fileChooserCustomMessage", fileChooserCustomMessage);
     }
 
-    private void initializeWindowProperties(JFrame parent) {
+    private void initializeWindowProperties() {
         debugFrame = this;
         debugFrame.setTitle(titleText);
         debugFrame.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         debugFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         debugFrame.setResizable(false);
-        debugFrame.setLocationRelativeTo(parent);
     }
 
     private void initializeGUIComponents(Preferences prefs) {
