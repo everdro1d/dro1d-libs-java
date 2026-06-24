@@ -95,7 +95,7 @@ public class SwingTestBench {
 //                }
 //            };
 
-            DebugConsoleWindow d = new DebugConsoleWindow(s,p,true);
+            DebugConsoleWindow d = new DebugConsoleWindow(p,true);
 
             frameArr[0] = s;
             frameArr[1] = d;
